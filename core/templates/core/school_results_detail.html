@@ -1,0 +1,423 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ session.title }} — {% trans "Результаты школы" %}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #f4f6f8;
+            color: #2c3e50;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            padding: 30px 20px;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Топбар */
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .topbar-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #64748b;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        .btn-top {
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 10px;
+            background: rgba(59,130,246,0.08);
+            border: 1px solid rgba(59,130,246,0.2);
+            transition: 0.2s;
+        }
+        .btn-top:hover {
+            background: rgba(59,130,246,0.14);
+            color: #1e40af;
+        }
+
+        /* Заголовок */
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 38px;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #2c3e50 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Инфо-карточка */
+        .info-card {
+            background: linear-gradient(135deg, rgba(59,130,246,0.06), rgba(6,182,212,0.04));
+            border: 1px solid rgba(59,130,246,0.2);
+            border-radius: 20px;
+            padding: 24px 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+        }
+        .info-card p {
+            font-size: 15px;
+            color: #34495e;
+            line-height: 1.7;
+            margin-bottom: 6px;
+        }
+        .info-card p:last-child { margin-bottom: 0; }
+        .info-card strong { color: #2c3e50; font-weight: 700; }
+
+        /* Фильтры */
+        .filters-card {
+            background: #ffffff;
+            border: 1px solid #e5e9ee;
+            border-radius: 20px;
+            padding: 22px 26px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+        }
+        .filters-form {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .filter-group label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .filter-group select {
+            padding: 10px 16px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            color: #2c3e50;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            outline: none;
+            min-width: 180px;
+        }
+        .filter-group select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59,130,246,0.12);
+            background: #ffffff;
+        }
+        .filter-group select option { color: #2c3e50; }
+
+        .filter-btn {
+            padding: 10px 24px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.25s;
+            box-shadow: 0 8px 25px -8px rgba(59,130,246,0.5);
+        }
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px -8px rgba(59,130,246,0.7);
+        }
+
+        /* Счётчик */
+        .total-count {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 16px;
+        }
+        .total-count strong {
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        /* Таблица */
+        .table-wrapper {
+            background: #ffffff;
+            border: 1px solid #e5e9ee;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th {
+            background: #f8fafc;
+            padding: 14px 16px;
+            text-align: left;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #2563eb;
+            border-bottom: 1px solid #e5e9ee;
+            white-space: nowrap;
+        }
+        td {
+            padding: 14px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #34495e;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: #f8fafc; }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .status-finished {
+            background: rgba(16,185,129,0.1);
+            color: #059669;
+            border: 1px solid rgba(16,185,129,0.3);
+        }
+        .status-annulled {
+            background: rgba(239,68,68,0.1);
+            color: #c0392b;
+            border: 1px solid rgba(239,68,68,0.3);
+        }
+        .status-in_progress {
+            background: rgba(251,191,36,0.12);
+            color: #b45309;
+            border: 1px solid rgba(251,191,36,0.35);
+        }
+
+        .violations {
+            color: #c0392b;
+            font-weight: 700;
+        }
+
+        .score {
+            font-size: 16px;
+            font-weight: 800;
+            color: #059669;
+        }
+
+        .btn-detail {
+            display: inline-block;
+            padding: 7px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            transition: 0.2s;
+            white-space: nowrap;
+        }
+        .btn-detail:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 15px -3px rgba(59,130,246,0.5);
+        }
+
+        /* Пусто */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #94a3b8;
+            font-size: 15px;
+            background: #ffffff;
+            border: 1px dashed #cbd5e1;
+            border-radius: 20px;
+        }
+
+        /* Кнопка назад */
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 24px;
+            padding: 12px 24px;
+            background: #ffffff;
+            color: #2c3e50;
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            border: 1px solid #e2e8f0;
+            transition: 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .btn-back:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        @media (max-width: 700px) {
+            h1 { font-size: 26px; }
+            .info-card, .filters-card { padding: 18px 20px; }
+            .filter-group select { min-width: 140px; font-size: 13px; }
+            .filter-btn { padding: 10px 18px; font-size: 13px; }
+            th, td { padding: 10px 8px; font-size: 13px; }
+            .table-wrapper { border-radius: 14px; overflow-x: auto; }
+            table { min-width: 700px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Топбар -->
+    <div class="topbar">
+        <span class="topbar-title">📊 {% trans "Результаты школы" %}</span>
+        <a href="{% url 'core:school_results' %}" class="btn-top">← {% trans "К списку сессий" %}</a>
+    </div>
+
+    <!-- Заголовок -->
+    <h1>{{ session.title }}</h1>
+
+    <!-- Инфо о сессии -->
+    <div class="info-card">
+        <p>📅 <strong>{{ session.opens_at|date:"d.m.Y H:i" }}</strong> — <strong>{{ session.closes_at|date:"d.m.Y H:i" }}</strong></p>
+        <p>🏫 {% trans "Школа" %}: <strong>{{ school.name }}</strong> — {{ school.city }}</p>
+    </div>
+
+    <!-- Фильтры -->
+    <div class="filters-card">
+        <form method="get" class="filters-form">
+            <div class="filter-group">
+                <label>{% trans "Класс" %}</label>
+                <select name="class">
+                    <option value="">— {% trans "Все" %} —</option>
+                    {% for c in classes %}
+                        <option value="{{ c.id }}" {% if selected_class == c.id|stringformat:"s" %}selected{% endif %}>
+                            {{ c.grade }}{{ c.letter }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>{% trans "Статус" %}</label>
+                <select name="status">
+                    <option value="all" {% if status_filter == 'all' %}selected{% endif %}>{% trans "Все" %}</option>
+                    <option value="finished" {% if status_filter == 'finished' %}selected{% endif %}>{% trans "Завершён" %}</option>
+                    <option value="annulled" {% if status_filter == 'annulled' %}selected{% endif %}>{% trans "Аннулирован" %}</option>
+                    <option value="in_progress" {% if status_filter == 'in_progress' %}selected{% endif %}>{% trans "В процессе" %}</option>
+                </select>
+            </div>
+
+            <button type="submit" class="filter-btn">{% trans "Применить" %}</button>
+        </form>
+    </div>
+
+    <!-- Счётчик -->
+    <p class="total-count">
+        {% trans "Всего записей" %}: <strong>{{ total_count }}</strong>
+    </p>
+
+    <!-- Таблица -->
+    {% if attempts %}
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:50px;">№</th>
+                        <th>{% trans "Ученик" %}</th>
+                        <th>{% trans "Класс" %}</th>
+                        <th>{% trans "Дата" %}</th>
+                        <th>{% trans "Статус" %}</th>
+                        <th>{% trans "Нарушений" %}</th>
+                        <th>{% trans "Балл" %}</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for a in attempts %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td style="font-weight: 600; color: #2c3e50;">
+                                {{ a.student.last_name }} {{ a.student.first_name }}
+                            </td>
+                            <td>{{ a.student.profile.school_class|default:"—" }}</td>
+                            <td>{{ a.started_at|date:"d.m.Y H:i" }}</td>
+                            <td>
+                                <span class="status-badge status-{{ a.status }}">
+                                    {% if a.status == 'finished' %}✅
+                                    {% elif a.status == 'annulled' %}❌
+                                    {% else %}⏳{% endif %}
+                                    {{ a.get_status_display }}
+                                </span>
+                            </td>
+                            <td class="{% if a.tab_switch_count > 0 %}violations{% endif %}">
+                                {{ a.tab_switch_count }}
+                            </td>
+                            <td class="score">
+                                {% if a.status == 'finished' %}{{ a.total_score }} / 140{% else %}—{% endif %}
+                            </td>
+                            <td>
+                                {% if a.status == 'finished' or a.status == 'annulled' %}
+                                    <a class="btn-detail" href="{% url 'core:test_result' a.id %}">
+                                        {% trans "Подробнее" %} →
+                                    </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="empty-state">
+            📭 {% trans "Результатов нет." %}
+        </div>
+    {% endif %}
+
+    <!-- Назад -->
+    <a class="btn-back" href="{% url 'core:school_results' %}">← {% trans "К списку сессий" %}</a>
+
+</div>
+
+</body>
+</html>

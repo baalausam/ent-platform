@@ -1,0 +1,307 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "Пробное ЕНТ" %}</title>
+
+    <!-- Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #f4f6f8;
+            color: #2c3e50;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .topbar {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            justify-content: flex-end;
+            padding: 20px 40px;
+        }
+        .lang-switch {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 10px 16px;
+            color: #2c3e50;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+            outline: none;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+        .lang-switch:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+        }
+        .lang-switch option { color: #2c3e50; }
+
+        .main {
+            position: relative;
+            z-index: 10;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 24px 80px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 40px 0 60px;
+        }
+        .badge {
+            display: inline-block;
+            background: rgba(59,130,246,0.1);
+            border: 1px solid rgba(59,130,246,0.25);
+            color: #2563eb;
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            margin-bottom: 24px;
+        }
+        .hero h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 76px;
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: -0.04em;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #2c3e50 0%, #3b82f6 50%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p {
+            font-size: 19px;
+            font-weight: 400;
+            color: #64748b;
+            max-width: 650px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+        }
+
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 32px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            box-shadow: 0 10px 30px -10px rgba(59,130,246,0.5),
+                        0 4px 12px rgba(0,0,0,0.08);
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px -10px rgba(59,130,246,0.7),
+                        0 8px 20px rgba(0,0,0,0.12);
+        }
+        .btn-secondary {
+            background: #ffffff;
+            color: #2c3e50;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .btn-secondary:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+        }
+        .btn-outline {
+            background: transparent;
+            color: #2c3e50;
+            border: 1px solid #cbd5e1;
+        }
+        .btn-outline:hover {
+            background: #ffffff;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+            margin-top: 80px;
+        }
+        .feature {
+            background: #ffffff;
+            border: 1px solid #e5e9ee;
+            border-radius: 20px;
+            padding: 32px 28px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .feature::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #10b981);
+            opacity: 0;
+            transition: 0.3s;
+        }
+        .feature:hover {
+            transform: translateY(-6px);
+            border-color: #cbd5e1;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15);
+        }
+        .feature:hover::before { opacity: 1; }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 20px -4px rgba(0,0,0,0.15);
+        }
+        .icon-blue { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .icon-purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+        .icon-green { background: linear-gradient(135deg, #10b981, #059669); }
+
+        .feature h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 12px;
+            color: #2c3e50;
+        }
+        .feature p {
+            font-size: 14px;
+            font-weight: 400;
+            color: #64748b;
+            line-height: 1.7;
+        }
+
+        .footer {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 40px 20px;
+            color: #94a3b8;
+            font-size: 13px;
+            font-weight: 500;
+            border-top: 1px solid #e5e9ee;
+            margin-top: 80px;
+        }
+
+        @media (max-width: 700px) {
+            .hero h1 { font-size: 44px; }
+            .hero p { font-size: 16px; }
+            .btn { padding: 14px 24px; font-size: 14px; }
+            .topbar { padding: 15px 20px; }
+            .main { padding: 20px 16px 60px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="topbar">
+    <form action="{% url 'set_language' %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <input name="next" type="hidden" value="{{ request.path }}">
+        <select name="language" class="lang-switch" onchange="this.form.submit()">
+            {% get_current_language as LANGUAGE_CODE %}
+            {% get_available_languages as LANGUAGES %}
+            {% for lang_code, lang_name in LANGUAGES %}
+                <option value="{{ lang_code }}" {% if lang_code == LANGUAGE_CODE %}selected{% endif %}>
+                    {{ lang_name }}
+                </option>
+            {% endfor %}
+        </select>
+    </form>
+</div>
+
+<div class="main">
+
+    <div class="hero">
+        <div class="badge">🚀 {% trans "Онлайн-платформа" %}</div>
+        <h1>{% trans "Пробное ЕНТ" %}</h1>
+        <p>{% trans "Онлайн-платформа для проведения пробного тестирования в школах" %}</p>
+
+        <div class="buttons">
+            <a class="btn btn-primary" href="{% url 'core:register_student' %}">
+                🎓 {% trans "Регистрация ученика" %}
+            </a>
+            <a class="btn btn-secondary" href="{% url 'core:register_teacher' %}">
+                👨‍🏫 {% trans "Регистрация учителя" %}
+            </a>
+            <a class="btn btn-secondary" href="{% url 'core:register_director' %}">
+                🏫 {% trans "Регистрация школы" %}
+            </a>
+        </div>
+
+        <div class="buttons" style="margin-top: 16px;">
+            <a class="btn btn-outline" href="{% url 'core:login' %}">
+                🔑 {% trans "Войти" %}
+            </a>
+        </div>
+    </div>
+
+    <div class="features">
+        <div class="feature">
+            <div class="feature-icon icon-blue">📝</div>
+            <h3>{% trans "120 вопросов" %}</h3>
+            <p>{% trans "История Казахстана, грамотность чтения, математическая грамотность и два профильных предмета." %}</p>
+        </div>
+        <div class="feature">
+            <div class="feature-icon icon-purple">⏱</div>
+            <h3>{% trans "4 часа" %}</h3>
+            <p>{% trans "Таймер идёт с момента старта. Защита от переключения вкладок." %}</p>
+        </div>
+        <div class="feature">
+            <div class="feature-icon icon-green">📊</div>
+            <h3>{% trans "Результаты сразу" %}</h3>
+            <p>{% trans "Ученик, классный руководитель, завуч и директор видят результаты." %}</p>
+        </div>
+    </div>
+
+</div>
+
+<div class="footer">
+    © 2026 {% trans "Пробное ЕНТ" %}
+</div>
+
+</body>
+</html>

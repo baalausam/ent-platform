@@ -1,0 +1,166 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "Проверка вопросов" %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #f4f6f8; color: #2c3e50; min-height: 100vh;
+            padding: 30px 20px; position: relative; overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        .container { position: relative; z-index: 10; max-width: 1200px; margin: 0 auto; }
+        .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; flex-wrap: wrap; gap: 12px; }
+        .topbar-title { font-size: 14px; font-weight: 600; color: #64748b; letter-spacing: 0.05em; text-transform: uppercase; }
+        .topbar-actions { display: flex; gap: 8px; }
+        .btn-top { color: #2563eb; text-decoration: none; font-size: 13px; font-weight: 600; padding: 8px 16px; border-radius: 10px; background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); transition: 0.2s; }
+        .btn-top:hover { background: rgba(59,130,246,0.14); }
+        .logout { color: #e74c3c; text-decoration: none; font-size: 13px; font-weight: 600; padding: 8px 16px; border-radius: 10px; background: rgba(231,76,60,0.08); border: 1px solid rgba(231,76,60,0.2); transition: 0.2s; }
+        .logout:hover { background: rgba(231,76,60,0.14); }
+        h1 { font-size: 38px; font-weight: 900; letter-spacing: -0.03em; margin-bottom: 8px; background: linear-gradient(135deg, #2c3e50 0%, #3b82f6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .subtitle { color: #64748b; font-size: 15px; margin-bottom: 32px; }
+        .stats { display: flex; gap: 12px; margin: 20px 0; flex-wrap: wrap; }
+        .stat { background: #ffffff; border: 1px solid #e5e9ee; padding: 16px 22px; border-radius: 14px; text-decoration: none; color: #34495e; transition: 0.2s; min-width: 130px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .stat:hover { background: #f8fafc; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+        .stat.active { background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; border-color: transparent; }
+        .stat strong { display: block; font-size: 28px; font-weight: 900; margin-top: 4px; color: #2c3e50; }
+        .stat.active strong { color: white; }
+        .card { background: #ffffff; border: 1px solid #e5e9ee; border-radius: 20px; padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+        .card h2 { font-size: 20px; font-weight: 800; margin-bottom: 16px; color: #2c3e50; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px 10px; text-align: left; font-size: 13px; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
+        th { color: #2563eb; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; }
+        .options { font-size: 12px; color: #64748b; margin-top: 6px; line-height: 1.6; }
+        .correct { color: #059669; font-weight: 700; }
+        .status-draft { color: #94a3b8; }
+        .status-pending { color: #b45309; font-weight: 700; }
+        .status-approved { color: #059669; font-weight: 700; }
+        .status-rejected { color: #c0392b; font-weight: 700; }
+        .btn { padding: 8px 16px; border: none; cursor: pointer; border-radius: 8px; font-size: 13px; font-weight: 700; font-family: inherit; margin-right: 6px; transition: 0.2s; }
+        .btn-approve { background: linear-gradient(135deg, #10b981, #059669); color: white; }
+        .btn-approve:hover { box-shadow: 0 8px 20px -6px rgba(16,185,129,0.5); transform: translateY(-2px); }
+        .btn-reject { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
+        .btn-reject:hover { box-shadow: 0 8px 20px -6px rgba(239,68,68,0.5); transform: translateY(-2px); }
+        .empty { text-align: center; padding: 40px; color: #94a3b8; background: #f8fafc; border-radius: 14px; border: 1px dashed #cbd5e1; }
+        @media (max-width: 700px) { h1 { font-size: 26px; } th, td { padding: 8px 6px; font-size: 12px; } }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="topbar">
+        <span class="topbar-title">📋 {% trans "Проверка вопросов" %}</span>
+        <div class="topbar-actions">
+            {% if profile.role == 'director' %}
+                <a href="{% url 'core:director_dashboard' %}" class="btn-top">← {% trans "В панель директора" %}</a>
+            {% else %}
+                <a href="{% url 'core:zavuch_dashboard' %}" class="btn-top">← {% trans "В панель завуча" %}</a>
+            {% endif %}
+            <a href="{% url 'core:logout' %}" class="logout">{% trans "Выйти" %}</a>
+        </div>
+    </div>
+
+    <h1>📋 {% trans "Проверка вопросов" %}</h1>
+    <p class="subtitle">{{ profile.school.name }}</p>
+
+    <div class="stats">
+        <a class="stat {% if status_filter == 'pending' %}active{% endif %}" href="?status=pending">
+            {% trans "На проверке" %}<strong>{{ stats.pending }}</strong>
+        </a>
+        <a class="stat {% if status_filter == 'approved' %}active{% endif %}" href="?status=approved">
+            {% trans "Одобрено" %}<strong>{{ stats.approved }}</strong>
+        </a>
+        <a class="stat {% if status_filter == 'rejected' %}active{% endif %}" href="?status=rejected">
+            {% trans "Отклонено" %}<strong>{{ stats.rejected }}</strong>
+        </a>
+        <a class="stat {% if status_filter == 'draft' %}active{% endif %}" href="?status=draft">
+            {% trans "Черновики" %}<strong>{{ stats.draft }}</strong>
+        </a>
+        <a class="stat {% if status_filter == 'all' %}active{% endif %}" href="?status=all">
+            {% trans "Все" %}<strong>{{ stats.all }}</strong>
+        </a>
+    </div>
+
+    {% if groups_pending %}
+        <div class="card">
+            <h2>📖 {% trans "Контексты на проверке" %} ({{ groups_pending.count }})</h2>
+            {% for g in groups_pending %}
+                <div style="border-bottom: 1px solid #f1f5f9; padding: 16px 0;">
+                    <strong style="color: #2563eb; font-size: 16px;">{{ g.title }}</strong>
+                    <p style="color: #64748b; font-size: 13px; margin: 8px 0; line-height: 1.6;">{{ g.context_text|truncatechars:200 }}</p>
+                    <p style="font-size: 12px; color: #94a3b8;">{% trans "Вопросов" %}: {{ g.questions.count }} | {% trans "Автор" %}: {{ g.author.last_name }} {{ g.author.first_name }}</p>
+                    <div style="margin-top: 10px;">
+                        <form method="post" action="{% url 'core:approve_group' g.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button class="btn btn-approve">✓ {% trans "Одобрить" %}</button>
+                        </form>
+                        <form method="post" action="{% url 'core:reject_group' g.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button class="btn btn-reject">✗ {% trans "Отклонить" %}</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="card">
+        <h2>{% trans "Вопросы" %}</h2>
+        {% if questions %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>{% trans "Автор" %}</th>
+                        <th>{% trans "Блок" %}</th>
+                        <th>{% trans "Вопрос" %}</th>
+                        <th>{% trans "Статус" %}</th>
+                        <th>{% trans "Действия" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for q in questions %}
+                        <tr>
+                            <td>{{ q.author.last_name }} {{ q.author.first_name }}</td>
+                            <td>{{ q.get_block_display }}</td>
+                            <td>
+                                <strong>{{ q.text }}</strong>
+                                <div class="options">
+                                    A. {{ q.option_a }}<br>
+                                    B. {{ q.option_b }}<br>
+                                    C. {{ q.option_c }}<br>
+                                    D. {{ q.option_d }}<br>
+                                    {% if q.option_e %}E. {{ q.option_e }}<br>{% endif %}
+                                    {% if q.option_f %}F. {{ q.option_f }}<br>{% endif %}
+                                    <span class="correct">✓ {{ q.correct_answer }}</span>
+                                </div>
+                            </td>
+                            <td class="status-{{ q.status }}">{{ q.get_status_display }}</td>
+                            <td>
+                                {% if q.status == 'pending' %}
+                                    <form method="post" action="{% url 'core:approve_question' q.id %}" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button class="btn btn-approve">✓</button>
+                                    </form>
+                                    <form method="post" action="{% url 'core:reject_question' q.id %}" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button class="btn btn-reject">✗</button>
+                                    </form>
+                                {% else %}—{% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="empty">{% trans "Вопросов с таким статусом нет." %}</div>
+        {% endif %}
+    </div>
+</div>
+</body>
+</html>

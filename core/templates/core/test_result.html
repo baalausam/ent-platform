@@ -1,0 +1,602 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "Результат ЕНТ" %}</title>
+
+    <!-- Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #f4f6f8;
+            color: #2c3e50;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ==== TOPBAR ==== */
+        .topbar {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            justify-content: flex-end;
+            padding: 20px 40px;
+        }
+        .lang-switch {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 10px 16px;
+            color: #2c3e50;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+            outline: none;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+        .lang-switch:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+        }
+        .lang-switch option { color: #2c3e50; }
+
+        /* ==== MAIN ==== */
+        .main {
+            position: relative;
+            z-index: 10;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px 24px 120px;
+        }
+
+        /* ==== ИНФО ОБ УЧЕНИКЕ ==== */
+        .student-info {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 500;
+            margin-bottom: 20px;
+            padding: 14px 20px;
+            background: #ffffff;
+            border: 1px solid #e5e9ee;
+            border-radius: 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .student-info strong { color: #34495e; font-weight: 700; }
+
+        /* ==== ЗАГОЛОВОК ==== */
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 42px;
+            font-weight: 900;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            margin-bottom: 28px;
+            background: linear-gradient(135deg, #2c3e50 0%, #3b82f6 50%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ==== ОБЩИЙ БАЛЛ ==== */
+        .total-score {
+            text-align: center;
+            padding: 40px 30px;
+            background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(139,92,246,0.08));
+            border: 1px solid rgba(139,92,246,0.25);
+            color: #2c3e50;
+            border-radius: 24px;
+            box-shadow: 0 15px 40px -15px rgba(59,130,246,0.3),
+                        0 2px 8px rgba(0,0,0,0.04);
+            margin: 20px 0;
+        }
+        .total-score .label {
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #2563eb;
+            margin-bottom: 8px;
+        }
+        .total-score .num {
+            font-size: 84px;
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -0.04em;
+            background: linear-gradient(135deg, #2c3e50 0%, #3b82f6 50%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 12px 0;
+        }
+        .total-score .max {
+            font-size: 20px;
+            font-weight: 600;
+            color: #64748b;
+        }
+
+        /* ==== КАРТОЧКА ==== */
+        .card {
+            background: #ffffff;
+            border: 1px solid #e5e9ee;
+            border-radius: 20px;
+            padding: 28px 26px;
+            margin: 20px 0;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+        }
+
+        /* ==== БЕЙДЖИ СТАТУСА ==== */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            border: 1px solid transparent;
+        }
+        .badge-green {
+            background: rgba(52,211,153,0.12);
+            border-color: rgba(52,211,153,0.35);
+            color: #059669;
+        }
+        .badge-red {
+            background: rgba(248,113,113,0.1);
+            border-color: rgba(248,113,113,0.35);
+            color: #c0392b;
+        }
+        .badge-orange {
+            background: rgba(251,191,36,0.12);
+            border-color: rgba(251,191,36,0.35);
+            color: #b45309;
+        }
+
+        .status-text {
+            margin-top: 16px;
+            font-size: 17px;
+            font-weight: 700;
+        }
+        .status-ok { color: #059669; }
+        .status-fail { color: #c0392b; }
+        .status-warn { color: #b45309; font-size: 14px; font-weight: 600; margin-top: 12px; }
+
+        /* ==== КНОПКИ ==== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 26px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        .btn-secondary {
+            background: #ffffff;
+            color: #2c3e50;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .btn-secondary:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+        }
+        .btn-green {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            box-shadow: 0 10px 30px -10px rgba(16,185,129,0.5),
+                        0 4px 12px rgba(0,0,0,0.08);
+        }
+        .btn-green:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px -10px rgba(16,185,129,0.7),
+                        0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #64748b;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: 0.2s;
+            padding: 8px 0;
+            margin-bottom: 8px;
+        }
+        .back-link:hover {
+            color: #2563eb;
+            transform: translateX(-3px);
+        }
+
+        /* ==== ДЕТАЛИЗАЦИЯ ==== */
+        #details {
+            display: none;
+            margin-top: 20px;
+        }
+        #details.show { display: block; }
+
+        #details h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: #2c3e50;
+            margin-bottom: 16px;
+        }
+
+        .subject-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .subject-row:last-child { border-bottom: none; }
+        .subject-name {
+            font-weight: 700;
+            color: #34495e;
+            font-size: 14px;
+        }
+        .subject-score {
+            font-weight: 800;
+            font-size: 15px;
+            text-align: right;
+            white-space: nowrap;
+        }
+        .subject-score small {
+            font-size: 12px;
+            font-weight: 600;
+            opacity: 0.75;
+            margin-left: 4px;
+        }
+        .threshold-ok { color: #059669; }
+        .threshold-fail { color: #c0392b; }
+
+        /* ==== ЦЕНТР ==== */
+        .center { text-align: center; }
+
+        /* ==== КАЛЬКУЛЯТОР ==== */
+        #calc {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            background: #ffffff;
+            border: 1px solid #e5e9ee;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            display: none;
+            width: 250px;
+            z-index: 999;
+        }
+        #calc .calc-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            color: #2c3e50;
+            font-size: 14px;
+            font-weight: 700;
+        }
+        #calc .calc-head button {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 0 6px;
+            transition: 0.2s;
+        }
+        #calc .calc-head button:hover { color: #e74c3c; }
+        #calc-display {
+            width: 100%;
+            padding: 12px;
+            font-size: 20px;
+            font-weight: 700;
+            text-align: right;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            color: #2c3e50;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+            outline: none;
+        }
+        .calc-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            margin-top: 12px;
+        }
+        .calc-grid button {
+            padding: 12px 0;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            color: #2c3e50;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .calc-grid button:hover {
+            background: #e2e8f0;
+            border-color: #cbd5e1;
+        }
+        .calc-grid button.op {
+            color: #2563eb;
+        }
+        .calc-grid button.eq {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            border-color: transparent;
+        }
+        .calc-grid button.eq:hover {
+            box-shadow: 0 8px 20px -8px rgba(59,130,246,0.5);
+        }
+        .calc-grid button.clear {
+            grid-column: span 4;
+            background: rgba(248,113,113,0.1);
+            border-color: rgba(248,113,113,0.35);
+            color: #c0392b;
+        }
+        .calc-grid button.clear:hover {
+            background: rgba(248,113,113,0.2);
+            border-color: rgba(248,113,113,0.55);
+        }
+
+        /* ==== КНОПКА-ОТКРЫВАШКА КАЛЬКУЛЯТОРА ==== */
+        .calc-fab {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            font-size: 24px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 10px 30px -8px rgba(59,130,246,0.5),
+                        0 4px 12px rgba(0,0,0,0.15);
+            z-index: 998;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .calc-fab:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 20px 40px -10px rgba(59,130,246,0.7),
+                        0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        /* ==== АДАПТИВ ==== */
+        @media (max-width: 700px) {
+            .topbar { padding: 15px 20px; }
+            .main { padding: 16px 16px 120px; }
+            h1 { font-size: 30px; }
+            .total-score .num { font-size: 60px; }
+            .total-score { padding: 30px 20px; }
+            .card { padding: 22px 18px; }
+            .subject-name { font-size: 13px; }
+            .subject-score { font-size: 14px; }
+            .btn { padding: 12px 20px; font-size: 13px; }
+            #calc { width: calc(100% - 40px); right: 20px; left: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="topbar">
+    <form action="{% url 'set_language' %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <input name="next" type="hidden" value="{{ request.path }}">
+        <select name="language" class="lang-switch" onchange="this.form.submit()">
+            {% get_current_language as LANGUAGE_CODE %}
+            {% get_available_languages as LANGUAGES %}
+            {% for lang_code, lang_name in LANGUAGES %}
+                <option value="{{ lang_code }}" {% if lang_code == LANGUAGE_CODE %}selected{% endif %}>
+                    {{ lang_name }}
+                </option>
+            {% endfor %}
+        </select>
+    </form>
+</div>
+
+<div class="main">
+
+    {% if view_mode != 'student' %}
+        <a class="back-link" href="javascript:history.back()">← {% trans "Назад" %}</a>
+        <div class="student-info">
+            <strong>{% trans "Ученик" %}:</strong> {{ student.last_name }} {{ student.first_name }}
+            &nbsp;|&nbsp;
+            <strong>{% trans "Класс" %}:</strong> {{ student.profile.school_class }}
+        </div>
+    {% endif %}
+
+    <h1>📊 {% trans "Результат пробного ЕНТ" %}</h1>
+
+    <!-- Общий балл -->
+    <div class="total-score">
+        <div class="label">{% trans "Общий балл" %}</div>
+        <div class="num">{{ attempt.total_score }}</div>
+        <div class="max">/ 140</div>
+    </div>
+
+    <!-- Статус -->
+    <div class="card center">
+        {% if attempt.status == 'finished' %}
+            <span class="badge badge-green">✅ {% trans "Завершён" %}</span>
+            {% if attempt.passed_thresholds %}
+                <p class="status-text status-ok">
+                    ✅ {% trans "Пороги пройдены" %}
+                </p>
+            {% else %}
+                <p class="status-text status-fail">
+                    ❌ {% trans "Пороги не пройдены" %}
+                </p>
+            {% endif %}
+        {% elif attempt.status == 'annulled' %}
+            <span class="badge badge-red">❌ {% trans "Аннулирован" %}</span>
+            <p class="status-text status-fail">
+                {% trans "Тест аннулирован из-за нарушений." %}
+            </p>
+        {% elif attempt.status == 'in_progress' %}
+            <span class="badge badge-orange">⏳ {% trans "В процессе" %}</span>
+        {% endif %}
+
+        {% if attempt.tab_switch_count > 0 %}
+            <p class="status-warn">
+                ⚠️ {% trans "Нарушений вкладки" %}: {{ attempt.tab_switch_count }}
+            </p>
+        {% endif %}
+    </div>
+
+    <!-- Кнопка «Показать детализацию» -->
+    {% if attempt.status == 'finished' %}
+    <div class="center">
+        <button class="btn btn-green" onclick="toggleDetails()">
+            📊 {% trans "Показать баллы по предметам" %}
+        </button>
+    </div>
+
+    <!-- Детализация -->
+    <div id="details" class="card">
+        <h2>{% trans "Баллы по предметам" %}</h2>
+
+        <div class="subject-row">
+            <span class="subject-name">{% trans "История Казахстана" %}</span>
+            <span class="subject-score {% if attempt.score_kaz_history >= 5 %}threshold-ok{% else %}threshold-fail{% endif %}">
+                {{ attempt.score_kaz_history }} / 20
+                {% if attempt.score_kaz_history < 5 %}<small>({% trans "порог 5" %})</small>{% endif %}
+            </span>
+        </div>
+
+        <div class="subject-row">
+            <span class="subject-name">{% trans "Грамотность чтения" %}</span>
+            <span class="subject-score {% if attempt.score_reading >= 3 %}threshold-ok{% else %}threshold-fail{% endif %}">
+                {{ attempt.score_reading }} / 10
+                {% if attempt.score_reading < 3 %}<small>({% trans "порог 3" %})</small>{% endif %}
+            </span>
+        </div>
+
+        <div class="subject-row">
+            <span class="subject-name">{% trans "Математическая грамотность" %}</span>
+            <span class="subject-score {% if attempt.score_math_literacy >= 3 %}threshold-ok{% else %}threshold-fail{% endif %}">
+                {{ attempt.score_math_literacy }} / 10
+                {% if attempt.score_math_literacy < 3 %}<small>({% trans "порог 3" %})</small>{% endif %}
+            </span>
+        </div>
+
+        <div class="subject-row">
+            <span class="subject-name">{{ attempt.profile_subject_1|default:"Профильный предмет 1" }}</span>
+            <span class="subject-score {% if attempt.score_profile_1 >= 5 %}threshold-ok{% else %}threshold-fail{% endif %}">
+                {{ attempt.score_profile_1 }} / 50
+                {% if attempt.score_profile_1 < 5 %}<small>({% trans "порог 5" %})</small>{% endif %}
+            </span>
+        </div>
+
+        <div class="subject-row">
+            <span class="subject-name">{{ attempt.profile_subject_2|default:"Профильный предмет 2" }}</span>
+            <span class="subject-score {% if attempt.score_profile_2 >= 5 %}threshold-ok{% else %}threshold-fail{% endif %}">
+                {{ attempt.score_profile_2 }} / 50
+                {% if attempt.score_profile_2 < 5 %}<small>({% trans "порог 5" %})</small>{% endif %}
+            </span>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="center" style="margin-top: 30px;">
+        <a class="btn btn-secondary" href="{% url 'core:home' %}">← {% trans "На главную" %}</a>
+    </div>
+
+</div>
+
+<!-- Калькулятор (фиксированный в углу) -->
+<div id="calc">
+    <div class="calc-head">
+        <span>🧮 {% trans "Калькулятор" %}</span>
+        <button onclick="toggleCalc()">✕</button>
+    </div>
+    <input type="text" id="calc-display" readonly>
+    <div class="calc-grid">
+        <button onclick="calcInput('7')">7</button>
+        <button onclick="calcInput('8')">8</button>
+        <button onclick="calcInput('9')">9</button>
+        <button class="op" onclick="calcInput('/')">/</button>
+        <button onclick="calcInput('4')">4</button>
+        <button onclick="calcInput('5')">5</button>
+        <button onclick="calcInput('6')">6</button>
+        <button class="op" onclick="calcInput('*')">×</button>
+        <button onclick="calcInput('1')">1</button>
+        <button onclick="calcInput('2')">2</button>
+        <button onclick="calcInput('3')">3</button>
+        <button class="op" onclick="calcInput('-')">−</button>
+        <button onclick="calcInput('0')">0</button>
+        <button onclick="calcInput('.')">.</button>
+        <button class="eq" onclick="calcResult()">=</button>
+        <button class="op" onclick="calcInput('+')">+</button>
+        <button class="clear" onclick="calcClear()">C</button>
+    </div>
+</div>
+
+<!-- Кнопка открытия калькулятора -->
+<button class="calc-fab" onclick="toggleCalc()">🧮</button>
+
+<script>
+function toggleDetails() {
+    const d = document.getElementById('details');
+    d.classList.toggle('show');
+}
+
+// Калькулятор
+function toggleCalc() {
+    const c = document.getElementById('calc');
+    c.style.display = (c.style.display === 'none' || c.style.display === '') ? 'block' : 'none';
+}
+
+function calcInput(v) {
+    document.getElementById('calc-display').value += v;
+}
+
+function calcClear() {
+    document.getElementById('calc-display').value = '';
+}
+
+function calcResult() {
+    const display = document.getElementById('calc-display');
+    try {
+        display.value = eval(display.value);
+    } catch (e) {
+        display.value = '{% trans "Ошибка" %}';
+    }
+}
+</script>
+
+</body>
+</html>

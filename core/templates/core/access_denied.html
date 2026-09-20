@@ -1,0 +1,54 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "Доступ запрещён" %}</title>
+
+    <!-- Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #f4f6f8;
+            color: #2c3e50;
+            text-align: center;
+            padding: 80px 20px;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        h1 { color: #e74c3c; font-size: 48px; font-weight: 900; margin-bottom: 8px; }
+        h2 { color: #2c3e50; font-size: 28px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 16px; }
+        p { font-size: 17px; color: #64748b; font-weight: 500; max-width: 560px; margin: 0 auto; line-height: 1.6; }
+        a {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 24px;
+            background: #2c3e50;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            transition: 0.2s;
+        }
+        a:hover {
+            background: #34495e;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <h1>🚫</h1>
+    <h2>{% trans "Доступ запрещён" %}</h2>
+    <p>{{ message }}</p>
+    <a href="{% url 'core:teacher_dashboard' %}">← {% trans "В панель учителя" %}</a>
+</body>
+</html>

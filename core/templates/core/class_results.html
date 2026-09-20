@@ -1,0 +1,183 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "Результаты класса" %}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #f4f6f8;
+            color: #2c3e50;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            padding: 30px 20px;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 40px;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #2c3e50 0%, #10b981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .subtitle {
+            color: #64748b;
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 32px;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding: 8px 16px;
+            border-radius: 10px;
+            background: rgba(59,130,246,0.08);
+            border: 1px solid rgba(59,130,246,0.2);
+            transition: 0.2s;
+        }
+        .back-link:hover {
+            background: rgba(59,130,246,0.14);
+            color: #1e40af;
+        }
+
+        /* Карточки сессий */
+        .session-card {
+            display: block;
+            background: #ffffff;
+            border: 1px solid #e5e9ee;
+            border-left: 4px solid #3b82f6;
+            border-radius: 18px;
+            padding: 24px 28px;
+            margin-bottom: 16px;
+            text-decoration: none;
+            color: #2c3e50;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+        }
+        .session-card:hover {
+            background: #f8fafc;
+            border-left-color: #8b5cf6;
+            transform: translateX(6px);
+            box-shadow: 0 10px 30px -10px rgba(59,130,246,0.3);
+        }
+
+        .session-title {
+            font-size: 19px;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .session-count {
+            display: inline-block;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+        .session-meta {
+            font-size: 14px;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .status-open { color: #059669; font-weight: 600; }
+        .status-closed { color: #94a3b8; font-weight: 500; }
+
+        .no-data {
+            text-align: center;
+            padding: 60px 20px;
+            color: #94a3b8;
+            font-size: 15px;
+            background: #ffffff;
+            border: 1px dashed #cbd5e1;
+            border-radius: 18px;
+        }
+
+        @media (max-width: 700px) {
+            h1 { font-size: 28px; }
+            .session-card { padding: 20px; }
+            .session-title { font-size: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    {% if no_class %}
+        <h1>{% trans "Класс не указан" %}</h1>
+        <p class="subtitle">{% trans "Обратитесь к директору." %}</p>
+        <a class="back-link" href="{% url 'core:teacher_dashboard' %}">← {% trans "Назад" %}</a>
+    {% else %}
+        <a class="back-link" href="{% url 'core:teacher_dashboard' %}">← {% trans "В панель учителя" %}</a>
+
+        <h1>📊 {% trans "Результаты класса" %}</h1>
+        <p class="subtitle">{{ school_class }} — {% trans "Пробные ЕНТ" %}</p>
+
+        {% if session_data %}
+            {% for item in session_data %}
+                <a class="session-card" href="{% url 'core:class_results_detail' item.session.id %}">
+                    <div class="session-title">
+                        🗓 {{ item.session.title }}
+                        <span class="session-count">{{ item.finished }} {% trans "сдали" %}</span>
+                    </div>
+                    <div class="session-meta">
+                        <span>📅 {{ item.session.opens_at|date:"d.m.Y H:i" }} — {{ item.session.closes_at|date:"d.m.Y H:i" }}</span>
+                        {% if item.session.is_open_now %}
+                            <span class="status-open">🟢 {% trans "открыта" %}</span>
+                        {% else %}
+                            <span class="status-closed">⚪ {% trans "закрыта" %}</span>
+                        {% endif %}
+                    </div>
+                </a>
+            {% endfor %}
+        {% else %}
+            <div class="no-data">
+                {% trans "По вашему классу ещё нет ни одной сессии." %}
+            </div>
+        {% endif %}
+    {% endif %}
+
+</div>
+
+</body>
+</html>

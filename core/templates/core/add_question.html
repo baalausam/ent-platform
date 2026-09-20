@@ -1,0 +1,111 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "Добавить вопрос" %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Montserrat', sans-serif; background: #f4f6f8; color: #2c3e50; min-height: 100vh; padding: 30px 20px; position: relative; }
+        .container { position: relative; z-index: 10; max-width: 700px; margin: 0 auto; }
+        .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+        .topbar-title { font-size: 14px; font-weight: 600; color: #64748b; letter-spacing: 0.05em; text-transform: uppercase; }
+        .btn-top { color: #2563eb; text-decoration: none; font-size: 13px; font-weight: 600; padding: 8px 16px; border-radius: 10px; background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); }
+        .btn-top:hover { background: rgba(59,130,246,0.14); }
+        .logout { color: #e74c3c; text-decoration: none; font-size: 13px; font-weight: 600; padding: 8px 16px; border-radius: 10px; background: rgba(231,76,60,0.08); border: 1px solid rgba(231,76,60,0.2); }
+        .logout:hover { background: rgba(231,76,60,0.14); }
+        h1 { font-size: 32px; font-weight: 900; letter-spacing: -0.03em; margin-bottom: 24px; background: linear-gradient(135deg, #2c3e50 0%, #10b981 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .context-info { background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.22); padding: 16px 20px; border-radius: 14px; margin-bottom: 24px; }
+        .context-info strong { color: #2563eb; }
+        .card { background: #ffffff; border: 1px solid #e5e9ee; border-radius: 20px; padding: 28px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+        label { display: block; margin-top: 18px; margin-bottom: 8px; font-size: 12px; font-weight: 700; color: #34495e; letter-spacing: 0.05em; text-transform: uppercase; }
+        input[type="text"], textarea, select { width: 100%; padding: 14px 18px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; color: #2c3e50; font-family: inherit; font-size: 15px; font-weight: 500; outline: none; }
+        input:focus, textarea:focus, select:focus { background: #ffffff; border-color: #10b981; box-shadow: 0 0 0 4px rgba(16,185,129,0.12); }
+        textarea { min-height: 100px; resize: vertical; }
+        select option { color: #2c3e50; }
+        button[type="submit"] { width: 100%; margin-top: 32px; padding: 16px; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; border-radius: 12px; font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 10px 30px -10px rgba(16,185,129,0.5); transition: 0.2s; }
+        button[type="submit"]:hover { transform: translateY(-2px); box-shadow: 0 20px 40px -10px rgba(16,185,129,0.7); }
+        .errors { background: rgba(231,76,60,0.08); border: 1px solid rgba(231,76,60,0.25); color: #c0392b; padding: 12px 16px; border-radius: 12px; margin-bottom: 16px; font-size: 14px; }
+        .field-error { color: #c0392b; font-size: 12px; margin-top: 6px; }
+        .back { display: block; text-align: center; margin-top: 24px; color: #64748b; text-decoration: none; font-size: 13px; }
+        .back:hover { color: #2563eb; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="topbar">
+        <span class="topbar-title">➕ {% trans "Добавить вопрос" %}</span>
+        <div style="display:flex; gap:8px;">
+            <a href="{% url 'core:my_questions' %}" class="btn-top">← {% trans "Мои вопросы" %}</a>
+            <a href="{% url 'core:logout' %}" class="logout">{% trans "Выйти" %}</a>
+        </div>
+    </div>
+
+    <h1>➕ {% trans "Добавить вопрос" %}</h1>
+
+    {% if group %}
+        <div class="context-info">
+            <strong>📖 {% trans "Контекст" %}:</strong> {{ group.title }}
+            <p style="margin-top: 10px; font-size: 14px; color: #34495e;">{{ group.context_text|truncatechars:300 }}</p>
+            <p style="font-size: 13px; color: #64748b; margin-top: 10px;">{% trans "Все вопросы, которые вы добавите сейчас, будут привязаны к этому контексту." %}</p>
+        </div>
+    {% endif %}
+
+    {% if form.non_field_errors %}
+        <div class="errors">
+            {% for error in form.non_field_errors %}<p>{{ error }}</p>{% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="card">
+        <form method="post">
+            {% csrf_token %}
+            {% if group %}
+                <input type="hidden" name="group_id" value="{{ group.id }}">
+            {% endif %}
+
+            <label>{{ form.block.label }}</label>
+            {{ form.block }}
+            {% if form.block.errors %}<div class="field-error">{{ form.block.errors.0 }}</div>{% endif %}
+
+            <label>{{ form.subject.label }}</label>
+            {{ form.subject }}
+            {% if form.subject.errors %}<div class="field-error">{{ form.subject.errors.0 }}</div>{% endif %}
+
+            <label>{{ form.question_type.label }}</label>
+            {{ form.question_type }}
+            {% if form.question_type.errors %}<div class="field-error">{{ form.question_type.errors.0 }}</div>{% endif %}
+
+            <label>{{ form.text.label }}</label>
+            {{ form.text }}
+            {% if form.text.errors %}<div class="field-error">{{ form.text.errors.0 }}</div>{% endif %}
+
+            <label>{{ form.option_a.label }}</label>
+            {{ form.option_a }}
+            <label>{{ form.option_b.label }}</label>
+            {{ form.option_b }}
+            <label>{{ form.option_c.label }}</label>
+            {{ form.option_c }}
+            <label>{{ form.option_d.label }}</label>
+            {{ form.option_d }}
+            <label>{{ form.option_e.label }}</label>
+            {{ form.option_e }}
+            <label>{{ form.option_f.label }}</label>
+            {{ form.option_f }}
+
+            <label>{{ form.correct_answer.label }}</label>
+            {{ form.correct_answer }}
+            {% if form.correct_answer.errors %}<div class="field-error">{{ form.correct_answer.errors.0 }}</div>{% endif %}
+
+            <button type="submit">💾 {% trans "Сохранить вопрос" %}</button>
+        </form>
+    </div>
+
+    <a class="back" href="{% url 'core:my_questions' %}">← {% trans "Назад" %}</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,2826 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-21 04:33+0500\n"
+"PO-Revision-Date: 2026-09-21 05:00+0500\n"
+"Last-Translator: Admin <admin@example.com>\n"
+"Language-Team: Kazakh\n"
+"Language: kk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#: .\core\forms.py:14 .\core\forms.py:52 .\core\forms.py:79
+#: .\core\templates\core\class_students_list.html:241
+#: .\core\templates\core\edit_profile.html:237
+#: .\core\templates\core\students_list.html:311
+#: .\core\templates\core\teachers_list.html:237
+msgid "Имя"
+msgstr "Аты"
+
+#: .\core\forms.py:15 .\core\forms.py:53 .\core\forms.py:80
+#: .\core\templates\core\class_students_list.html:240
+#: .\core\templates\core\edit_profile.html:240
+#: .\core\templates\core\students_list.html:310
+#: .\core\templates\core\teachers_list.html:236
+msgid "Фамилия"
+msgstr "Тегі"
+
+#: .\core\forms.py:16 .\core\forms.py:54 .\core\forms.py:81
+#: .\core\templates\core\class_students_list.html:242
+#: .\core\templates\core\edit_profile.html:243
+#: .\core\templates\core\login.html:237
+#: .\core\templates\core\students_list.html:312
+#: .\core\templates\core\teachers_list.html:238
+msgid "Логин"
+msgstr "Логин"
+
+#: .\core\forms.py:17 .\core\forms.py:55 .\core\forms.py:82
+#: .\core\templates\core\login.html:240
+msgid "Пароль"
+msgstr "Құпия сөз"
+
+#: .\core\forms.py:18 .\core\forms.py:56 .\core\forms.py:83
+msgid "Повторите пароль"
+msgstr "Құпия сөзді қайталаңыз"
+
+#: .\core\forms.py:20
+msgid "Название школы"
+msgstr "Мектеп атауы"
+
+#: .\core\forms.py:21
+msgid "Город"
+msgstr "Қала"
+
+#: .\core\forms.py:26 .\core\forms.py:62 .\core\forms.py:89 .\core\views.py:229
+#: .\core\views.py:378
+msgid "Такой логин уже занят."
+msgstr "Бұл логин бос емес."
+
+#: .\core\forms.py:34 .\core\forms.py:70 .\core\forms.py:97
+msgid "Пароли не совпадают."
+msgstr "Құпия сөздер сәйкес келмейді."
+
+#: .\core\forms.py:41
+msgid ""
+"Школа с таким названием уже зарегистрирована. Если вы её директор — "
+"обратитесь к администратору."
+msgstr ""
+"Бұл атаумен мектеп тіркелген. Егер сіз оның директоры болсаңыз — әкімшіге "
+"хабарласыңыз."
+
+#: .\core\forms.py:57
+msgid "Код школы"
+msgstr "Мектеп коды"
+
+#: .\core\forms.py:84
+msgid "Код школы (для учеников)"
+msgstr "Мектеп коды (оқушылар үшін)"
+
+#: .\core\forms.py:107 .\core\templates\core\test_not_enough.html:71
+#: .\core\templates\core\test_result.html:493
+msgid "История Казахстана"
+msgstr "Қазақстан тарихы"
+
+#: .\core\forms.py:108 .\core\templates\core\test_not_enough.html:72
+#: .\core\templates\core\test_result.html:501
+msgid "Грамотность чтения"
+msgstr "Оқу сауаттылығы"
+
+#: .\core\forms.py:109 .\core\templates\core\test_result.html:509
+msgid "Математическая грамотность"
+msgstr "Математикалық сауаттылық"
+
+#: .\core\forms.py:110 .\core\forms.py:122
+msgid "Профильный предмет"
+msgstr "Бейіндік пән"
+
+#: .\core\forms.py:114
+msgid "Один правильный ответ"
+msgstr "Бір дұрыс жауап"
+
+#: .\core\forms.py:115
+msgid "Несколько правильных ответов"
+msgstr "Бірнеше дұрыс жауап"
+
+#: .\core\forms.py:118
+msgid "Блок ЕНТ"
+msgstr "ҰБТ блогы"
+
+#: .\core\forms.py:126
+msgid "Тип вопроса"
+msgstr "Сұрақ түрі"
+
+#: .\core\forms.py:130
+msgid "Текст вопроса"
+msgstr "Сұрақ мәтіні"
+
+#: .\core\forms.py:132
+msgid "Вариант A"
+msgstr "A нұсқасы"
+
+#: .\core\forms.py:133
+msgid "Вариант B"
+msgstr "B нұсқасы"
+
+#: .\core\forms.py:134
+msgid "Вариант C"
+msgstr "C нұсқасы"
+
+#: .\core\forms.py:135
+msgid "Вариант D"
+msgstr "D нұсқасы"
+
+#: .\core\forms.py:136
+msgid "Вариант E"
+msgstr "E нұсқасы"
+
+#: .\core\forms.py:137
+msgid "Вариант F"
+msgstr "F нұсқасы"
+
+#: .\core\forms.py:140
+msgid "Правильный ответ"
+msgstr "Дұрыс жауап"
+
+#: .\core\forms.py:141
+msgid "Для одного: A, B, C или D. Для нескольких: AB, ACD, ABCD, ABCDEF."
+msgstr "Бір жауап үшін: A, B, C немесе D. Бірнеше үшін: AB, ACD, ABCD, ABCDEF."
+
+#: .\core\forms.py:161
+msgid "Выберите профильный предмет."
+msgstr "Бейіндік пәнді таңдаңыз."
+
+#: .\core\forms.py:166
+msgid "Укажите правильный ответ."
+msgstr "Дұрыс жауапты көрсетіңіз."
+
+#: .\core\forms.py:168
+msgid "Допустимы только A, B, C, D, E, F."
+msgstr "Тек A, B, C, D, E, F рұқсат етіледі."
+
+#: .\core\forms.py:170
+msgid "Для одного ответа укажите одну букву."
+msgstr "Бір жауап үшін бір әріп көрсетіңіз."
+
+#: .\core\forms.py:172
+msgid "Для нескольких ответов укажите минимум две буквы."
+msgstr "Бірнеше жауап үшін кемінде екі әріп көрсетіңіз."
+
+#: .\core\forms.py:174
+msgid "Буквы не должны повторяться."
+msgstr "Әріптер қайталанбауы керек."
+
+#: .\core\forms.py:197
+msgid "Название сессии"
+msgstr "Сессия атауы"
+
+#: .\core\forms.py:199 .\core\templates\core\class_results_detail.html:264
+msgid "Начало"
+msgstr "Басталуы"
+
+#: .\core\forms.py:203 .\core\templates\core\class_results_detail.html:268
+msgid "Окончание"
+msgstr "Аяқталуы"
+
+#: .\core\forms.py:210
+msgid "Классы (пусто = для всех)"
+msgstr "Сыныптар (бос = барлығына)"
+
+#: .\core\forms.py:223
+msgid "Окончание должно быть позже начала."
+msgstr "Аяқталуы басталуынан кейін болуы керек."
+
+#: .\core\templates\core\access_denied.html:7
+#: .\core\templates\core\access_denied.html:50
+msgid "Доступ запрещён"
+msgstr "Қатынауға тыйым салынған"
+
+#: .\core\templates\core\access_denied.html:52
+#: .\core\templates\core\add_question_group.html:260
+#: .\core\templates\core\class_results.html:151
+#: .\core\templates\core\manage_sessions.html:356
+#: .\core\templates\core\my_question_groups.html:260
+#: .\core\templates\core\my_questions.html:47
+msgid "В панель учителя"
+msgstr "Мұғалім панеліне"
+
+#: .\core\templates\core\add_question.html:7
+#: .\core\templates\core\add_question.html:41
+#: .\core\templates\core\add_question.html:48
+#: .\core\templates\core\my_questions.html:62
+#: .\core\templates\core\teacher_dashboard.html:285
+msgid "Добавить вопрос"
+msgstr "Сұрақ қосу"
+
+#: .\core\templates\core\add_question.html:43
+#: .\core\templates\core\my_questions.html:7
+#: .\core\templates\core\my_questions.html:45
+#: .\core\templates\core\my_questions.html:52
+#: .\core\templates\core\teacher_dashboard.html:282
+msgid "Мои вопросы"
+msgstr "Менің сұрақтарым"
+
+#: .\core\templates\core\add_question.html:44
+#: .\core\templates\core\director_dashboard.html:284
+#: .\core\templates\core\my_questions.html:48
+#: .\core\templates\core\review_questions.html:65
+#: .\core\templates\core\student_dashboard.html:355
+#: .\core\templates\core\teacher_dashboard.html:260
+#: .\core\templates\core\zavuch_dashboard.html:280
+msgid "Выйти"
+msgstr "Шығу"
+
+#: .\core\templates\core\add_question.html:52
+msgid "Контекст"
+msgstr "Контекст"
+
+#: .\core\templates\core\add_question.html:54
+msgid ""
+"Все вопросы, которые вы добавите сейчас, будут привязаны к этому контексту."
+msgstr "Қазір қосатын барлық сұрақтар осы контекстке байланыстырылады."
+
+#: .\core\templates\core\add_question.html:104
+msgid "Сохранить вопрос"
+msgstr "Сұрақты сақтау"
+
+#: .\core\templates\core\add_question.html:108
+#: .\core\templates\core\class_results.html:149
+#: .\core\templates\core\class_students_list.html:265
+#: .\core\templates\core\edit_profile.html:348
+#: .\core\templates\core\school_results.html:147
+#: .\core\templates\core\students_list.html:284
+#: .\core\templates\core\teachers_list.html:225
+#: .\core\templates\core\test_result.html:434
+msgid "Назад"
+msgstr "Артқа"
+
+#: .\core\templates\core\add_question_group.html:7
+#: .\core\templates\core\my_question_groups.html:264
+msgid "Создать контекст"
+msgstr "Контекст жасау"
+
+#: .\core\templates\core\add_question_group.html:229
+msgid "Создать контекст для вопросов"
+msgstr "Сұрақтарға контекст жасау"
+
+#: .\core\templates\core\add_question_group.html:233
+msgid ""
+"Контекст — это текст (рассказ, отрывок), к которому вы привяжете несколько "
+"вопросов. Ученик увидит текст и 10 вопросов к нему."
+msgstr ""
+"Контекст — сіз бірнеше сұрақты байланыстыратын мәтін (әңгіме, үзінді). Оқушы "
+"мәтінді және оған қатысты 10 сұрақты көреді."
+
+#: .\core\templates\core\add_question_group.html:256
+msgid "Сохранить контекст"
+msgstr "Контексті сақтау"
+
+#: .\core\templates\core\class_results.html:7
+#: .\core\templates\core\class_results.html:153
+#: .\core\templates\core\class_results_detail.html:7
+#: .\core\templates\core\class_results_detail.html:259
+#: .\core\templates\core\teacher_dashboard.html:303
+msgid "Результаты класса"
+msgstr "Сынып нәтижелері"
+
+#: .\core\templates\core\class_results.html:147
+msgid "Класс не указан"
+msgstr "Сынып көрсетілмеген"
+
+#: .\core\templates\core\class_results.html:148
+msgid "Обратитесь к директору."
+msgstr "Директорға хабарласыңыз."
+
+#: .\core\templates\core\class_results.html:154
+#: .\core\templates\core\school_results.html:121
+msgid "Пробные ЕНТ"
+msgstr "Сынақ ҰБТ"
+
+#: .\core\templates\core\class_results.html:161
+#: .\core\templates\core\school_results.html:128
+msgid "сдали"
+msgstr "тапсырды"
+
+#: .\core\templates\core\class_results.html:166
+#: .\core\templates\core\class_results_detail.html:279
+#: .\core\templates\core\school_results.html:133
+msgid "открыта"
+msgstr "ашық"
+
+#: .\core\templates\core\class_results.html:168
+#: .\core\templates\core\class_results_detail.html:281
+#: .\core\templates\core\school_results.html:135
+msgid "закрыта"
+msgstr "жабық"
+
+#: .\core\templates\core\class_results.html:175
+msgid "По вашему классу ещё нет ни одной сессии."
+msgstr "Сіздің сыныбыңыз бойынша әлі бірде-бір сессия жоқ."
+
+#: .\core\templates\core\class_results_detail.html:254
+#: .\core\templates\core\school_results_detail.html:314
+#: .\core\templates\core\school_results_detail.html:418
+msgid "К списку сессий"
+msgstr "Сессиялар тізіміне"
+
+#: .\core\templates\core\class_results_detail.html:272
+#: .\core\templates\core\class_students_list.html:221
+#: .\core\templates\core\edit_profile.html:317
+#: .\core\templates\core\school_results_detail.html:330
+#: .\core\templates\core\school_results_detail.html:368
+#: .\core\templates\core\students_list.html:289
+#: .\core\templates\core\students_list.html:313
+#: .\core\templates\core\teacher_dashboard.html:298
+#: .\core\templates\core\test_result.html:438
+msgid "Класс"
+msgstr "Сынып"
+
+#: .\core\templates\core\class_results_detail.html:276
+#: .\core\templates\core\class_results_detail.html:307
+#: .\core\templates\core\manage_sessions.html:397
+#: .\core\templates\core\my_question_groups.html:275
+#: .\core\templates\core\my_questions.html:74
+#: .\core\templates\core\review_questions.html:122
+#: .\core\templates\core\school_results_detail.html:342
+#: .\core\templates\core\school_results_detail.html:370
+#: .\core\templates\core\student_dashboard.html:427
+msgid "Статус"
+msgstr "Мәртебесі"
+
+#: .\core\templates\core\class_results_detail.html:290
+#: .\core\templates\core\class_students_list.html:231
+msgid "Всего учеников"
+msgstr "Барлық оқушылар"
+
+#: .\core\templates\core\class_results_detail.html:294
+msgid "Сдали тест"
+msgstr "Тест тапсырды"
+
+#: .\core\templates\core\class_results_detail.html:306
+#: .\core\templates\core\school_results_detail.html:367
+#: .\core\templates\core\teacher_dashboard.html:320
+#: .\core\templates\core\test_result.html:436
+msgid "Ученик"
+msgstr "Оқушы"
+
+#: .\core\templates\core\class_results_detail.html:308
+#: .\core\templates\core\school_results_detail.html:369
+#: .\core\templates\core\student_dashboard.html:426
+msgid "Дата"
+msgstr "Күні"
+
+#: .\core\templates\core\class_results_detail.html:309
+#: .\core\templates\core\school_results_detail.html:371
+#: .\core\templates\core\student_dashboard.html:428
+#: .\core\templates\core\take_test.html:813
+msgid "Нарушений"
+msgstr "Бұзушылықтар"
+
+#: .\core\templates\core\class_results_detail.html:310
+#: .\core\templates\core\school_results_detail.html:372
+#: .\core\templates\core\student_dashboard.html:429
+msgid "Балл"
+msgstr "Балл"
+
+#: .\core\templates\core\class_results_detail.html:337
+#: .\core\templates\core\school_results_detail.html:402
+#: .\core\templates\core\student_dashboard.html:453
+msgid "Подробнее"
+msgstr "Толығырақ"
+
+#: .\core\templates\core\class_results_detail.html:342
+msgid "не сдавал"
+msgstr "тапсырмаған"
+
+#: .\core\templates\core\class_results_detail.html:354
+#: .\core\templates\core\class_students_list.html:262
+#: .\core\templates\core\teacher_dashboard.html:340
+msgid "В классе пока нет учеников."
+msgstr "Сыныпта әзірге оқушылар жоқ."
+
+#: .\core\templates\core\class_students_list.html:7
+msgid "Ученики класса"
+msgstr "Сынып оқушылары"
+
+#: .\core\templates\core\class_students_list.html:223
+#: .\core\templates\core\manage_sessions.html:352
+#: .\core\templates\core\review_questions.html:61
+msgid "В панель директора"
+msgstr "Директор панеліне"
+
+#: .\core\templates\core\class_students_list.html:225
+#: .\core\templates\core\manage_sessions.html:354
+#: .\core\templates\core\review_questions.html:63
+msgid "В панель завуча"
+msgstr "Оқу ісі меңгерушісінің панеліне"
+
+#: .\core\templates\core\class_students_list.html:243
+#: .\core\templates\core\edit_profile.html:261
+#: .\core\templates\core\register_student.html:303
+#: .\core\templates\core\students_list.html:314
+msgid "Профильный предмет 1"
+msgstr "Бейіндік пән 1"
+
+#: .\core\templates\core\class_students_list.html:244
+#: .\core\templates\core\edit_profile.html:272
+#: .\core\templates\core\register_student.html:311
+#: .\core\templates\core\students_list.html:315
+msgid "Профильный предмет 2"
+msgstr "Бейіндік пән 2"
+
+#: .\core\templates\core\director_dashboard.html:7
+#: .\core\templates\core\director_dashboard.html:281
+msgid "Панель директора"
+msgstr "Директор панелі"
+
+#: .\core\templates\core\director_dashboard.html:283
+#: .\core\templates\core\student_dashboard.html:354
+#: .\core\templates\core\teacher_dashboard.html:259
+#: .\core\templates\core\zavuch_dashboard.html:279
+msgid "Профиль"
+msgstr "Профиль"
+
+#: .\core\templates\core\director_dashboard.html:294
+msgid "Коды доступа для вашей школы"
+msgstr "Мектебіңізге қатынау кодтары"
+
+#: .\core\templates\core\director_dashboard.html:295
+msgid "Передайте эти коды учителям, завучу и ученикам."
+msgstr ""
+"Бұл кодтарды мұғалімдерге, оқу ісі меңгерушісіне және оқушыларға беріңіз."
+
+#: .\core\templates\core\director_dashboard.html:298
+msgid "Код для учителей"
+msgstr "Мұғалімдер коды"
+
+#: .\core\templates\core\director_dashboard.html:302
+msgid "Код для завуча"
+msgstr "Оқу ісі меңгерушісінің коды"
+
+#: .\core\templates\core\director_dashboard.html:306
+msgid "Код для учеников"
+msgstr "Оқушылар коды"
+
+#: .\core\templates\core\director_dashboard.html:313
+#: .\core\templates\core\zavuch_dashboard.html:305
+msgid "Классы школы"
+msgstr "Мектеп сыныптары"
+
+#: .\core\templates\core\director_dashboard.html:323
+#: .\core\templates\core\zavuch_dashboard.html:315
+msgid "Классы ещё не созданы."
+msgstr "Сыныптар әлі жасалмаған."
+
+#: .\core\templates\core\director_dashboard.html:329
+#: .\core\templates\core\manage_sessions.html:398
+#: .\core\templates\core\my_question_groups.html:276
+#: .\core\templates\core\review_questions.html:123
+#: .\core\templates\core\zavuch_dashboard.html:321
+msgid "Действия"
+msgstr "Әрекеттер"
+
+#: .\core\templates\core\director_dashboard.html:333
+#: .\core\templates\core\review_questions.html:7
+#: .\core\templates\core\review_questions.html:58
+#: .\core\templates\core\review_questions.html:69
+#: .\core\templates\core\zavuch_dashboard.html:325
+msgid "Проверка вопросов"
+msgstr "Сұрақтарды тексеру"
+
+#: .\core\templates\core\director_dashboard.html:337
+#: .\core\templates\core\school_results.html:7
+#: .\core\templates\core\school_results.html:118
+#: .\core\templates\core\school_results_detail.html:7
+#: .\core\templates\core\school_results_detail.html:313
+#: .\core\templates\core\zavuch_dashboard.html:329
+msgid "Результаты школы"
+msgstr "Мектеп нәтижелері"
+
+#: .\core\templates\core\director_dashboard.html:341
+#: .\core\templates\core\students_list.html:7
+msgid "Ученики"
+msgstr "Оқушылар"
+
+#: .\core\templates\core\director_dashboard.html:345
+#: .\core\templates\core\teachers_list.html:7
+msgid "Учителя"
+msgstr "Мұғалімдер"
+
+#: .\core\templates\core\director_dashboard.html:349
+#: .\core\templates\core\manage_sessions.html:7
+#: .\core\templates\core\manage_sessions.html:350
+#: .\core\templates\core\teacher_dashboard.html:306
+#: .\core\templates\core\zavuch_dashboard.html:333
+msgid "Сессии ЕНТ"
+msgstr "ҰБТ сессиялары"
+
+#: .\core\templates\core\director_setup_classes.html:7
+msgid "Настройка классов"
+msgstr "Сыныптарды баптау"
+
+#: .\core\templates\core\director_setup_classes.html:210
+msgid "Шаг 2: Укажите классы вашей школы"
+msgstr "2-қадам: Мектебіңіздің сыныптарын көрсетіңіз"
+
+#: .\core\templates\core\director_setup_classes.html:214
+msgid "Отметьте галочками классы, которые есть в вашей школе."
+msgstr "Мектебіңізде бар сыныптарды белгілеңіз."
+
+#: .\core\templates\core\director_setup_classes.html:231
+msgid "класс"
+msgstr "сынып"
+
+#: .\core\templates\core\director_setup_classes.html:245
+msgid "Сохранить классы"
+msgstr "Сыныптарды сақтау"
+
+#: .\core\templates\core\edit_profile.html:7
+#: .\core\templates\core\edit_profile.html:221
+msgid "Редактирование профиля"
+msgstr "Профильді өңдеу"
+
+#: .\core\templates\core\edit_profile.html:225
+msgid "Профиль обновлён."
+msgstr "Профиль жаңартылды."
+
+#: .\core\templates\core\edit_profile.html:235
+msgid "Личные данные"
+msgstr "Жеке деректер"
+
+#: .\core\templates\core\edit_profile.html:248
+msgid "Мой класс и предметы"
+msgstr "Менің сыныбым және пәндерім"
+
+#: .\core\templates\core\edit_profile.html:250
+#: .\core\templates\core\register_student.html:295
+#: .\core\templates\core\student_dashboard.html:366
+msgid "Ваш класс"
+msgstr "Сіздің сыныбыңыз"
+
+#: .\core\templates\core\edit_profile.html:252
+#: .\core\templates\core\edit_profile.html:319
+#: .\core\templates\core\register_student.html:297
+#: .\core\templates\core\register_teacher.html:387
+msgid "выберите класс"
+msgstr "сыныпты таңдаңыз"
+
+#: .\core\templates\core\edit_profile.html:263
+#: .\core\templates\core\edit_profile.html:274
+#: .\core\templates\core\register_student.html:305
+#: .\core\templates\core\register_student.html:313
+msgid "выберите предмет"
+msgstr "пәнді таңдаңыз"
+
+#: .\core\templates\core\edit_profile.html:286
+msgid "Мои роли"
+msgstr "Менің рөлдерім"
+
+#: .\core\templates\core\edit_profile.html:293
+#: .\core\templates\core\register_teacher.html:363
+msgid "Я предметник"
+msgstr "Мен пән мұғалімімін"
+
+#: .\core\templates\core\edit_profile.html:296
+#: .\core\templates\core\register_teacher.html:366
+msgid "Выберите предметы"
+msgstr "Пәндерді таңдаңыз"
+
+#: .\core\templates\core\edit_profile.html:314
+#: .\core\templates\core\register_teacher.html:382
+msgid "Я классный руководитель"
+msgstr "Мен сынып жетекшісімін"
+
+#: .\core\templates\core\edit_profile.html:328
+msgid "Если снять галочку — вы перестанете быть классным руководителем."
+msgstr "Белгіні алып тастасаңыз — сынып жетекшісі болудан қаласыз."
+
+#: .\core\templates\core\edit_profile.html:334
+msgid "Смена пароля"
+msgstr "Құпия сөзді ауыстыру"
+
+#: .\core\templates\core\edit_profile.html:336
+msgid "Старый пароль"
+msgstr "Ескі құпия сөз"
+
+#: .\core\templates\core\edit_profile.html:339
+msgid "Новый пароль"
+msgstr "Жаңа құпия сөз"
+
+#: .\core\templates\core\edit_profile.html:342
+msgid "Повторите новый пароль"
+msgstr "Жаңа құпия сөзді қайталаңыз"
+
+#: .\core\templates\core\edit_profile.html:345
+msgid "Сохранить"
+msgstr "Сақтау"
+
+#: .\core\templates\core\edit_profile.html:354
+msgid "Вы уверены, что хотите перестать быть классным руководителем?"
+msgstr "Сынып жетекшісі болудан қалуға сенімдісіз бе?"
+
+#: .\core\templates\core\home.html:7 .\core\templates\core\home.html:260
+#: .\core\templates\core\home.html:303 .\core\templates\core\login.html:229
+#: .\core\templates\core\take_test.html:8
+msgid "Пробное ЕНТ"
+msgstr "Сынақ ҰБТ"
+
+#: .\core\templates\core\home.html:259
+msgid "Онлайн-платформа"
+msgstr "Онлайн-платформа"
+
+#: .\core\templates\core\home.html:261
+msgid "Онлайн-платформа для проведения пробного тестирования в школах"
+msgstr "Мектептерде сынақ тестілеу өткізуге арналған онлайн-платформа"
+
+#: .\core\templates\core\home.html:265 .\core\templates\core\login.html:249
+#: .\core\templates\core\register_student.html:7
+#: .\core\templates\core\register_student.html:222
+#: .\core\templates\core\register_student.html:273
+msgid "Регистрация ученика"
+msgstr "Оқушы тіркелуі"
+
+#: .\core\templates\core\home.html:268 .\core\templates\core\login.html:250
+msgid "Регистрация учителя"
+msgstr "Мұғалім тіркелуі"
+
+#: .\core\templates\core\home.html:271 .\core\templates\core\login.html:251
+msgid "Регистрация школы"
+msgstr "Мектеп тіркелуі"
+
+#: .\core\templates\core\home.html:277 .\core\templates\core\login.html:243
+msgid "Войти"
+msgstr "Кіру"
+
+#: .\core\templates\core\home.html:285
+msgid "120 вопросов"
+msgstr "120 сұрақ"
+
+#: .\core\templates\core\home.html:286
+msgid ""
+"История Казахстана, грамотность чтения, математическая грамотность и два "
+"профильных предмета."
+msgstr ""
+"Қазақстан тарихы, оқу сауаттылығы, математикалық сауаттылық және екі "
+"бейіндік пән."
+
+#: .\core\templates\core\home.html:290
+msgid "4 часа"
+msgstr "4 сағат"
+
+#: .\core\templates\core\home.html:291
+msgid "Таймер идёт с момента старта. Защита от переключения вкладок."
+msgstr "Таймер басталған сәттен жүреді. Қосымша беттерге ауысудан қорғау."
+
+#: .\core\templates\core\home.html:295
+msgid "Результаты сразу"
+msgstr "Нәтижелер бірден"
+
+#: .\core\templates\core\home.html:296
+msgid "Ученик, классный руководитель, завуч и директор видят результаты."
+msgstr ""
+"Оқушы, сынып жетекшісі, оқу ісі меңгерушісі және директор нәтижелерді көреді."
+
+#: .\core\templates\core\login.html:7 .\core\templates\core\login.html:228
+msgid "Вход"
+msgstr "Кіру"
+
+#: .\core\templates\core\login.html:246
+msgid "Или"
+msgstr "Немесе"
+
+#: .\core\templates\core\login.html:254
+#: .\core\templates\core\register_director.html:230
+#: .\core\templates\core\register_student.html:324
+#: .\core\templates\core\register_teacher.html:401
+#: .\core\templates\core\test_result.html:535
+msgid "На главную"
+msgstr "Басты бетке"
+
+#: .\core\templates\core\manage_sessions.html:361
+msgid "Создать новую сессию"
+msgstr "Жаңа сессия жасау"
+
+#: .\core\templates\core\manage_sessions.html:376
+msgid "Классы (пусто = для всей школы)"
+msgstr "Сыныптар (бос = бүкіл мектепке)"
+
+#: .\core\templates\core\manage_sessions.html:383
+msgid "Создать сессию"
+msgstr "Сессия жасау"
+
+#: .\core\templates\core\manage_sessions.html:387
+msgid "Существующие сессии"
+msgstr "Бар сессиялар"
+
+#: .\core\templates\core\manage_sessions.html:393
+#: .\core\templates\core\my_question_groups.html:272
+msgid "Название"
+msgstr "Атауы"
+
+#: .\core\templates\core\manage_sessions.html:394
+msgid "Открытие"
+msgstr "Ашылуы"
+
+#: .\core\templates\core\manage_sessions.html:395
+msgid "Закрытие"
+msgstr "Жабылуы"
+
+#: .\core\templates\core\manage_sessions.html:396
+msgid "Классы"
+msgstr "Сыныптар"
+
+#: .\core\templates\core\manage_sessions.html:408
+#: .\core\templates\core\review_questions.html:86
+#: .\core\templates\core\school_results_detail.html:332
+#: .\core\templates\core\school_results_detail.html:344
+#: .\core\templates\core\students_list.html:291
+msgid "Все"
+msgstr "Барлығы"
+
+#: .\core\templates\core\manage_sessions.html:412
+msgid "Выключена"
+msgstr "Өшірілген"
+
+#: .\core\templates\core\manage_sessions.html:414
+msgid "Идёт"
+msgstr "Жүріп жатыр"
+
+#: .\core\templates\core\manage_sessions.html:416
+msgid "Ожидание"
+msgstr "Күту"
+
+#: .\core\templates\core\manage_sessions.html:423
+msgid "Выкл"
+msgstr "Өшіру"
+
+#: .\core\templates\core\manage_sessions.html:423
+msgid "Вкл"
+msgstr "Қосу"
+
+#: .\core\templates\core\manage_sessions.html:437
+msgid "Пока нет сессий."
+msgstr "Әзірге сессиялар жоқ."
+
+#: .\core\templates\core\my_question_groups.html:7
+#: .\core\templates\core\my_question_groups.html:259
+#: .\core\templates\core\teacher_dashboard.html:288
+msgid "Мои контексты"
+msgstr "Менің контексттерім"
+
+#: .\core\templates\core\my_question_groups.html:273
+#: .\core\templates\core\my_questions.html:69
+#: .\core\templates\core\review_questions.html:120
+msgid "Блок"
+msgstr "Блок"
+
+#: .\core\templates\core\my_question_groups.html:274
+#: .\core\templates\core\review_questions.html:97
+msgid "Вопросов"
+msgstr "Сұрақтар"
+
+#: .\core\templates\core\my_question_groups.html:292
+#: .\core\templates\core\review_questions.html:121
+msgid "Вопрос"
+msgstr "Сұрақ"
+
+#: .\core\templates\core\my_question_groups.html:297
+#: .\core\templates\core\my_questions.html:91
+msgid "На проверку"
+msgstr "Тексеруге"
+
+#: .\core\templates\core\my_question_groups.html:311
+msgid "У вас пока нет контекстов. Создайте первый!"
+msgstr "Сізде әзірге контексттер жоқ. Біріншісін жасаңыз!"
+
+#: .\core\templates\core\my_questions.html:56
+#: .\core\templates\core\students_list.html:302
+#: .\core\templates\core\teachers_list.html:228
+msgid "Всего"
+msgstr "Барлығы"
+
+#: .\core\templates\core\my_questions.html:57
+#: .\core\templates\core\review_questions.html:83
+msgid "Черновики"
+msgstr "Жобалар"
+
+#: .\core\templates\core\my_questions.html:58
+#: .\core\templates\core\review_questions.html:74
+msgid "На проверке"
+msgstr "Тексеруде"
+
+#: .\core\templates\core\my_questions.html:59
+#: .\core\templates\core\review_questions.html:77
+msgid "Одобрено"
+msgstr "Мақұлданды"
+
+#: .\core\templates\core\my_questions.html:70
+msgid "Предмет"
+msgstr "Пән"
+
+#: .\core\templates\core\my_questions.html:71
+msgid "Тип"
+msgstr "Түрі"
+
+#: .\core\templates\core\my_questions.html:72
+msgid "Текст"
+msgstr "Мәтін"
+
+#: .\core\templates\core\my_questions.html:73
+msgid "Ответ"
+msgstr "Жауап"
+
+#: .\core\templates\core\my_questions.html:101
+msgid "У вас пока нет вопросов. Нажмите «Добавить вопрос»."
+msgstr "Сізде әзірге сұрақтар жоқ. «Сұрақ қосу» түймесін басыңыз."
+
+#: .\core\templates\core\no_active_session.html:7
+#: .\core\templates\core\student_dashboard.html:413
+msgid "Сессия закрыта"
+msgstr "Сессия жабық"
+
+#: .\core\templates\core\no_active_session.html:67
+msgid "Сессия ЕНТ закрыта"
+msgstr "ҰБТ сессиясы жабық"
+
+#: .\core\templates\core\no_active_session.html:71
+msgid "Следующая сессия начнётся:"
+msgstr "Келесі сессия басталады:"
+
+#: .\core\templates\core\no_active_session.html:75
+msgid "Сейчас нет активной сессии ЕНТ."
+msgstr "Қазір белсенді ҰБТ сессиясы жоқ."
+
+#: .\core\templates\core\no_active_session.html:76
+#: .\core\templates\core\test_no_subjects.html:47
+msgid "Обратитесь к классному руководителю."
+msgstr "Сынып жетекшісіне хабарласыңыз."
+
+#: .\core\templates\core\no_active_session.html:80
+msgid "В личный кабинет"
+msgstr "Жеке кабинетке"
+
+#: .\core\templates\core\register_director.html:7
+msgid "Регистрация директора"
+msgstr "Директор тіркелуі"
+
+#: .\core\templates\core\register_director.html:185
+msgid "Регистрация директора школы"
+msgstr "Мектеп директорының тіркелуі"
+
+#: .\core\templates\core\register_director.html:186
+msgid "Заполните данные, чтобы создать школу и получить коды для учителей."
+msgstr "Мектеп жасау және мұғалімдерге кодтар алу үшін деректерді толтырыңыз."
+
+#: .\core\templates\core\register_director.html:227
+msgid "Зарегистрировать школу"
+msgstr "Мектепті тіркеу"
+
+#: .\core\templates\core\register_student.html:219
+#: .\core\templates\core\register_teacher.html:270
+msgid "Шаг 1 из 2"
+msgstr "1-қадам, 2-ден"
+
+#: .\core\templates\core\register_student.html:223
+msgid "Введите свои данные и код школы, который выдал учитель."
+msgstr "Деректеріңізді және мұғалім берген мектеп кодын енгізіңіз."
+
+#: .\core\templates\core\register_student.html:259
+#: .\core\templates\core\register_teacher.html:313
+#: .\core\templates\core\student_dashboard.html:455
+msgid "Продолжить"
+msgstr "Жалғастыру"
+
+#: .\core\templates\core\register_student.html:270
+#: .\core\templates\core\register_teacher.html:324
+msgid "Шаг 2 из 2"
+msgstr "2-қадам, 2-ден"
+
+#: .\core\templates\core\register_student.html:277
+msgid "Код школы принят. Выберите класс и профильные предметы."
+msgstr "Мектеп коды қабылданды. Сынып пен бейіндік пәндерді таңдаңыз."
+
+#: .\core\templates\core\register_student.html:319
+#: .\core\templates\core\register_teacher.html:396
+msgid "Зарегистрироваться"
+msgstr "Тіркелу"
+
+#: .\core\templates\core\register_teacher.html:7
+#: .\core\templates\core\register_teacher.html:273
+msgid "Регистрация учителя / завуча"
+msgstr "Мұғалім / оқу ісі меңгерушісінің тіркелуі"
+
+#: .\core\templates\core\register_teacher.html:275
+msgid "Введите свои данные и код, который выдал директор."
+msgstr "Деректеріңізді және директор берген кодты енгізіңіз."
+
+#: .\core\templates\core\register_teacher.html:276
+msgid "Код учителя начинается с T-, код завуча — с Z-."
+msgstr ""
+"Мұғалім коды T- әрпінен, оқу ісі меңгерушісінің коды Z- әрпінен басталады."
+
+#: .\core\templates\core\register_teacher.html:327
+msgid "Регистрация"
+msgstr "Тіркелу"
+
+#: .\core\templates\core\register_teacher.html:332
+msgid ""
+"Вы регистрируетесь как ЗАВУЧ. У вас будет доступ к проверке вопросов всей "
+"школы."
+msgstr ""
+"Сіз ОҚУ ІСІ МЕҢГЕРУШІСІ ретінде тіркелесіз. Бүкіл мектептің сұрақтарын "
+"тексеруге қатынауыңыз болады."
+
+#: .\core\templates\core\register_teacher.html:334
+msgid "Код учителя принят. Заполните информацию о вашей роли."
+msgstr "Мұғалім коды қабылданды. Рөліңіз туралы ақпаратты толтырыңыз."
+
+#: .\core\templates\core\register_teacher.html:356
+msgid "Нажмите «Зарегистрироваться», чтобы завершить."
+msgstr "Аяқтау үшін «Тіркелу» түймесін басыңыз."
+
+#: .\core\templates\core\register_teacher.html:374
+msgid "Предметы ещё не добавлены."
+msgstr "Пәндер әлі қосылмаған."
+
+#: .\core\templates\core\register_teacher.html:385
+msgid "Класс, в котором вы классный руководитель"
+msgstr "Сынып жетекшісі болып табылатын сынып"
+
+#: .\core\templates\core\review_questions.html:80
+msgid "Отклонено"
+msgstr "Қабылданбады"
+
+#: .\core\templates\core\review_questions.html:92
+msgid "Контексты на проверке"
+msgstr "Тексерудегі контексттер"
+
+#: .\core\templates\core\review_questions.html:97
+#: .\core\templates\core\review_questions.html:119
+msgid "Автор"
+msgstr "Автор"
+
+#: .\core\templates\core\review_questions.html:101
+msgid "Одобрить"
+msgstr "Мақұлдау"
+
+#: .\core\templates\core\review_questions.html:105
+msgid "Отклонить"
+msgstr "Қабылдамау"
+
+#: .\core\templates\core\review_questions.html:114
+msgid "Вопросы"
+msgstr "Сұрақтар"
+
+#: .\core\templates\core\review_questions.html:161
+msgid "Вопросов с таким статусом нет."
+msgstr "Бұл мәртебедегі сұрақтар жоқ."
+
+#: .\core\templates\core\school_results.html:142
+msgid "Пока нет ни одной сессии с результатами."
+msgstr "Әзірге нәтижелері бар бірде-бір сессия жоқ."
+
+#: .\core\templates\core\school_results.html:148
+msgid "Скачать Excel"
+msgstr "Excel жүктеу"
+
+#: .\core\templates\core\school_results_detail.html:323
+msgid "Школа"
+msgstr "Мектеп"
+
+#: .\core\templates\core\school_results_detail.html:345
+#: .\core\templates\core\student_dashboard.html:440
+#: .\core\templates\core\test_result.html:454
+msgid "Завершён"
+msgstr "Аяқталды"
+
+#: .\core\templates\core\school_results_detail.html:346
+#: .\core\templates\core\student_dashboard.html:442
+#: .\core\templates\core\test_result.html:465
+msgid "Аннулирован"
+msgstr "Жойылды"
+
+#: .\core\templates\core\school_results_detail.html:347
+#: .\core\templates\core\student_dashboard.html:444
+#: .\core\templates\core\test_result.html:470
+msgid "В процессе"
+msgstr "Орындалуда"
+
+#: .\core\templates\core\school_results_detail.html:351
+#: .\core\templates\core\students_list.html:299
+msgid "Применить"
+msgstr "Қолдану"
+
+#: .\core\templates\core\school_results_detail.html:357
+msgid "Всего записей"
+msgstr "Барлық жазбалар"
+
+#: .\core\templates\core\school_results_detail.html:413
+msgid "Результатов нет."
+msgstr "Нәтижелер жоқ."
+
+#: .\core\templates\core\student_dashboard.html:7
+#: .\core\templates\core\student_dashboard.html:352
+msgid "Панель ученика"
+msgstr "Оқушы панелі"
+
+#: .\core\templates\core\student_dashboard.html:370
+msgid "не выбран"
+msgstr "таңдалмаған"
+
+#: .\core\templates\core\student_dashboard.html:374
+msgid "Профильные предметы"
+msgstr "Бейіндік пәндер"
+
+#: .\core\templates\core\student_dashboard.html:379
+#: .\core\templates\core\teacher_dashboard.html:276
+msgid "не выбраны"
+msgstr "таңдалмаған"
+
+#: .\core\templates\core\student_dashboard.html:387
+msgid "У вас есть незавершённый тест"
+msgstr "Сізде аяқталмаған тест бар"
+
+#: .\core\templates\core\student_dashboard.html:388
+msgid "Вы начали тест, но не завершили. Продолжите."
+msgstr "Сіз тестті бастадыңыз, бірақ аяқтамадыңыз. Жалғастырыңыз."
+
+#: .\core\templates\core\student_dashboard.html:390
+msgid "Продолжить тест"
+msgstr "Тестті жалғастыру"
+
+#: .\core\templates\core\student_dashboard.html:395
+msgid "Сессия ЕНТ открыта"
+msgstr "ҰБТ сессиясы ашық"
+
+#: .\core\templates\core\student_dashboard.html:398
+msgid "До"
+msgstr "Дейін"
+
+#: .\core\templates\core\student_dashboard.html:403
+msgid "Вы уже сдали в этой сессии. Повторно нельзя."
+msgstr "Сіз осы сессияда тапсырдыңыз. Қайта мүмкін емес."
+
+#: .\core\templates\core\student_dashboard.html:407
+msgid "Начать пробное ЕНТ"
+msgstr "Сынақ ҰБТ бастау"
+
+#: .\core\templates\core\student_dashboard.html:414
+msgid "Директор пока не открыл новую сессию. Дождитесь сигнала."
+msgstr "Директор әзірге жаңа сессия ашпады. Хабарласуды күтіңіз."
+
+#: .\core\templates\core\student_dashboard.html:419
+msgid "История пробных ЕНТ"
+msgstr "Сынақ ҰБТ тарихы"
+
+#: .\core\templates\core\student_dashboard.html:464
+msgid "Вы пока не проходили пробное ЕНТ."
+msgstr "Сіз әзірге сынақ ҰБТ-дан өтпедіңіз."
+
+#: .\core\templates\core\students_list.html:281
+msgid "Ученики школы"
+msgstr "Мектеп оқушылары"
+
+#: .\core\templates\core\students_list.html:334
+msgid "Учеников пока нет."
+msgstr "Оқушылар әзірге жоқ."
+
+#: .\core\templates\core\take_test.html:513
+msgid "Отвечено"
+msgstr "Жауап берілді"
+
+#: .\core\templates\core\take_test.html:516
+msgid "Менделеев"
+msgstr "Менделеев"
+
+#: .\core\templates\core\take_test.html:517
+msgid "Растворимость"
+msgstr "Ерігіштік"
+
+#: .\core\templates\core\take_test.html:529
+msgid "Ист. КЗ"
+msgstr "Қаз. тарихы"
+
+#: .\core\templates\core\take_test.html:530
+msgid "Чтение"
+msgstr "Оқу"
+
+#: .\core\templates\core\take_test.html:531
+msgid "Матем."
+msgstr "Матем."
+
+#: .\core\templates\core\take_test.html:611
+msgid "Следующий предмет"
+msgstr "Келесі пән"
+
+#: .\core\templates\core\take_test.html:615
+#: .\core\templates\core\take_test.html:625
+msgid "Завершить тест"
+msgstr "Тестті аяқтау"
+
+#: .\core\templates\core\take_test.html:624
+msgid "Осталось"
+msgstr "Қалды"
+
+#: .\core\templates\core\take_test.html:632
+#: .\core\templates\core\test_result.html:543
+msgid "Калькулятор"
+msgstr "Калькулятор"
+
+#: .\core\templates\core\take_test.html:661
+msgid "Периодическая таблица Менделеева"
+msgstr "Менделеевтің периодтық кестесі"
+
+#: .\core\templates\core\take_test.html:670
+msgid "Таблица растворимости"
+msgstr "Ерігіштік кестесі"
+
+#: .\core\templates\core\take_test.html:677
+msgid "ВНИМАНИЕ!"
+msgstr "НАЗАР АУДАРЫҢЫЗ!"
+
+#: .\core\templates\core\take_test.html:678
+msgid "Ваши результаты будут аннулированы."
+msgstr "Нәтижелеріңіз жойылады."
+
+#: .\core\templates\core\take_test.html:679
+msgid "Не покидайте вкладку с тестом!"
+msgstr "Тест орналасқан қосымша беттен шықпаңыз!"
+
+#: .\core\templates\core\take_test.html:681
+msgid "Понятно, продолжить"
+msgstr "Түсінікті, жалғастыру"
+
+#: .\core\templates\core\take_test.html:687
+msgid "Завершить тест?"
+msgstr "Тестті аяқтау керек пе?"
+
+#: .\core\templates\core\take_test.html:689
+msgid "Да, завершить"
+msgstr "Иә, аяқтау"
+
+#: .\core\templates\core\take_test.html:690
+msgid "Отмена"
+msgstr "Болдырмау"
+
+#: .\core\templates\core\take_test.html:793
+msgid "Время вышло! Тест завершается."
+msgstr "Уақыт бітті! Тест аяқталуда."
+
+#: .\core\templates\core\take_test.html:819
+msgid "ТЕСТ АННУЛИРОВАН"
+msgstr "ТЕСТ ЖОЙЫЛДЫ"
+
+#: .\core\templates\core\take_test.html:820
+msgid "Вы покинули вкладку"
+msgstr "Сіз қосымша беттен шықтыңыз"
+
+#: .\core\templates\core\take_test.html:820
+msgid "раз(а)."
+msgstr "рет."
+
+#: .\core\templates\core\take_test.html:821
+msgid "Результат не будет засчитан."
+msgstr "Нәтиже есепке алынбайды."
+
+#: .\core\templates\core\take_test.html:872
+msgid "Вы не ответили на"
+msgstr "Сіз жауап бермедіңіз"
+
+#: .\core\templates\core\take_test.html:872
+msgid "вопросов. Точно завершить?"
+msgstr "сұраққа. Аяқтауға сенімдісіз бе?"
+
+#: .\core\templates\core\take_test.html:873
+msgid "Вы ответили на все вопросы. Завершить?"
+msgstr "Сіз барлық сұрақтарға жауап бердіңіз. Аяқтау керек пе?"
+
+#: .\core\templates\core\teacher_dashboard.html:7
+#: .\core\templates\core\teacher_dashboard.html:257
+msgid "Панель учителя"
+msgstr "Мұғалім панелі"
+
+#: .\core\templates\core\teacher_dashboard.html:271
+#: .\core\templates\core\teachers_list.html:252
+msgid "Предметник"
+msgstr "Пән мұғалімі"
+
+#: .\core\templates\core\teacher_dashboard.html:272
+#: .\core\templates\core\teachers_list.html:240
+msgid "Предметы"
+msgstr "Пәндер"
+
+#: .\core\templates\core\teacher_dashboard.html:297
+msgid "Классный руководитель"
+msgstr "Сынып жетекшісі"
+
+#: .\core\templates\core\teacher_dashboard.html:299
+msgid "учеников"
+msgstr "оқушы"
+
+#: .\core\templates\core\teacher_dashboard.html:314
+msgid "Мои ученики"
+msgstr "Менің оқушыларым"
+
+#: .\core\templates\core\teacher_dashboard.html:321
+msgid "Профильные"
+msgstr "Бейіндік"
+
+#: .\core\templates\core\teacher_dashboard.html:349
+msgid "Вы не выбрали ни предмет, ни класс. Обратитесь к директору."
+msgstr "Сіз не пәнді, не сыныпты таңдамадыңыз. Директорға хабарласыңыз."
+
+#: .\core\templates\core\teachers_list.html:222
+msgid "Учителя школы"
+msgstr "Мектеп мұғалімдері"
+
+#: .\core\templates\core\teachers_list.html:239
+msgid "Роль"
+msgstr "Рөлі"
+
+#: .\core\templates\core\teachers_list.html:241
+msgid "Классное руководство"
+msgstr "Сынып жетекшілігі"
+
+#: .\core\templates\core\teachers_list.html:253
+msgid "Классрук"
+msgstr "Сынып жетекшісі"
+
+#: .\core\templates\core\teachers_list.html:268
+msgid "Учителей пока нет."
+msgstr "Мұғалімдер әзірге жоқ."
+
+#: .\core\templates\core\test_already_done.html:7
+msgid "Тест уже пройден"
+msgstr "Тест тапсырылды"
+
+#: .\core\templates\core\test_already_done.html:46
+msgid "Вы уже сдали пробное ЕНТ"
+msgstr "Сіз сынақ ҰБТ-ны тапсырдыңыз"
+
+#: .\core\templates\core\test_already_done.html:47
+msgid "Повторная сдача не разрешена."
+msgstr "Қайта тапсыруға рұқсат етілмейді."
+
+#: .\core\templates\core\test_no_subjects.html:7
+msgid "Нет профильных предметов"
+msgstr "Бейіндік пәндер жоқ"
+
+#: .\core\templates\core\test_no_subjects.html:46
+msgid "Профильные предметы не выбраны"
+msgstr "Бейіндік пәндер таңдалмаған"
+
+#: .\core\templates\core\test_not_enough.html:7
+#: .\core\templates\core\test_not_enough.html:68
+msgid "Недостаточно вопросов"
+msgstr "Сұрақтар жеткіліксіз"
+
+#: .\core\templates\core\test_not_enough.html:69
+msgid "Нужно 120 вопросов, есть"
+msgstr "120 сұрақ керек, бар"
+
+#: .\core\templates\core\test_not_enough.html:73
+msgid "Мат. грамотность"
+msgstr "Мат. сауаттылық"
+
+#: .\core\templates\core\test_not_enough.html:74
+msgid "Профильный 1"
+msgstr "Бейіндік 1"
+
+#: .\core\templates\core\test_not_enough.html:75
+msgid "Профильный 2"
+msgstr "Бейіндік 2"
+
+#: .\core\templates\core\test_not_enough.html:77
+msgid "Попросите учителей добавить и одобрить вопросы."
+msgstr "Мұғалімдерден сұрақтарды қосуды және мақұлдауды сұраңыз."
+
+#: .\core\templates\core\test_result.html:7
+msgid "Результат ЕНТ"
+msgstr "ҰБТ нәтижесі"
+
+#: .\core\templates\core\test_result.html:442
+msgid "Результат пробного ЕНТ"
+msgstr "Сынақ ҰБТ нәтижесі"
+
+#: .\core\templates\core\test_result.html:446
+msgid "Общий балл"
+msgstr "Жалпы балл"
+
+#: .\core\templates\core\test_result.html:457
+msgid "Пороги пройдены"
+msgstr "Шектік балдарға жетті"
+
+#: .\core\templates\core\test_result.html:461
+msgid "Пороги не пройдены"
+msgstr "Шектік балдарға жетпеді"
+
+#: .\core\templates\core\test_result.html:467
+msgid "Тест аннулирован из-за нарушений."
+msgstr "Бұзушылықтарға байланысты тест жойылды."
+
+#: .\core\templates\core\test_result.html:475
+msgid "Нарушений вкладки"
+msgstr "Қосымша бетке өту"
+
+#: .\core\templates\core\test_result.html:484
+msgid "Показать баллы по предметам"
+msgstr "Пәндер бойынша баллдарды көрсету"
+
+#: .\core\templates\core\test_result.html:490
+msgid "Баллы по предметам"
+msgstr "Пәндер бойынша баллдар"
+
+#: .\core\templates\core\test_result.html:496
+#: .\core\templates\core\test_result.html:520
+#: .\core\templates\core\test_result.html:528
+msgid "порог 5"
+msgstr "шек 5"
+
+#: .\core\templates\core\test_result.html:504
+#: .\core\templates\core\test_result.html:512
+msgid "порог 3"
+msgstr "шек 3"
+
+#: .\core\templates\core\test_result.html:596
+msgid "Ошибка"
+msgstr "Қате"
+
+#: .\core\templates\core\zavuch_dashboard.html:7
+#: .\core\templates\core\zavuch_dashboard.html:277
+msgid "Панель завуча"
+msgstr "Оқу ісі меңгерушісінің панелі"
+
+#: .\core\templates\core\zavuch_dashboard.html:290
+msgid "Общая информация"
+msgstr "Жалпы ақпарат"
+
+#: .\core\templates\core\zavuch_dashboard.html:293
+msgid "Учеников"
+msgstr "Оқушылар"
+
+#: .\core\templates\core\zavuch_dashboard.html:297
+msgid "Учителей"
+msgstr "Мұғалімдер"
+
+#: .\core\views.py:224 .\core\views.py:373
+msgid "Введите имя."
+msgstr "Атыңызды енгізіңіз."
+
+#: .\core\views.py:225 .\core\views.py:374
+msgid "Введите фамилию."
+msgstr "Тегіңізді енгізіңіз."
+
+#: .\core\views.py:226 .\core\views.py:375
+msgid "Введите логин."
+msgstr "Логинді енгізіңіз."
+
+#: .\core\views.py:227 .\core\views.py:376
+msgid "Введите пароль."
+msgstr "Құпия сөзді енгізіңіз."
+
+#: .\core\views.py:236 .\core\views.py:1400
+msgid "Выберите хотя бы одно: предметник или классный руководитель."
+msgstr "Кемінде біреуін таңдаңыз: пән мұғалімі немесе сынып жетекшісі."
+
+#: .\core\views.py:243
+msgid "Неверный код завуча."
+msgstr "Оқу ісі меңгерушісінің коды дұрыс емес."
+
+#: .\core\views.py:248
+msgid "Неверный код учителя."
+msgstr "Мұғалім коды дұрыс емес."
+
+#: .\core\views.py:260
+#, python-format
+msgid ""
+"У класса %(cls)s уже есть классный руководитель. Один класс — один классрук."
+msgstr "%(cls)s сыныбында сынып жетекшісі бар. Бір сынып — бір жетекші."
+
+#: .\core\views.py:264 .\core\views.py:1428
+msgid "Класс не найден."
+msgstr "Сынып табылмады."
+
+#: .\core\views.py:314 .\core\views.py:440
+msgid "Неверный код."
+msgstr "Код дұрыс емес."
+
+#: .\core\views.py:384
+msgid "Неверный код школы."
+msgstr "Мектеп коды дұрыс емес."
+
+#: .\core\views.py:390 .\core\views.py:1377 .\core\views.py:1414
+msgid "Выберите класс."
+msgstr "Сыныпты таңдаңыз."
+
+#: .\core\views.py:395
+msgid "Такого класса нет в школе."
+msgstr "Мұндай сынып мектепте жоқ."
+
+#: .\core\views.py:401 .\core\views.py:1379
+msgid "Выберите два профильных предмета."
+msgstr "Екі бейіндік пәнді таңдаңыз."
+
+#: .\core\views.py:403 .\core\views.py:1381
+msgid "Профильные предметы должны быть разными."
+msgstr "Бейіндік пәндер әртүрлі болуы керек."
+
+#: .\core\views.py:493
+msgid "У вас нет предметов для добавления вопросов."
+msgstr "Сізде сұрақ қосуға арналған пәндер жоқ."
+
+#: .\core\views.py:513
+msgid "Вы не можете добавлять вопросы в этот блок."
+msgstr "Сіз бұл блокқа сұрақ қоса алмайсыз."
+
+#: .\core\views.py:522
+msgid "Вы можете добавлять вопросы только по своему предмету."
+msgstr "Сіз тек өз пәніңіз бойынша сұрақ қоса аласыз."
+
+#: .\core\views.py:599
+msgid "Контексты может создавать только учитель грамотности чтения."
+msgstr "Контексттерді тек оқу сауаттылығы мұғалімі жасай алады."
+
+#: .\core\views.py:627
+msgid "Контексты доступны только учителю грамотности чтения."
+msgstr "Контексттер тек оқу сауаттылығы мұғаліміне қолжетімді."
+
+#: .\core\views.py:1243
+msgid "Неверный логин или пароль."
+msgstr "Логин немесе құпия сөз дұрыс емес."
+
+#: .\core\views.py:1362
+msgid "Старый пароль неверный."
+msgstr "Ескі құпия сөз дұрыс емес."
+
+#: .\core\views.py:1364
+msgid "Новые пароли не совпадают."
+msgstr "Жаңа құпия сөздер сәйкес келмейді."
+
+#: .\core\views.py:1366
+msgid "Пароль должен быть минимум 6 символов."
+msgstr "Құпия сөз кемінде 6 таңбадан тұруы керек."
+
+#: .\core\views.py:1392
+msgid "Ошибка при сохранении класса или предметов."
+msgstr "Сыныпты немесе пәндерді сақтау кезінде қате орын алды."
+
+#: .\core\views.py:1405
+msgid "Выберите хотя бы один предмет."
+msgstr "Кемінде бір пәнді таңдаңыз."
+
+#: .\core\views.py:1424
+#, python-format
+msgid "У класса %(cls)s уже есть классный руководитель."
+msgstr "%(cls)s сыныбында сынып жетекшісі бар."
+
+#: .\mysite\settings.py:113
+msgid "Қазақша"
+msgstr "Қазақша"
+
+#: .\venv\Lib\site-packages\django\contrib\messages\apps.py:16
+msgid "Messages"
+msgstr "Хабарламалар"
+
+#: .\venv\Lib\site-packages\django\contrib\sitemaps\apps.py:8
+msgid "Site Maps"
+msgstr "Сайт карталары"
+
+#: .\venv\Lib\site-packages\django\contrib\staticfiles\apps.py:9
+msgid "Static Files"
+msgstr "Статикалық файлдар"
+
+#: .\venv\Lib\site-packages\django\contrib\syndication\apps.py:7
+msgid "Syndication"
+msgstr "Синдикация"
+
+#. Translators: String used to replace omitted page numbers in elided page
+#. range generated by paginators, e.g. [1, 2, '…', 5, 6, 7, '…', 9, 10].
+#: .\venv\Lib\site-packages\django\core\paginator.py:33
+msgid "…"
+msgstr "…"
+
+#: .\venv\Lib\site-packages\django\core\paginator.py:35
+msgid "That page number is not an integer"
+msgstr "Бет нөмірі бүтін сан емес"
+
+#: .\venv\Lib\site-packages\django\core\paginator.py:36
+msgid "That page number is less than 1"
+msgstr "Бет нөмірі 1-ден кіші"
+
+#: .\venv\Lib\site-packages\django\core\paginator.py:37
+msgid "That page contains no results"
+msgstr "Бұл бетте нәтижелер жоқ"
+
+#: .\venv\Lib\site-packages\django\core\validators.py:22
+msgid "Enter a valid value."
+msgstr "Дұрыс мәнді енгізіңіз."
+
+#: .\venv\Lib\site-packages\django\core\validators.py:70
+msgid "Enter a valid domain name."
+msgstr "Дұрыс домен атауын енгізіңіз."
+
+#: .\venv\Lib\site-packages\django\core\validators.py:153
+#: .\venv\Lib\site-packages\django\forms\fields.py:775
+msgid "Enter a valid URL."
+msgstr "Дұрыс URL енгізіңіз."
+
+#: .\venv\Lib\site-packages\django\core\validators.py:200
+msgid "Enter a valid integer."
+msgstr "Дұрыс бүтін санды енгізіңіз."
+
+#: .\venv\Lib\site-packages\django\core\validators.py:211
+msgid "Enter a valid email address."
+msgstr "Дұрыс email мекенжайын енгізіңіз."
+
+#. Translators: "letters" means latin letters: a-z and A-Z.
+#: .\venv\Lib\site-packages\django\core\validators.py:289
+msgid ""
+"Enter a valid “slug” consisting of letters, numbers, underscores or hyphens."
+msgstr ""
+"Әріптерден, сандардан, астыңғы сызықтан немесе дефистен тұратын дұрыс "
+"«slug» енгізіңіз."
+
+#: .\venv\Lib\site-packages\django\core\validators.py:297
+msgid ""
+"Enter a valid “slug” consisting of Unicode letters, numbers, underscores, or "
+"hyphens."
+msgstr ""
+"Unicode әріптерден, сандардан, астыңғы сызықтан немесе дефистен тұратын "
+"дұрыс «slug» енгізіңіз."
+
+#: .\venv\Lib\site-packages\django\core\validators.py:309
+#: .\venv\Lib\site-packages\django\core\validators.py:318
+#: .\venv\Lib\site-packages\django\core\validators.py:332
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2299
+#, python-format
+msgid "Enter a valid %(protocol)s address."
+msgstr "Дұрыс %(protocol)s мекенжайын енгізіңіз."
+
+#: .\venv\Lib\site-packages\django\core\validators.py:311
+msgid "IPv4"
+msgstr "IPv4"
+
+#: .\venv\Lib\site-packages\django\core\validators.py:320
+#: .\venv\Lib\site-packages\django\utils\ipv6.py:43
+msgid "IPv6"
+msgstr "IPv6"
+
+#: .\venv\Lib\site-packages\django\core\validators.py:334
+msgid "IPv4 or IPv6"
+msgstr "IPv4 немесе IPv6"
+
+#: .\venv\Lib\site-packages\django\core\validators.py:375
+msgid "Enter only digits separated by commas."
+msgstr "Үтірмен бөлінген тек сандарды енгізіңіз."
+
+#: .\venv\Lib\site-packages\django\core\validators.py:381
+#, python-format
+msgid "Ensure this value is %(limit_value)s (it is %(show_value)s)."
+msgstr "Бұл мән %(limit_value)s болуы керек (қазір %(show_value)s)."
+
+#: .\venv\Lib\site-packages\django\core\validators.py:416
+#, python-format
+msgid "Ensure this value is less than or equal to %(limit_value)s."
+msgstr "Бұл мән %(limit_value)s-тен кіші немесе тең болуы керек."
+
+#: .\venv\Lib\site-packages\django\core\validators.py:425
+#, python-format
+msgid "Ensure this value is greater than or equal to %(limit_value)s."
+msgstr "Бұл мән %(limit_value)s-тен үлкен немесе тең болуы керек."
+
+#: .\venv\Lib\site-packages\django\core\validators.py:434
+#, python-format
+msgid "Ensure this value is a multiple of step size %(limit_value)s."
+msgstr "Бұл мән %(limit_value)s қадамына еселік болуы керек."
+
+#: .\venv\Lib\site-packages\django\core\validators.py:441
+#, python-format
+msgid ""
+"Ensure this value is a multiple of step size %(limit_value)s, starting from "
+"%(offset)s, e.g. %(offset)s, %(valid_value1)s, %(valid_value2)s, and so on."
+msgstr ""
+"Бұл мән %(offset)s-тен бастап %(limit_value)s қадамына еселік болуы керек, "
+"мысалы %(offset)s, %(valid_value1)s, %(valid_value2)s, т.б."
+
+#: .\venv\Lib\site-packages\django\core\validators.py:473
+#, python-format
+msgid ""
+"Ensure this value has at least %(limit_value)d character (it has "
+"%(show_value)d)."
+msgid_plural ""
+"Ensure this value has at least %(limit_value)d characters (it has "
+"%(show_value)d)."
+msgstr[0] ""
+"Бұл мәнде кемінде %(limit_value)d таңба болуы керек (қазір %(show_value)d)."
+msgstr[1] ""
+"Бұл мәнде кемінде %(limit_value)d таңба болуы керек (қазір %(show_value)d)."
+
+#: .\venv\Lib\site-packages\django\core\validators.py:491
+#, python-format
+msgid ""
+"Ensure this value has at most %(limit_value)d character (it has "
+"%(show_value)d)."
+msgid_plural ""
+"Ensure this value has at most %(limit_value)d characters (it has "
+"%(show_value)d)."
+msgstr[0] ""
+"Бұл мәнде ең көбі %(limit_value)d таңба болуы керек (қазір %(show_value)d)."
+msgstr[1] ""
+"Бұл мәнде ең көбі %(limit_value)d таңба болуы керек (қазір %(show_value)d)."
+
+#: .\venv\Lib\site-packages\django\core\validators.py:514
+#: .\venv\Lib\site-packages\django\forms\fields.py:366
+#: .\venv\Lib\site-packages\django\forms\fields.py:405
+msgid "Enter a number."
+msgstr "Санды енгізіңіз."
+
+#: .\venv\Lib\site-packages\django\core\validators.py:516
+#, python-format
+msgid "Ensure that there are no more than %(max)s digit in total."
+msgid_plural "Ensure that there are no more than %(max)s digits in total."
+msgstr[0] "Барлығы %(max)s саннан аспауы керек."
+msgstr[1] "Барлығы %(max)s саннан аспауы керек."
+
+#: .\venv\Lib\site-packages\django\core\validators.py:521
+#, python-format
+msgid "Ensure that there are no more than %(max)s decimal place."
+msgid_plural "Ensure that there are no more than %(max)s decimal places."
+msgstr[0] "Ондық бөлшекте %(max)s таңбадан аспауы керек."
+msgstr[1] "Ондық бөлшекте %(max)s таңбадан аспауы керек."
+
+#: .\venv\Lib\site-packages\django\core\validators.py:526
+#, python-format
+msgid ""
+"Ensure that there are no more than %(max)s digit before the decimal point."
+msgid_plural ""
+"Ensure that there are no more than %(max)s digits before the decimal point."
+msgstr[0] "Ондық бөлшекке дейін %(max)s саннан аспауы керек."
+msgstr[1] "Ондық бөлшекке дейін %(max)s саннан аспауы керек."
+
+#: .\venv\Lib\site-packages\django\core\validators.py:597
+#, python-format
+msgid ""
+"File extension “%(extension)s” is not allowed. Allowed extensions are: "
+"%(allowed_extensions)s."
+msgstr ""
+"“%(extension)s” файл кеңейтіміне рұқсат етілмейді. Рұқсат етілген кеңейтімдер: "
+"%(allowed_extensions)s."
+
+#: .\venv\Lib\site-packages\django\core\validators.py:659
+msgid "Null characters are not allowed."
+msgstr "Нөлдік таңбаларға рұқсат етілмейді."
+
+#: .\venv\Lib\site-packages\django\db\models\base.py:1666
+#: .\venv\Lib\site-packages\django\forms\models.py:933
+msgid "and"
+msgstr "және"
+
+#: .\venv\Lib\site-packages\django\db\models\base.py:1668
+#, python-format
+msgid "%(model_name)s with this %(field_labels)s already exists."
+msgstr "Осы %(field_labels)s бар %(model_name)s бұрыннан бар."
+
+#: .\venv\Lib\site-packages\django\db\models\constraints.py:22
+#, python-format
+msgid "Constraint “%(name)s” is violated."
+msgstr "“%(name)s” шектеуі бұзылды."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:94
+msgid "- Select an option -"
+msgstr "- Опцияны таңдаңыз -"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:143
+#, python-format
+msgid "Value %(value)r is not a valid choice."
+msgstr "%(value)r мәні дұрыс таңдау емес."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:144
+msgid "This field cannot be null."
+msgstr "Бұл өріс бос болмауы керек."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:145
+msgid "This field cannot be blank."
+msgstr "Бұл өріс бос болмауы керек."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:146
+#, python-format
+msgid "%(model_name)s with this %(field_label)s already exists."
+msgstr "Осы %(field_label)s бар %(model_name)s бұрыннан бар."
+
+#. Translators: The 'lookup_type' is one of 'date', 'year' or
+#. 'month'. Eg: "Title must be unique for pub_date year"
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:150
+#, python-format
+msgid ""
+"%(field_label)s must be unique for %(date_field_label)s %(lookup_type)s."
+msgstr ""
+"%(field_label)s %(date_field_label)s %(lookup_type)s үшін бірегей болуы керек."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:187
+#, python-format
+msgid "Field of type: %(field_type)s"
+msgstr "Өріс түрі: %(field_type)s"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1203
+#, python-format
+msgid "“%(value)s” value must be either True or False."
+msgstr "“%(value)s” мәні True немесе False болуы керек."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1204
+#, python-format
+msgid "“%(value)s” value must be either True, False, or None."
+msgstr "“%(value)s” мәні True, False немесе None болуы керек."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1206
+msgid "Boolean (Either True or False)"
+msgstr "Boolean (True немесе False)"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1256
+#, python-format
+msgid "String (up to %(max_length)s)"
+msgstr "Жол (%(max_length)s таңбаға дейін)"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1258
+msgid "String (unlimited)"
+msgstr "Жол (шектеусіз)"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1367
+msgid "Comma-separated integers"
+msgstr "Үтірмен бөлінген бүтін сандар"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1468
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid date format. It must be in YYYY-MM-DD "
+"format."
+msgstr ""
+"“%(value)s” мәнінің күн форматы дұрыс емес. YYYY-MM-DD форматында болуы керек."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1472
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1607
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (YYYY-MM-DD) but it is an invalid "
+"date."
+msgstr ""
+"“%(value)s” мәнінің форматы дұрыс (YYYY-MM-DD), бірақ күн жарамсыз."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1476
+msgid "Date (without time)"
+msgstr "Күн (уақытсыз)"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1603
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in YYYY-MM-DD HH:MM[:ss[."
+"uuuuuu]][TZ] format."
+msgstr ""
+"“%(value)s” мәнінің форматы дұрыс емес. YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ] "
+"форматында болуы керек."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1611
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (YYYY-MM-DD HH:MM[:ss[.uuuuuu]]"
+"[TZ]) but it is an invalid date/time."
+msgstr ""
+"“%(value)s” мәнінің форматы дұрыс (YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ]), "
+"бірақ күн/уақыт жарамсыз."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1616
+msgid "Date (with time)"
+msgstr "Күн (уақытпен)"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1743
+#, python-format
+msgid "“%(value)s” value must be a decimal number."
+msgstr "“%(value)s” мәні ондық сан болуы керек."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1745
+msgid "Decimal number"
+msgstr "Ондық сан"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1947
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in [DD] [[HH:]MM:]ss[."
+"uuuuuu] format."
+msgstr ""
+"“%(value)s” мәнінің форматы дұрыс емес. [DD] [[HH:]MM:]ss[.uuuuuu] "
+"форматында болуы керек."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1951
+msgid "Duration"
+msgstr "Ұзақтығы"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1999
+msgid "Email address"
+msgstr "Email мекенжайы"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2024
+msgid "File path"
+msgstr "Файл жолы"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2102
+#, python-format
+msgid "“%(value)s” value must be a float."
+msgstr "“%(value)s” мәні нақты сан болуы керек."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2104
+msgid "Floating point number"
+msgstr "Нақты сан"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2144
+#, python-format
+msgid "“%(value)s” value must be an integer."
+msgstr "“%(value)s” мәні бүтін сан болуы керек."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2146
+msgid "Integer"
+msgstr "Бүтін сан"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2242
+msgid "Big (8 byte) integer"
+msgstr "Үлкен (8 байт) бүтін сан"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2259
+msgid "Small integer"
+msgstr "Кіші бүтін сан"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2267
+msgid "IPv4 address"
+msgstr "IPv4 мекенжайы"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2298
+msgid "IP address"
+msgstr "IP мекенжайы"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2389
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2390
+#, python-format
+msgid "“%(value)s” value must be either None, True or False."
+msgstr "“%(value)s” мәні None, True немесе False болуы керек."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2392
+msgid "Boolean (Either True, False or None)"
+msgstr "Boolean (True, False немесе None)"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2443
+msgid "Positive big integer"
+msgstr "Оң үлкен бүтін сан"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2458
+msgid "Positive integer"
+msgstr "Оң бүтін сан"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2473
+msgid "Positive small integer"
+msgstr "Оң кіші бүтін сан"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2489
+#, python-format
+msgid "Slug (up to %(max_length)s)"
+msgstr "Slug (%(max_length)s таңбаға дейін)"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2525
+msgid "Text"
+msgstr "Мәтін"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2605
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in HH:MM[:ss[.uuuuuu]] "
+"format."
+msgstr ""
+"“%(value)s” мәнінің форматы дұрыс емес. HH:MM[:ss[.uuuuuu]] форматында болуы "
+"керек."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2609
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (HH:MM[:ss[.uuuuuu]]) but it is an "
+"invalid time."
+msgstr ""
+"“%(value)s” мәнінің форматы дұрыс (HH:MM[:ss[.uuuuuu]]), бірақ уақыт жарамсыз."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2613
+msgid "Time"
+msgstr "Уақыт"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2721
+msgid "URL"
+msgstr "URL"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2745
+msgid "Raw binary data"
+msgstr "Шикі екілік деректер"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2748
+#, python-format
+msgid "“%(value)s” is not a valid binary value."
+msgstr "“%(value)s” жарамды екілік мән емес."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2821
+#, python-format
+msgid "“%(value)s” is not a valid UUID."
+msgstr "“%(value)s” жарамды UUID емес."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2823
+msgid "Universally unique identifier"
+msgstr "Әмбебап бірегей идентификатор"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\files.py:247
+msgid "File"
+msgstr "Файл"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\files.py:423
+msgid "Image"
+msgstr "Сурет"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\json.py:26
+msgid "A JSON object"
+msgstr "JSON нысаны"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\json.py:28
+msgid "Value must be valid JSON."
+msgstr "Мән жарамды JSON болуы керек."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\related.py:991
+#, python-format
+msgid "%(model)s instance with %(field)s %(value)r is not a valid choice."
+msgstr "%(field)s %(value)r бар %(model)s данасы дұрыс таңдау емес."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\related.py:994
+msgid "Foreign Key (type determined by related field)"
+msgstr "Сыртқы кілт (түрі байланысты өріспен анықталады)"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\related.py:1369
+msgid "One-to-one relationship"
+msgstr "Бір-бірге қатынас"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\related.py:1426
+#, python-format
+msgid "%(from)s-%(to)s relationship"
+msgstr "%(from)s-%(to)s қатынасы"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\related.py:1428
+#, python-format
+msgid "%(from)s-%(to)s relationships"
+msgstr "%(from)s-%(to)s қатынастары"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\related.py:1476
+msgid "Many-to-many relationship"
+msgstr "Көптен-көпке қатынас"
+
+#. Translators: If found as last label character, these punctuation
+#. characters will prevent the default label_suffix to be appended to
+#. the label
+#: .\venv\Lib\site-packages\django\forms\boundfield.py:188
+msgid ":?.!"
+msgstr ":?.!"
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:93
+msgid "This field is required."
+msgstr "Бұл өріс міндетті."
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:315
+msgid "Enter a whole number."
+msgstr "Бүтін санды енгізіңіз."
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:486
+#: .\venv\Lib\site-packages\django\forms\fields.py:1246
+msgid "Enter a valid date."
+msgstr "Дұрыс күнді енгізіңіз."
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:509
+#: .\venv\Lib\site-packages\django\forms\fields.py:1247
+msgid "Enter a valid time."
+msgstr "Дұрыс уақытты енгізіңіз."
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:536
+msgid "Enter a valid date/time."
+msgstr "Дұрыс күн/уақытты енгізіңіз."
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:570
+msgid "Enter a valid duration."
+msgstr "Дұрыс ұзақтықты енгізіңіз."
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:571
+#, python-brace-format
+msgid "The number of days must be between {min_days} and {max_days}."
+msgstr "Күндер саны {min_days} мен {max_days} аралығында болуы керек."
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:640
+msgid "No file was submitted. Check the encoding type on the form."
+msgstr "Файл жіберілмеді. Форманың кодтау түрін тексеріңіз."
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:641
+msgid "No file was submitted."
+msgstr "Файл жіберілмеді."
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:642
+msgid "The submitted file is empty."
+msgstr "Жіберілген файл бос."
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:644
+#, python-format
+msgid "Ensure this filename has at most %(max)d character (it has %(length)d)."
+msgid_plural ""
+"Ensure this filename has at most %(max)d characters (it has %(length)d)."
+msgstr[0] ""
+"Бұл файл атауында ең көбі %(max)d таңба болуы керек (қазір %(length)d)."
+msgstr[1] ""
+"Бұл файл атауында ең көбі %(max)d таңба болуы керек (қазір %(length)d)."
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:649
+msgid "Please either submit a file or check the clear checkbox, not both."
+msgstr "Файл жіберіңіз немесе тазалау құсбелгісін белгілеңіз, екеуін бірге емес."
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:717
+msgid ""
+"Upload a valid image. The file you uploaded was either not an image or a "
+"corrupted image."
+msgstr ""
+"Жарамды суретті жүктеңіз. Жүктелген файл сурет емес немесе бүлінген сурет."
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:864
+#: .\venv\Lib\site-packages\django\forms\fields.py:951
+#: .\venv\Lib\site-packages\django\forms\models.py:1624
+#, python-format
+msgid "Select a valid choice. %(value)s is not one of the available choices."
+msgstr "Жарамды таңдауды таңдаңыз. %(value)s қолжетімді таңдаулардың бірі емес."
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:953
+#: .\venv\Lib\site-packages\django\forms\fields.py:1073
+#: .\venv\Lib\site-packages\django\forms\models.py:1622
+msgid "Enter a list of values."
+msgstr "Мәндер тізімін енгізіңіз."
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:1074
+msgid "Enter a complete value."
+msgstr "Толық мәнді енгізіңіз."
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:1318
+msgid "Enter a valid UUID."
+msgstr "Дұрыс UUID енгізіңіз."
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:1348
+msgid "Enter a valid JSON."
+msgstr "Дұрыс JSON енгізіңіз."
+
+#. Translators: This is the default suffix added to form field labels
+#: .\venv\Lib\site-packages\django\forms\forms.py:97
+msgid ":"
+msgstr ":"
+
+#: .\venv\Lib\site-packages\django\forms\forms.py:239
+#, python-format
+msgid "(Hidden field %(name)s) %(error)s"
+msgstr "(Жасырын өріс %(name)s) %(error)s"
+
+#: .\venv\Lib\site-packages\django\forms\formsets.py:61
+#, python-format
+msgid ""
+"ManagementForm data is missing or has been tampered with. Missing fields: "
+"%(field_names)s. You may need to file a bug report if the issue persists."
+msgstr ""
+"ManagementForm деректері жоқ немесе өзгертілген. Жетіспейтін өрістер: "
+"%(field_names)s. Мәселе жалғасса, қате туралы хабарласу қажет болуы мүмкін."
+
+#: .\venv\Lib\site-packages\django\forms\formsets.py:65
+#, python-format
+msgid "Please submit at most %(num)d form."
+msgid_plural "Please submit at most %(num)d forms."
+msgstr[0] "Ең көбі %(num)d форма жіберіңіз."
+msgstr[1] "Ең көбі %(num)d форма жіберіңіз."
+
+#: .\venv\Lib\site-packages\django\forms\formsets.py:70
+#, python-format
+msgid "Please submit at least %(num)d form."
+msgid_plural "Please submit at least %(num)d forms."
+msgstr[0] "Кемінде %(num)d форма жіберіңіз."
+msgstr[1] "Кемінде %(num)d форма жіберіңіз."
+
+#: .\venv\Lib\site-packages\django\forms\formsets.py:484
+#: .\venv\Lib\site-packages\django\forms\formsets.py:491
+msgid "Order"
+msgstr "Реті"
+
+#: .\venv\Lib\site-packages\django\forms\formsets.py:499
+msgid "Delete"
+msgstr "Жою"
+
+#: .\venv\Lib\site-packages\django\forms\models.py:926
+#, python-format
+msgid "Please correct the duplicate data for %(field)s."
+msgstr "%(field)s үшін қайталанатын деректерді түзетіңіз."
+
+#: .\venv\Lib\site-packages\django\forms\models.py:931
+#, python-format
+msgid "Please correct the duplicate data for %(field)s, which must be unique."
+msgstr "%(field)s үшін қайталанатын деректерді түзетіңіз, ол бірегей болуы керек."
+
+#: .\venv\Lib\site-packages\django\forms\models.py:938
+#, python-format
+msgid ""
+"Please correct the duplicate data for %(field_name)s which must be unique "
+"for the %(lookup)s in %(date_field)s."
+msgstr ""
+"%(date_field)s ішіндегі %(lookup)s үшін бірегей болуы керек %(field_name)s "
+"үшін қайталанатын деректерді түзетіңіз."
+
+#: .\venv\Lib\site-packages\django\forms\models.py:947
+msgid "Please correct the duplicate values below."
+msgstr "Төмендегі қайталанатын мәндерді түзетіңіз."
+
+#: .\venv\Lib\site-packages\django\forms\models.py:1384
+msgid "The inline value did not match the parent instance."
+msgstr "Кірістірілген мән негізгі данаға сәйкес келмеді."
+
+#: .\venv\Lib\site-packages\django\forms\models.py:1475
+msgid "Select a valid choice. That choice is not one of the available choices."
+msgstr "Жарамды таңдауды таңдаңыз. Бұл таңдау қолжетімді таңдаулардың бірі емес."
+
+#: .\venv\Lib\site-packages\django\forms\models.py:1626
+#, python-format
+msgid "“%(pk)s” is not a valid value."
+msgstr "“%(pk)s” жарамды мән емес."
+
+#: .\venv\Lib\site-packages\django\forms\utils.py:229
+#, python-format
+msgid ""
+"%(datetime)s couldn’t be interpreted in time zone %(current_timezone)s; it "
+"may be ambiguous or it may not exist."
+msgstr ""
+"%(datetime)s %(current_timezone)s уақыт белдеуінде түсіндірілмеді; ол "
+"екіұшты болуы мүмкін немесе жоқ болуы мүмкін."
+
+#: .\venv\Lib\site-packages\django\forms\widgets.py:573
+msgid "Clear"
+msgstr "Тазалау"
+
+#: .\venv\Lib\site-packages\django\forms\widgets.py:574
+msgid "Currently"
+msgstr "Қазір"
+
+#: .\venv\Lib\site-packages\django\forms\widgets.py:575
+msgid "Change"
+msgstr "Өзгерту"
+
+#: .\venv\Lib\site-packages\django\forms\widgets.py:914
+msgid "Unknown"
+msgstr "Белгісіз"
+
+#: .\venv\Lib\site-packages\django\forms\widgets.py:915
+msgid "Yes"
+msgstr "Иә"
+
+#: .\venv\Lib\site-packages\django\forms\widgets.py:916
+msgid "No"
+msgstr "Жоқ"
+
+#. Translators: %s is the name of a model, e.g. "No City matches the
+#. given query."
+#: .\venv\Lib\site-packages\django\shortcuts.py:105
+#: .\venv\Lib\site-packages\django\shortcuts.py:125
+#: .\venv\Lib\site-packages\django\shortcuts.py:149
+#: .\venv\Lib\site-packages\django\shortcuts.py:168
+#, python-format
+msgid "No %s matches the given query."
+msgstr "Берілген сұранысқа сәйкес %s табылмады."
+
+#: .\venv\Lib\site-packages\django\tasks\base.py:35
+msgctxt "Task"
+msgid "Ready"
+msgstr "Дайын"
+
+#: .\venv\Lib\site-packages\django\tasks\base.py:37
+msgctxt "Task"
+msgid "Running"
+msgstr "Орындалуда"
+
+#: .\venv\Lib\site-packages\django\tasks\base.py:39
+msgctxt "Task"
+msgid "Failed"
+msgstr "Сәтсіз"
+
+#: .\venv\Lib\site-packages\django\tasks\base.py:41
+msgctxt "Task"
+msgid "Successful"
+msgstr "Сәтті"
+
+#. Translators: Please do not add spaces around commas.
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:879
+msgid "yes,no,maybe"
+msgstr "иә,жоқ,мүмкін"
+
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:909
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:926
+#, python-format
+msgid "%(size)d byte"
+msgid_plural "%(size)d bytes"
+msgstr[0] "%(size)d байт"
+msgstr[1] "%(size)d байт"
+
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:928
+#, python-format
+msgid "%s KB"
+msgstr "%s КБ"
+
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:930
+#, python-format
+msgid "%s MB"
+msgstr "%s МБ"
+
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:932
+#, python-format
+msgid "%s GB"
+msgstr "%s ГБ"
+
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:934
+#, python-format
+msgid "%s TB"
+msgstr "%s ТБ"
+
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:936
+#, python-format
+msgid "%s PB"
+msgstr "%s ПБ"
+
+#: .\venv\Lib\site-packages\django\utils\dateformat.py:74
+msgid "p.m."
+msgstr "түстен кейін"
+
+#: .\venv\Lib\site-packages\django\utils\dateformat.py:75
+msgid "a.m."
+msgstr "түске дейін"
+
+#: .\venv\Lib\site-packages\django\utils\dateformat.py:80
+msgid "PM"
+msgstr "ТК"
+
+#: .\venv\Lib\site-packages\django\utils\dateformat.py:81
+msgid "AM"
+msgstr "ТД"
+
+#: .\venv\Lib\site-packages\django\utils\dateformat.py:153
+msgid "midnight"
+msgstr "түн ортасы"
+
+#: .\venv\Lib\site-packages\django\utils\dateformat.py:155
+msgid "noon"
+msgstr "түс"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:7
+msgid "Monday"
+msgstr "Дүйсенбі"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:8
+msgid "Tuesday"
+msgstr "Сейсенбі"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:9
+msgid "Wednesday"
+msgstr "Сәрсенбі"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:10
+msgid "Thursday"
+msgstr "Бейсенбі"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:11
+msgid "Friday"
+msgstr "Жұма"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:12
+msgid "Saturday"
+msgstr "Сенбі"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:13
+msgid "Sunday"
+msgstr "Жексенбі"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:16
+msgid "Mon"
+msgstr "Дс"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:17
+msgid "Tue"
+msgstr "Сс"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:18
+msgid "Wed"
+msgstr "Ср"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:19
+msgid "Thu"
+msgstr "Бс"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:20
+msgid "Fri"
+msgstr "Жм"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:21
+msgid "Sat"
+msgstr "Сн"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:22
+msgid "Sun"
+msgstr "Жс"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:25
+msgid "January"
+msgstr "Қаңтар"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:26
+msgid "February"
+msgstr "Ақпан"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:27
+msgid "March"
+msgstr "Наурыз"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:28
+msgid "April"
+msgstr "Сәуір"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:29
+msgid "May"
+msgstr "Мамыр"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:30
+msgid "June"
+msgstr "Маусым"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:31
+msgid "July"
+msgstr "Шілде"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:32
+msgid "August"
+msgstr "Тамыз"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:33
+msgid "September"
+msgstr "Қыркүйек"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:34
+msgid "October"
+msgstr "Қазан"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:35
+msgid "November"
+msgstr "Қараша"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:36
+msgid "December"
+msgstr "Желтоқсан"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:39
+msgid "jan"
+msgstr "қаң"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:40
+msgid "feb"
+msgstr "ақп"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:41
+msgid "mar"
+msgstr "нау"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:42
+msgid "apr"
+msgstr "сәу"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:43
+msgid "may"
+msgstr "мам"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:44
+msgid "jun"
+msgstr "мау"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:45
+msgid "jul"
+msgstr "шіл"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:46
+msgid "aug"
+msgstr "там"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:47
+msgid "sep"
+msgstr "қыр"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:48
+msgid "oct"
+msgstr "қаз"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:49
+msgid "nov"
+msgstr "қар"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:50
+msgid "dec"
+msgstr "жел"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:53
+msgctxt "abbrev. month"
+msgid "Jan."
+msgstr "Қаң."
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:54
+msgctxt "abbrev. month"
+msgid "Feb."
+msgstr "Ақп."
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:55
+msgctxt "abbrev. month"
+msgid "March"
+msgstr "Наурыз"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:56
+msgctxt "abbrev. month"
+msgid "April"
+msgstr "Сәуір"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:57
+msgctxt "abbrev. month"
+msgid "May"
+msgstr "Мамыр"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:58
+msgctxt "abbrev. month"
+msgid "June"
+msgstr "Маусым"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:59
+msgctxt "abbrev. month"
+msgid "July"
+msgstr "Шілде"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:60
+msgctxt "abbrev. month"
+msgid "Aug."
+msgstr "Там."
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:61
+msgctxt "abbrev. month"
+msgid "Sept."
+msgstr "Қыр."
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:62
+msgctxt "abbrev. month"
+msgid "Oct."
+msgstr "Қаз."
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:63
+msgctxt "abbrev. month"
+msgid "Nov."
+msgstr "Қар."
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:64
+msgctxt "abbrev. month"
+msgid "Dec."
+msgstr "Жел."
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:67
+msgctxt "alt. month"
+msgid "January"
+msgstr "Қаңтар"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:68
+msgctxt "alt. month"
+msgid "February"
+msgstr "Ақпан"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:69
+msgctxt "alt. month"
+msgid "March"
+msgstr "Наурыз"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:70
+msgctxt "alt. month"
+msgid "April"
+msgstr "Сәуір"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:71
+msgctxt "alt. month"
+msgid "May"
+msgstr "Мамыр"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:72
+msgctxt "alt. month"
+msgid "June"
+msgstr "Маусым"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:73
+msgctxt "alt. month"
+msgid "July"
+msgstr "Шілде"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:74
+msgctxt "alt. month"
+msgid "August"
+msgstr "Тамыз"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:75
+msgctxt "alt. month"
+msgid "September"
+msgstr "Қыркүйек"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:76
+msgctxt "alt. month"
+msgid "October"
+msgstr "Қазан"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:77
+msgctxt "alt. month"
+msgid "November"
+msgstr "Қараша"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:78
+msgctxt "alt. month"
+msgid "December"
+msgstr "Желтоқсан"
+
+#: .\venv\Lib\site-packages\django\utils\ipv6.py:20
+msgid "This is not a valid IPv6 address."
+msgstr "Бұл жарамды IPv6 мекенжайы емес."
+
+#: .\venv\Lib\site-packages\django\utils\text.py:76
+#, python-format
+msgctxt "String to return when truncating text"
+msgid "%(truncated_text)s…"
+msgstr "%(truncated_text)s…"
+
+#: .\venv\Lib\site-packages\django\utils\text.py:282
+msgid "or"
+msgstr "немесе"
+
+#. Translators: This string is used as a separator between list elements
+#: .\venv\Lib\site-packages\django\utils\text.py:301
+#: .\venv\Lib\site-packages\django\utils\timesince.py:135
+msgid ", "
+msgstr ", "
+
+#: .\venv\Lib\site-packages\django\utils\timesince.py:8
+#, python-format
+msgid "%(num)d year"
+msgid_plural "%(num)d years"
+msgstr[0] "%(num)d жыл"
+msgstr[1] "%(num)d жыл"
+
+#: .\venv\Lib\site-packages\django\utils\timesince.py:9
+#, python-format
+msgid "%(num)d month"
+msgid_plural "%(num)d months"
+msgstr[0] "%(num)d ай"
+msgstr[1] "%(num)d ай"
+
+#: .\venv\Lib\site-packages\django\utils\timesince.py:10
+#, python-format
+msgid "%(num)d week"
+msgid_plural "%(num)d weeks"
+msgstr[0] "%(num)d апта"
+msgstr[1] "%(num)d апта"
+
+#: .\venv\Lib\site-packages\django\utils\timesince.py:11
+#, python-format
+msgid "%(num)d day"
+msgid_plural "%(num)d days"
+msgstr[0] "%(num)d күн"
+msgstr[1] "%(num)d күн"
+
+#: .\venv\Lib\site-packages\django\utils\timesince.py:12
+#, python-format
+msgid "%(num)d hour"
+msgid_plural "%(num)d hours"
+msgstr[0] "%(num)d сағат"
+msgstr[1] "%(num)d сағат"
+
+#: .\venv\Lib\site-packages\django\utils\timesince.py:13
+#, python-format
+msgid "%(num)d minute"
+msgid_plural "%(num)d minutes"
+msgstr[0] "%(num)d минут"
+msgstr[1] "%(num)d минут"
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:30
+msgid "Forbidden"
+msgstr "Тыйым салынған"
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:31
+msgid "CSRF verification failed. Request aborted."
+msgstr "CSRF тексеруі сәтсіз аяқталды. Сұраныс тоқтатылды."
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:35
+msgid ""
+"You are seeing this message because this HTTPS site requires a “Referer "
+"header” to be sent by your web browser, but none was sent. This header is "
+"required for security reasons, to ensure that your browser is not being "
+"hijacked by third parties."
+msgstr ""
+"Сіз бұл хабарламаны көріп отырсыз, себебі бұл HTTPS сайты веб-браузеріңізден "
+"“Referer header” жіберуді талап етеді, бірақ ол жіберілмеді. Бұл тақырып "
+"қауіпсіздік себептерімен қажет, браузеріңіз үшінші тараптармен ұрланбауы үшін."
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:41
+msgid ""
+"If you have configured your browser to disable “Referer” headers, please re-"
+"enable them, at least for this site, or for HTTPS connections, or for “same-"
+"origin” requests."
+msgstr ""
+"Егер браузеріңізді “Referer” тақырыптарын өшіруге баптаған болсаңыз, оларды "
+"қайта қосыңыз, кемінде осы сайт үшін, немесе HTTPS қосылымдары үшін, немесе "
+"“same-origin” сұраныстары үшін."
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:46
+msgid ""
+"If you are using the <meta name=\"referrer\" content=\"no-referrer\"> tag or "
+"including the “Referrer-Policy: no-referrer” header, please remove them. The "
+"CSRF protection requires the “Referer” header to do strict referer checking. "
+"If you’re concerned about privacy, use alternatives like <a "
+"rel=\"noreferrer\" …> for links to third-party sites."
+msgstr ""
+"Егер <meta name=\"referrer\" content=\"no-referrer\"> тегін немесе "
+"“Referrer-Policy: no-referrer” тақырыбын қолдансаңыз, оларды жойыңыз. CSRF "
+"қорғанысы қатаң referer тексеруі үшін “Referer” тақырыбын талап етеді. "
+"Құпиялылық туралы алаңдасаңыз, үшінші тарап сайттарына сілтемелер үшін <a "
+"rel=\"noreferrer\" …> сияқты баламаларды қолданыңыз."
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:55
+msgid ""
+"You are seeing this message because this site requires a CSRF cookie when "
+"submitting forms. This cookie is required for security reasons, to ensure "
+"that your browser is not being hijacked by third parties."
+msgstr ""
+"Сіз бұл хабарламаны көріп отырсыз, себебі бұл сайт формаларды жіберу кезінде "
+"CSRF cookie талап етеді. Бұл cookie қауіпсіздік себептерімен қажет, "
+"браузеріңіз үшінші тараптармен ұрланбауы үшін."
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:61
+msgid ""
+"If you have configured your browser to disable cookies, please re-enable "
+"them, at least for this site, or for “same-origin” requests."
+msgstr ""
+"Егер браузеріңізді cookie өшіруге баптаған болсаңыз, оларды қайта қосыңыз, "
+"кемінде осы сайт үшін, немесе “same-origin” сұраныстары үшін."
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:67
+msgid "More information is available with DEBUG=True."
+msgstr "Қосымша ақпарат DEBUG=True кезінде қолжетімді."
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:44
+msgid "No year specified"
+msgstr "Жыл көрсетілмеген"
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:64
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:115
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:214
+msgid "Date out of range"
+msgstr "Күн ауқымнан тыс"
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:94
+msgid "No month specified"
+msgstr "Ай көрсетілмеген"
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:147
+msgid "No day specified"
+msgstr "Күн көрсетілмеген"
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:194
+msgid "No week specified"
+msgstr "Апта көрсетілмеген"
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:353
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:384
+#, python-format
+msgid "No %(verbose_name_plural)s available"
+msgstr "%(verbose_name_plural)s қолжетімсіз"
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:680
+#, python-format
+msgid ""
+"Future %(verbose_name_plural)s not available because %(class_name)s."
+"allow_future is False."
+msgstr ""
+"Болашақ %(verbose_name_plural)s қолжетімсіз, себебі %(class_name)s."
+"allow_future False."
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:720
+#, python-format
+msgid "Invalid date string “%(datestr)s” given format “%(format)s”"
+msgstr "“%(format)s” форматындағы “%(datestr)s” күн жолы жарамсыз"
+
+#: .\venv\Lib\site-packages\django\views\generic\detail.py:56
+#, python-format
+msgid "No %(verbose_name)s found matching the query"
+msgstr "Сұранысқа сәйкес %(verbose_name)s табылмады"
+
+#: .\venv\Lib\site-packages\django\views\generic\list.py:70
+msgid "Page is not “last”, nor can it be converted to an int."
+msgstr "Бет “соңғы” емес, оны int-ке түрлендіру мүмкін емес."
+
+#: .\venv\Lib\site-packages\django\views\generic\list.py:77
+#, python-format
+msgid "Invalid page (%(page_number)s): %(message)s"
+msgstr "Жарамсыз бет (%(page_number)s): %(message)s"
+
+#: .\venv\Lib\site-packages\django\views\generic\list.py:173
+#, python-format
+msgid "Empty list and “%(class_name)s.allow_empty” is False."
+msgstr "Бос тізім және “%(class_name)s.allow_empty” False."
+
+#: .\venv\Lib\site-packages\django\views\static.py:49
+msgid "Directory indexes are not allowed here."
+msgstr "Мұнда каталог индекстеріне рұқсат етілмейді."
+
+#: .\venv\Lib\site-packages\django\views\static.py:51
+#, python-format
+msgid "“%(path)s” does not exist"
+msgstr "“%(path)s” жоқ"
+
+#: .\venv\Lib\site-packages\django\views\static.py:68
+#: .\venv\Lib\site-packages\django\views\templates\directory_index.html:9
+#: .\venv\Lib\site-packages\django\views\templates\directory_index.html:12
+#, python-format
+msgid "Index of %(directory)s"
+msgstr "%(directory)s индексі"
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:7
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:197
+msgid "The install worked successfully! Congratulations!"
+msgstr "Орнату сәтті өтті! Құттықтаймыз!"
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:199
+#, python-format
+msgid ""
+"View <a href=\"https://docs.djangoproject.com/en/%(version)s/releases/\" "
+"target=\"_blank\" rel=\"noopener\">release notes</a> for Django %(version)s"
+msgstr ""
+"Django %(version)s үшін <a href=\"https://docs.djangoproject.com/en/"
+"%(version)s/releases/\" target=\"_blank\" rel=\"noopener\">release "
+"notes</a> қараңыз"
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:201
+#, python-format
+msgid ""
+"You are seeing this page because <a href=\"https://docs.djangoproject.com/en/"
+"%(version)s/ref/settings/#debug\" target=\"_blank\" "
+"rel=\"noopener\">DEBUG=True</a> is in your settings file and you have not "
+"configured any URLs."
+msgstr ""
+"Сіз бұл бетті көріп отырсыз, себебі параметрлер файлыңызда <a "
+"href=\"https://docs.djangoproject.com/en/%(version)s/ref/settings/#debug\" "
+"target=\"_blank\" rel=\"noopener\">DEBUG=True</a> орнатылған және ешбір URL "
+"бапталмаған."
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:220
+msgid "Django Documentation"
+msgstr "Django құжаттамасы"
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:221
+msgid "Topics, references, &amp; how-to’s"
+msgstr "Тақырыптар, анықтамалар және нұсқаулықтар"
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:229
+msgid "Tutorial: A Polling App"
+msgstr "Оқулық: Дауыс беру қолданбасы"
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:230
+msgid "Get started with Django"
+msgstr "Django-мен бастау"
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:238
+msgid "Django Community"
+msgstr "Django қауымдастығы"
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:239
+msgid "Connect, get help, or contribute"
+msgstr "Қосылыңыз, көмек алыңыз немесе үлес қосыңыз"
+
+#~ msgid "Назад к моим вопросам"
+#~ msgstr "Менің сұрақтарыма оралу"
+
+#~ msgid "Изменить классы"
+#~ msgstr "Сыныптарды өзгерту"
+
+#~ msgid "3 часа 30 минут"
+#~ msgstr "3 сағат 30 минут"
+
+#~ msgid "Отправить на проверку"
+#~ msgstr "Тексеруге жіберу"
+
+#~ msgid "несколько ответов"
+#~ msgstr "бірнеше жауап"
+
+#~ msgid "Русский"
+#~ msgstr "Орысша"

@@ -1,0 +1,340 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "Ученики" %}</title>
+
+    <!-- Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #f4f6f8;
+            color: #2c3e50;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ==== TOPBAR ==== */
+        .topbar {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            justify-content: flex-end;
+            padding: 20px 40px;
+        }
+        .lang-switch {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 10px 16px;
+            color: #2c3e50;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+            outline: none;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+        .lang-switch:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+        }
+        .lang-switch option { color: #2c3e50; }
+
+        /* ==== MAIN ==== */
+        .main {
+            position: relative;
+            z-index: 10;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px 24px 80px;
+        }
+
+        /* ==== ЗАГОЛОВОК ==== */
+        .page-header { margin-bottom: 28px; }
+        .page-header h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 42px;
+            font-weight: 900;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #2c3e50 0%, #3b82f6 50%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .page-header h1 .school {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            color: #64748b;
+            -webkit-text-fill-color: #64748b;
+            display: block;
+            margin-top: 8px;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #64748b;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: 0.2s;
+            padding: 8px 0;
+        }
+        .back-link:hover {
+            color: #2563eb;
+            transform: translateX(-3px);
+        }
+
+        /* ==== ФИЛЬТРЫ ==== */
+        .filters {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+            background: #ffffff;
+            border: 1px solid #e5e9ee;
+            border-radius: 18px;
+            padding: 20px 24px;
+            margin: 24px 0;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+        }
+        .filters label {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #34495e;
+            margin: 0;
+        }
+        .filters select {
+            padding: 10px 14px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            color: #2c3e50;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            outline: none;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .filters select:focus {
+            border-color: #3b82f6;
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(59,130,246,0.12);
+        }
+        .filters select option { color: #2c3e50; }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            box-shadow: 0 10px 30px -10px rgba(59,130,246,0.5),
+                        0 4px 12px rgba(0,0,0,0.08);
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px -10px rgba(59,130,246,0.7),
+                        0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        /* ==== СЧЁТЧИК ==== */
+        .total-line {
+            font-size: 15px;
+            font-weight: 500;
+            color: #64748b;
+            margin: 8px 0 4px;
+        }
+        .total-line strong {
+            color: #2563eb;
+            font-weight: 800;
+            font-size: 17px;
+        }
+
+        /* ==== ТАБЛИЦА ==== */
+        .table-wrap {
+            background: #ffffff;
+            border: 1px solid #e5e9ee;
+            border-radius: 20px;
+            padding: 8px;
+            margin-top: 18px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+        }
+        table { width: 100%; border-collapse: collapse; }
+        th, td {
+            padding: 16px 18px;
+            text-align: left;
+            font-size: 14px;
+            vertical-align: middle;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        th {
+            background: #f8fafc;
+            color: #2563eb;
+            font-weight: 700;
+            font-size: 12px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border-bottom: 1px solid #e5e9ee;
+        }
+        tbody tr { transition: 0.2s; }
+        tbody tr:hover { background: #f8fafc; }
+        tbody tr:last-child td { border-bottom: none; }
+
+        /* ==== БЕЙДЖ КЛАССА ==== */
+        .class-badge {
+            display: inline-block;
+            background: rgba(59,130,246,0.1);
+            border: 1px solid rgba(59,130,246,0.3);
+            color: #2563eb;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: 0.02em;
+        }
+
+        /* ==== ПУСТОЕ СОСТОЯНИЕ ==== */
+        .no-data {
+            text-align: center;
+            padding: 80px 40px;
+            color: #94a3b8;
+            font-size: 16px;
+            font-weight: 500;
+            background: #ffffff;
+            border: 1px dashed #cbd5e1;
+            border-radius: 20px;
+            margin-top: 24px;
+        }
+
+        /* ==== АДАПТИВ ==== */
+        @media (max-width: 700px) {
+            .topbar { padding: 15px 20px; }
+            .main { padding: 16px 16px 60px; }
+            .page-header h1 { font-size: 30px; }
+            .page-header h1 .school { font-size: 16px; }
+            .filters { padding: 16px; gap: 12px; }
+            .filters label { width: 100%; }
+            .filters select { flex: 1; }
+            th, td { padding: 12px 10px; font-size: 13px; }
+            .btn { padding: 11px 18px; font-size: 13px; }
+            .table-wrap { overflow-x: auto; }
+            table { min-width: 820px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="topbar">
+    <form action="{% url 'set_language' %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <input name="next" type="hidden" value="{{ request.path }}">
+        <select name="language" class="lang-switch" onchange="this.form.submit()">
+            {% get_current_language as LANGUAGE_CODE %}
+            {% get_available_languages as LANGUAGES %}
+            {% for lang_code, lang_name in LANGUAGES %}
+                <option value="{{ lang_code }}" {% if lang_code == LANGUAGE_CODE %}selected{% endif %}>
+                    {{ lang_name }}
+                </option>
+            {% endfor %}
+        </select>
+    </form>
+</div>
+
+<div class="main">
+
+    <div class="page-header">
+        <h1>
+            👥 {% trans "Ученики школы" %}
+            <span class="school">{{ school.name }}</span>
+        </h1>
+        <a class="back-link" href="{% url 'core:zavuch_dashboard' %}">← {% trans "Назад" %}</a>
+    </div>
+
+    <form method="get" class="filters">
+        <label>
+            {% trans "Класс" %}:
+            <select name="class">
+                <option value="">— {% trans "Все" %} —</option>
+                {% for c in classes %}
+                    <option value="{{ c.id }}" {% if selected_class == c.id|stringformat:"s" %}selected{% endif %}>
+                        {{ c.grade }}{{ c.letter }}
+                    </option>
+                {% endfor %}
+            </select>
+        </label>
+        <button type="submit" class="btn btn-primary">{% trans "Применить" %}</button>
+    </form>
+
+    <p class="total-line">{% trans "Всего" %}: <strong>{{ total }}</strong></p>
+
+    {% if students %}
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>№</th>
+                        <th>{% trans "Фамилия" %}</th>
+                        <th>{% trans "Имя" %}</th>
+                        <th>{% trans "Логин" %}</th>
+                        <th>{% trans "Класс" %}</th>
+                        <th>{% trans "Профильный предмет 1" %}</th>
+                        <th>{% trans "Профильный предмет 2" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in students %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ s.user.last_name }}</td>
+                            <td>{{ s.user.first_name }}</td>
+                            <td>{{ s.user.username }}</td>
+                            <td><span class="class-badge">{{ s.school_class|default:"—" }}</span></td>
+                            <td>{{ s.profile_subject_1|default:"—" }}</td>
+                            <td>{{ s.profile_subject_2|default:"—" }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="no-data">{% trans "Учеников пока нет." %}</div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,927 @@
+{% load i18n %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "Пробное ЕНТ" %}</title>
+
+    <!-- Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #f4f6f8;
+            color: #2c3e50;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ==== HEADER ==== */
+        .header {
+            position: sticky; top: 0; z-index: 101;
+            background: #2c3e50;
+            color: white;
+            padding: 12px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .timer { font-size: 22px; font-weight: 800; letter-spacing: 0.02em; }
+        .timer.warning { color: #f39c12; }
+        .timer.danger { color: #e74c3c; animation: pulse 1s infinite; }
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .progress { font-size: 15px; font-weight: 600; }
+        .progress span { color: #27ae60; font-weight: 800; }
+
+        .ref-btn {
+            padding: 8px 14px;
+            background: rgba(255,255,255,0.12);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .ref-btn:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.4);
+        }
+
+        /* ==== TABS ==== */
+        .tabs {
+            display: flex;
+            background: #34495e;
+            position: sticky; top: 56px;
+            z-index: 99;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            width: 100%;
+        }
+        .tab {
+            flex: 1 1 0;
+            padding: 12px 8px;
+            color: white;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            border-bottom: 4px solid transparent;
+            transition: 0.15s;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            min-width: 0;
+        }
+        .tab:hover { background: #3d566e; }
+        .tab.active {
+            background: #2c3e50;
+            border-bottom-color: #27ae60;
+            font-weight: 800;
+        }
+        .tab .tab-badge {
+            background: #27ae60;
+            color: white;
+            border-radius: 12px;
+            padding: 2px 8px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-left: 6px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 20px 100px;
+        }
+
+        /* ==== ВОПРОСЫ ==== */
+        .question {
+            background: white;
+            padding: 20px 22px;
+            margin-bottom: 14px;
+            border-radius: 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border: 1px solid #e5e9ee;
+            transition: 0.2s;
+        }
+        .question:hover {
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+        }
+        .q-text { font-size: 16px; margin-bottom: 14px; font-weight: 600; line-height: 1.55; color: #2c3e50; }
+        .q-num {
+            color: #94a3b8;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        /* ==== КОНТЕКСТ ==== */
+        .context-block {
+            background: #f0f7fd;
+            border-left: 4px solid #2980b9;
+            padding: 15px 18px;
+            margin-bottom: 16px;
+            border-radius: 8px;
+        }
+        .context-block strong {
+            display: block;
+            margin-bottom: 8px;
+            color: #2980b9;
+            font-weight: 800;
+            font-size: 14px;
+        }
+        .context-block p {
+            margin: 0;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            color: #34495e;
+        }
+
+        /* ==== ВАРИАНТЫ ОТВЕТА ==== */
+        .option {
+            display: block;
+            padding: 12px 16px;
+            margin: 8px 0;
+            background: #fafbfc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.15s;
+            font-size: 15px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        .option:hover {
+            background: #f0f4f8;
+            border-color: #cbd5e1;
+        }
+        .option input {
+            margin-right: 12px;
+            accent-color: #2980b9;
+            width: 18px; height: 18px;
+            cursor: pointer;
+            vertical-align: middle;
+        }
+        .option.selected {
+            background: #e8f4fd;
+            border-color: #2980b9;
+            box-shadow: 0 0 0 3px rgba(41,128,185,0.12);
+        }
+
+        .subject-block { display: none; }
+        .subject-block.active { display: block; }
+
+        /* ==== FINISH BAR ==== */
+        .finish-bar {
+            position: sticky;
+            bottom: 0;
+            background: white;
+            border-top: 1px solid #e5e9ee;
+            padding: 15px 20px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 99;
+            flex-wrap: wrap;
+            gap: 10px;
+            color: #34495e;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .finish-bar strong { color: #27ae60; }
+        .finish-btn {
+            padding: 14px 30px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: 0.2s;
+            box-shadow: 0 4px 12px rgba(39,174,96,0.25);
+        }
+        .finish-btn:hover {
+            background: #219a52;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(39,174,96,0.35);
+        }
+
+        /* ==== КНОПКИ НАВИГАЦИИ ==== */
+        .btn-nav {
+            padding: 14px 30px;
+            color: white;
+            border: none;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-nav-blue {
+            background: #2980b9;
+            box-shadow: 0 4px 12px rgba(41,128,185,0.25);
+        }
+        .btn-nav-blue:hover {
+            background: #2471a3;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(41,128,185,0.35);
+        }
+        .btn-nav-green {
+            background: #27ae60;
+            box-shadow: 0 4px 12px rgba(39,174,96,0.25);
+        }
+        .btn-nav-green:hover {
+            background: #219a52;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(39,174,96,0.35);
+        }
+
+        /* ==== OVERLAY ==== */
+        #warning-overlay {
+            display: none;
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(15,23,42,0.92);
+            color: white;
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px;
+        }
+        #warning-overlay div { max-width: 600px; }
+        #warning-overlay h1 { color: #ff4d4d; font-size: 42px; font-weight: 900; letter-spacing: -0.03em; }
+        #warning-overlay p { font-size: 20px; margin: 15px 0; font-weight: 600; }
+        #warning-overlay button {
+            margin-top: 25px;
+            padding: 15px 40px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        #warning-overlay button:hover {
+            background: #219a52;
+            transform: translateY(-2px);
+        }
+
+        /* ==== МОДАЛКИ ==== */
+        .modal-bg {
+            display: none;
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 500;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .modal {
+            background: white;
+            padding: 32px 28px;
+            border-radius: 16px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            color: #2c3e50;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        }
+        .modal h2 { margin-top: 0; font-weight: 800; letter-spacing: -0.02em; }
+        .modal p { color: #64748b; margin: 12px 0; font-size: 15px; }
+        .modal button {
+            margin: 8px;
+            padding: 12px 24px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+        .modal .yes { background: #27ae60; color: white; }
+        .modal .yes:hover { background: #219a52; transform: translateY(-2px); }
+        .modal .no {
+            background: #ecf0f1;
+            color: #34495e;
+        }
+        .modal .no:hover { background: #d5dbdb; transform: translateY(-2px); }
+
+        /* ==== КАЛЬКУЛЯТОР ==== */
+        #calc {
+            display: none;
+            position: fixed;
+            bottom: 160px; right: 20px;
+            background: white;
+            border: 1px solid #e5e9ee;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.18);
+            width: 260px;
+            max-width: calc(100vw - 40px);
+            z-index: 1001;
+        }
+        #calc .calc-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            color: #2c3e50;
+            font-size: 14px;
+            font-weight: 700;
+        }
+        #calc .calc-head button {
+            background: none; border: none;
+            color: #94a3b8; font-size: 20px;
+            cursor: pointer; padding: 0 6px;
+            transition: 0.2s;
+        }
+        #calc .calc-head button:hover { color: #e74c3c; }
+        #calc-display {
+            width: 100%;
+            padding: 10px;
+            font-size: 18px;
+            font-weight: 700;
+            text-align: right;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            color: #2c3e50;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+            outline: none;
+        }
+        .calc-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+            margin-top: 10px;
+        }
+        .calc-key {
+            padding: 12px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            border: none;
+            background: #ecf0f1;
+            color: #2c3e50;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .calc-key:hover { background: #d5dbdb; }
+        .calc-op {
+            background: #2980b9;
+            color: white;
+        }
+        .calc-op:hover { background: #2471a3; }
+        .calc-eq {
+            background: #27ae60;
+            color: white;
+        }
+        .calc-eq:hover { background: #219a52; }
+        .calc-clear {
+            grid-column: span 4;
+            background: #e74c3c;
+            color: white;
+        }
+        .calc-clear:hover { background: #c0392b; }
+
+        .calc-fab {
+            position: fixed;
+            bottom: 90px; right: 20px;
+            width: 60px; height: 60px;
+            border-radius: 50%;
+            background: #2980b9;
+            color: white;
+            font-size: 24px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(41,128,185,0.4);
+            z-index: 1000;
+            transition: 0.2s;
+        }
+        .calc-fab:hover {
+            background: #2471a3;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(41,128,185,0.5);
+        }
+
+        /* ==== МОДАЛКИ ТАБЛИЦ ==== */
+        .table-modal {
+            display: none;
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .table-modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            max-width: 95%;
+            max-height: 95%;
+            overflow: auto;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+        .table-modal-content h2 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+        .table-modal-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 8px;
+        }
+        .table-modal-close {
+            position: absolute;
+            top: 10px; right: 10px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        .table-modal-close:hover { background: #c0392b; transform: scale(1.05); }
+
+        /* ==== АДАПТИВ ==== */
+        @media (max-width: 700px) {
+            .tab { font-size: 11px; padding: 10px 4px; }
+            .tab .tab-badge { font-size: 10px; padding: 1px 5px; margin-left: 2px; }
+            .container { padding: 20px 10px 100px; }
+            .q-text { font-size: 15px; }
+            .option { font-size: 14px; padding: 10px 12px; }
+            .timer { font-size: 18px; }
+            .progress { font-size: 13px; }
+            .header { padding: 10px 12px; }
+            .ref-btn { font-size: 11px; padding: 6px 10px; }
+            .question { padding: 16px 16px; }
+            .tabs { top: 52px; }
+            #calc { width: calc(100% - 40px); right: 20px; left: 20px; }
+        }
+        @media (max-width: 450px) {
+            .tab { font-size: 9px; padding: 8px 2px; }
+            .tab .tab-badge { display: none; }
+            .timer { font-size: 16px; }
+            .progress { font-size: 12px; }
+            .ref-btn { font-size: 10px; padding: 5px 8px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="progress">
+        {% trans "Отвечено" %}: <span id="answered-count">0</span> / {{ answers.count }}
+    </div>
+    <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+        <button class="ref-btn" onclick="toggleMendeleev()">🧪 {% trans "Менделеев" %}</button>
+        <button class="ref-btn" onclick="toggleSolubility()">💧 {% trans "Растворимость" %}</button>
+        <div class="timer" id="timer">4:00:00</div>
+    </div>
+</div>
+
+{% regroup answers by subject_snapshot as answer_blocks %}
+
+<div class="tabs">
+    {% for block in answer_blocks %}
+        <button class="tab {% if forloop.first %}active{% endif %}"
+                data-target="block-{{ forloop.counter }}"
+                onclick="switchTab(this, 'block-{{ forloop.counter }}')">
+            {% if block.grouper == 'kaz_history' %}📜 {% trans "Ист. КЗ" %}
+            {% elif block.grouper == 'reading' %}📖 {% trans "Чтение" %}
+            {% elif block.grouper == 'math_literacy' %}🔢 {% trans "Матем." %}
+            {% elif block.grouper|slice:":8" == 'profile_' %}📚 {{ block.grouper|slice:"8:" }}
+            {% else %}{{ block.grouper }}{% endif %}
+            <span class="tab-badge">{{ block.list|length }}</span>
+        </button>
+    {% endfor %}
+</div>
+
+<div class="container">
+    {% for block in answer_blocks %}
+        <div class="subject-block {% if forloop.first %}active{% endif %}"
+             id="block-{{ forloop.counter }}">
+
+            {% for ans in block.list %}
+                <div class="question" data-answer-id="{{ ans.id }}" data-qtype="{{ ans.question_type_snapshot }}">
+                    <div class="q-num">№ {{ forloop.counter }}</div>
+
+                    {% if ans.group_context_snapshot %}
+                        <div class="context-block">
+                            <strong>📖 {{ ans.group_title_snapshot }}</strong>
+                            <p>{{ ans.group_context_snapshot }}</p>
+                        </div>
+                    {% endif %}
+
+                    <div class="q-text">{{ ans.question_snapshot }}</div>
+
+                    {% if ans.question.option_a %}
+                        <label class="option {% if 'A' in ans.chosen %}selected{% endif %}">
+                            <input type="{% if ans.question_type_snapshot == 'single' %}radio{% else %}checkbox{% endif %}"
+                                   name="q-{{ ans.id }}" value="A"
+                                   {% if 'A' in ans.chosen %}checked{% endif %}
+                                   onchange="saveAnswer({{ ans.id }})">
+                            A. {{ ans.question.option_a }}
+                        </label>
+                        <label class="option {% if 'B' in ans.chosen %}selected{% endif %}">
+                            <input type="{% if ans.question_type_snapshot == 'single' %}radio{% else %}checkbox{% endif %}"
+                                   name="q-{{ ans.id }}" value="B"
+                                   {% if 'B' in ans.chosen %}checked{% endif %}
+                                   onchange="saveAnswer({{ ans.id }})">
+                            B. {{ ans.question.option_b }}
+                        </label>
+                        <label class="option {% if 'C' in ans.chosen %}selected{% endif %}">
+                            <input type="{% if ans.question_type_snapshot == 'single' %}radio{% else %}checkbox{% endif %}"
+                                   name="q-{{ ans.id }}" value="C"
+                                   {% if 'C' in ans.chosen %}checked{% endif %}
+                                   onchange="saveAnswer({{ ans.id }})">
+                            C. {{ ans.question.option_c }}
+                        </label>
+                        <label class="option {% if 'D' in ans.chosen %}selected{% endif %}">
+                            <input type="{% if ans.question_type_snapshot == 'single' %}radio{% else %}checkbox{% endif %}"
+                                   name="q-{{ ans.id }}" value="D"
+                                   {% if 'D' in ans.chosen %}checked{% endif %}
+                                   onchange="saveAnswer({{ ans.id }})">
+                            D. {{ ans.question.option_d }}
+                        </label>
+                        {% if ans.question.option_e %}
+                            <label class="option {% if 'E' in ans.chosen %}selected{% endif %}">
+                                <input type="{% if ans.question_type_snapshot == 'single' %}radio{% else %}checkbox{% endif %}"
+                                       name="q-{{ ans.id }}" value="E"
+                                       {% if 'E' in ans.chosen %}checked{% endif %}
+                                       onchange="saveAnswer({{ ans.id }})">
+                                E. {{ ans.question.option_e }}
+                            </label>
+                        {% endif %}
+                        {% if ans.question.option_f %}
+                            <label class="option {% if 'F' in ans.chosen %}selected{% endif %}">
+                                <input type="{% if ans.question_type_snapshot == 'single' %}radio{% else %}checkbox{% endif %}"
+                                       name="q-{{ ans.id }}" value="F"
+                                       {% if 'F' in ans.chosen %}checked{% endif %}
+                                       onchange="saveAnswer({{ ans.id }})">
+                                F. {{ ans.question.option_f }}
+                            </label>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            <div style="text-align: center; margin: 30px 0;">
+                {% if not forloop.last %}
+                    <button onclick="nextTab({{ forloop.counter }})" class="btn-nav btn-nav-blue">
+                        {% trans "Следующий предмет" %} →
+                    </button>
+                {% else %}
+                    <button onclick="confirmFinish()" class="btn-nav btn-nav-green">
+                        {% trans "Завершить тест" %} ✓
+                    </button>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<div class="finish-bar">
+    <div>{% trans "Осталось" %}: <strong id="timer2">4:00:00</strong></div>
+    <button class="finish-btn" onclick="confirmFinish()">{% trans "Завершить тест" %}</button>
+</div>
+
+<button onclick="toggleCalc()" class="calc-fab">🧮</button>
+
+<div id="calc">
+    <div class="calc-head">
+        <strong>🧮 {% trans "Калькулятор" %}</strong>
+        <button onclick="toggleCalc()">✕</button>
+    </div>
+    <input type="text" id="calc-display" readonly>
+    <div class="calc-grid">
+        <button onclick="calcInput('7')" class="calc-key">7</button>
+        <button onclick="calcInput('8')" class="calc-key">8</button>
+        <button onclick="calcInput('9')" class="calc-key">9</button>
+        <button onclick="calcInput('/')" class="calc-key calc-op">/</button>
+        <button onclick="calcInput('4')" class="calc-key">4</button>
+        <button onclick="calcInput('5')" class="calc-key">5</button>
+        <button onclick="calcInput('6')" class="calc-key">6</button>
+        <button onclick="calcInput('*')" class="calc-key calc-op">×</button>
+        <button onclick="calcInput('1')" class="calc-key">1</button>
+        <button onclick="calcInput('2')" class="calc-key">2</button>
+        <button onclick="calcInput('3')" class="calc-key">3</button>
+        <button onclick="calcInput('-')" class="calc-key calc-op">−</button>
+        <button onclick="calcInput('0')" class="calc-key">0</button>
+        <button onclick="calcInput('.')" class="calc-key">.</button>
+        <button onclick="calcResult()" class="calc-key calc-eq">=</button>
+        <button onclick="calcInput('+')" class="calc-key calc-op">+</button>
+        <button onclick="calcClear()" class="calc-key calc-clear">C</button>
+    </div>
+</div>
+
+<!-- Модалка: Таблица Менделеева -->
+<div id="mendeleev-modal" class="table-modal">
+    <div class="table-modal-content">
+        <button class="table-modal-close" onclick="toggleMendeleev()">✕</button>
+        <h2>🧪 {% trans "Периодическая таблица Менделеева" %}</h2>
+        <img src="{% static 'core/images/periodic_table.png' %}" alt="Mendeleev Table">
+    </div>
+</div>
+
+<!-- Модалка: Таблица растворимости -->
+<div id="solubility-modal" class="table-modal">
+    <div class="table-modal-content">
+        <button class="table-modal-close" onclick="toggleSolubility()">✕</button>
+        <h2>💧 {% trans "Таблица растворимости" %}</h2>
+        <img src="{% static 'core/images/solubility.png' %}" alt="Solubility Table">
+    </div>
+</div>
+
+<div id="warning-overlay">
+    <div>
+        <h1>⚠️ {% trans "ВНИМАНИЕ!" %}</h1>
+        <p>{% trans "Ваши результаты будут аннулированы." %}</p>
+        <p>{% trans "Не покидайте вкладку с тестом!" %}</p>
+        <p id="violation-count"></p>
+        <button onclick="closeWarning()">{% trans "Понятно, продолжить" %}</button>
+    </div>
+</div>
+
+<div class="modal-bg" id="confirm-modal">
+    <div class="modal">
+        <h2>{% trans "Завершить тест?" %}</h2>
+        <p id="unanswered-info"></p>
+        <button class="yes" onclick="doFinish()">{% trans "Да, завершить" %}</button>
+        <button class="no" onclick="closeModal()">{% trans "Отмена" %}</button>
+    </div>
+</div>
+
+<script>
+const ATTEMPT_ID = {{ attempt.id }};
+const SECONDS_LEFT = {{ seconds_left }};
+const MAX_VIOLATIONS = 3;
+const LANG = '{{ LANGUAGE_CODE }}';
+let violations = 0;
+let testActive = true;
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function switchTab(btn, blockId) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.subject-block').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(blockId).classList.add('active');
+    window.scrollTo(0, 0);
+}
+
+function nextTab(currentIndex) {
+    const tabs = document.querySelectorAll('.tab');
+    if (currentIndex < tabs.length) {
+        tabs[currentIndex].click();
+    }
+}
+
+function saveAnswer(answerId) {
+    const q = document.querySelector(`[data-answer-id="${answerId}"]`);
+    const type = q.dataset.qtype;
+    let chosen = '';
+
+    if (type === 'single') {
+        const checked = q.querySelector('input:checked');
+        chosen = checked ? checked.value : '';
+    } else {
+        const checked = q.querySelectorAll('input:checked');
+        chosen = Array.from(checked).map(i => i.value).sort().join('');
+    }
+
+    q.querySelectorAll('.option').forEach(opt => {
+        const inp = opt.querySelector('input');
+        opt.classList.toggle('selected', inp.checked);
+    });
+
+    fetch(`/${LANG}/api/test/${ATTEMPT_ID}/answer/${answerId}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `chosen=${chosen}`,
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.ok) {
+            document.getElementById('answered-count').textContent = data.answered;
+        }
+    })
+    .catch(e => console.error(e));
+}
+
+let secondsLeft = SECONDS_LEFT;
+
+function formatTime(sec) {
+    const h = Math.floor(sec / 3600);
+    const m = Math.floor((sec % 3600) / 60);
+    const s = sec % 60;
+    return `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+function updateTimer() {
+    const timer = document.getElementById('timer');
+    const timer2 = document.getElementById('timer2');
+    const text = formatTime(secondsLeft);
+    timer.textContent = text;
+    timer2.textContent = text;
+
+    timer.classList.remove('warning', 'danger');
+    if (secondsLeft < 900) timer.classList.add('danger');
+    else if (secondsLeft < 1800) timer.classList.add('warning');
+}
+
+setInterval(() => {
+    if (secondsLeft > 0) {
+        secondsLeft--;
+        updateTimer();
+        if (secondsLeft === 0) {
+            alert('{% trans "Время вышло! Тест завершается." %}');
+            doFinish();
+        }
+    }
+}, 1000);
+
+updateTimer();
+
+function reportViolation() {
+    if (!testActive) return;
+
+    fetch(`/${LANG}/api/test/${ATTEMPT_ID}/violation/`, {
+        method: 'POST',
+        headers: { 'X-CSRFToken': getCookie('csrftoken') },
+    })
+    .then(r => r.json())
+    .then(data => {
+        violations = data.count;
+        const overlay = document.getElementById('warning-overlay');
+        document.getElementById('violation-count').textContent =
+            `{% trans "Нарушений" %}: ${violations} / ${data.max}`;
+        overlay.style.display = 'flex';
+
+        if (data.annulled) {
+            testActive = false;
+            overlay.innerHTML = `<div>
+                <h1>❌ {% trans "ТЕСТ АННУЛИРОВАН" %}</h1>
+                <p>{% trans "Вы покинули вкладку" %} ${violations} {% trans "раз(а)." %}</p>
+                <p>{% trans "Результат не будет засчитан." %}</p>
+            </div>`;
+        }
+    })
+    .catch(e => console.error(e));
+}
+
+function closeWarning() {
+    document.getElementById('warning-overlay').style.display = 'none';
+}
+
+// ============================================================
+// ЗАЩИТА ОТ ЛОЖНОГО СРАБАТЫВАНИЯ ПРИ F5 / ПЕРЕЗАГРУЗКЕ
+// ============================================================
+let pageReady = false;
+setTimeout(() => { pageReady = true; }, 2000);
+
+document.addEventListener('visibilitychange', () => {
+    if (!pageReady) return;
+    if (document.hidden) reportViolation();
+});
+
+window.addEventListener('blur', () => {
+    if (!pageReady) return;
+    if (document.readyState !== 'complete') return;
+    reportViolation();
+});
+
+window.addEventListener('beforeunload', () => {
+    pageReady = false;
+});
+
+// ============================================================
+// МОДАЛЬНЫЕ ОКНА ТАБЛИЦ
+// ============================================================
+function toggleMendeleev() {
+    const m = document.getElementById('mendeleev-modal');
+    m.style.display = (m.style.display === 'none' || m.style.display === '') ? 'flex' : 'none';
+}
+
+function toggleSolubility() {
+    const m = document.getElementById('solubility-modal');
+    m.style.display = (m.style.display === 'none' || m.style.display === '') ? 'flex' : 'none';
+}
+
+function confirmFinish() {
+    const answered = parseInt(document.getElementById('answered-count').textContent);
+    const total = {{ answers.count }};
+    const unanswered = total - answered;
+    document.getElementById('unanswered-info').textContent =
+        unanswered > 0
+            ? `{% trans "Вы не ответили на" %} ${unanswered} {% trans "вопросов. Точно завершить?" %}`
+            : `{% trans "Вы ответили на все вопросы. Завершить?" %}`;
+    document.getElementById('confirm-modal').style.display = 'flex';
+}
+
+function closeModal() {
+    document.getElementById('confirm-modal').style.display = 'none';
+}
+
+function doFinish() {
+    testActive = false;
+    document.getElementById('confirm-modal').style.display = 'none';
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = `/${LANG}/student/test/${ATTEMPT_ID}/finish/`;
+    const csrf = document.createElement('input');
+    csrf.type = 'hidden';
+    csrf.name = 'csrfmiddlewaretoken';
+    csrf.value = getCookie('csrftoken');
+    form.appendChild(csrf);
+    document.body.appendChild(form);
+    form.submit();
+}
+
+function toggleCalc() {
+    const c = document.getElementById('calc');
+    c.style.display = c.style.display === 'none' || c.style.display === '' ? 'block' : 'none';
+}
+
+function calcInput(v) {
+    document.getElementById('calc-display').value += v;
+}
+
+function calcClear() {
+    document.getElementById('calc-display').value = '';
+}
+
+function calcResult() {
+    const display = document.getElementById('calc-display');
+    try {
+        display.value = eval(display.value);
+    } catch (e) {
+        display.value = 'Ошибка';
+    }
+}
+
+document.querySelectorAll('input[type=radio]:checked, input[type=checkbox]:checked').forEach(inp => {
+    inp.closest('.option').classList.add('selected');
+});
+let initialAnswered = document.querySelectorAll('.question').length -
+    document.querySelectorAll('.question:not(:has(input:checked))').length;
+document.getElementById('answered-count').textContent = initialAnswered;
+</script>
+
+</body>
+</html>

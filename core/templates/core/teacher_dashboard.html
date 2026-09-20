@@ -1,0 +1,356 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "Панель учителя" %}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #f4f6f8;
+            color: #2c3e50;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            padding: 30px 20px;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .topbar-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #64748b;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        .topbar-actions { display: flex; gap: 8px; }
+        .btn-top {
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 10px;
+            background: rgba(59,130,246,0.08);
+            border: 1px solid rgba(59,130,246,0.2);
+            transition: 0.2s;
+        }
+        .btn-top:hover {
+            background: rgba(59,130,246,0.14);
+            color: #1e40af;
+        }
+        .logout {
+            color: #e74c3c;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 10px;
+            background: rgba(231,76,60,0.08);
+            border: 1px solid rgba(231,76,60,0.2);
+            transition: 0.2s;
+        }
+        .logout:hover {
+            background: rgba(231,76,60,0.14);
+            color: #c0392b;
+        }
+
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 40px;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #2c3e50 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .school-name {
+            color: #64748b;
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 32px;
+        }
+
+        .card {
+            border-radius: 20px;
+            padding: 28px 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+            animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card-subject {
+            background: linear-gradient(135deg, rgba(59,130,246,0.06), rgba(139,92,246,0.04));
+            border: 1px solid rgba(59,130,246,0.22);
+        }
+        .card-subject h3 {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            color: #2563eb;
+            letter-spacing: -0.01em;
+        }
+
+        .card-homeroom {
+            background: linear-gradient(135deg, rgba(16,185,129,0.06), rgba(59,130,246,0.04));
+            border: 1px solid rgba(16,185,129,0.22);
+        }
+        .card-homeroom h3 {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            color: #059669;
+            letter-spacing: -0.01em;
+        }
+
+        .card p {
+            font-size: 15px;
+            color: #34495e;
+            line-height: 1.7;
+            margin-bottom: 8px;
+        }
+        .card p strong { color: #2c3e50; font-weight: 700; }
+
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 13px 24px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            cursor: pointer;
+        }
+        .btn-blue {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            box-shadow: 0 8px 25px -8px rgba(59,130,246,0.5);
+        }
+        .btn-blue:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px -8px rgba(59,130,246,0.7);
+        }
+        .btn-green {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            box-shadow: 0 8px 25px -8px rgba(16,185,129,0.5);
+        }
+        .btn-green:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px -8px rgba(16,185,129,0.7);
+        }
+        .btn-purple {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+            box-shadow: 0 8px 25px -8px rgba(139,92,246,0.5);
+        }
+        .btn-purple:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px -8px rgba(139,92,246,0.7);
+        }
+        .btn-orange {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            box-shadow: 0 8px 25px -8px rgba(245,158,11,0.5);
+        }
+        .btn-orange:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px -8px rgba(245,158,11,0.7);
+        }
+
+        /* Таблица учеников */
+        .students-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+        }
+        .students-table th {
+            text-align: left;
+            padding: 10px 8px;
+            font-size: 11px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border-bottom: 1px solid #e5e9ee;
+        }
+        .students-table td {
+            padding: 12px 8px;
+            font-size: 14px;
+            color: #34495e;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .students-table tr:last-child td { border-bottom: none; }
+        .students-table tr:hover td { background: #f8fafc; }
+        .student-name {
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .empty-students {
+            margin-top: 20px;
+            padding: 20px;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 14px;
+            background: #f8fafc;
+            border: 1px dashed #cbd5e1;
+            border-radius: 12px;
+        }
+
+        @media (max-width: 700px) {
+            h1 { font-size: 28px; }
+            .card { padding: 22px; }
+            .card h3 { font-size: 18px; }
+            .btn { padding: 11px 18px; font-size: 13px; }
+            .students-table th, .students-table td { padding: 8px 6px; font-size: 13px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Топбар -->
+    <div class="topbar">
+        <span class="topbar-title">👨‍🏫 {% trans "Панель учителя" %}</span>
+        <div class="topbar-actions">
+            <a href="{% url 'core:edit_profile' %}" class="btn-top">⚙️ {% trans "Профиль" %}</a>
+            <a href="{% url 'core:logout' %}" class="logout">{% trans "Выйти" %}</a>
+        </div>
+    </div>
+
+    <!-- Заголовок -->
+    <h1>{{ user.last_name }} {{ user.first_name }}</h1>
+    <p class="school-name">{{ user.profile.school.name }}</p>
+
+    <!-- Блок предметника -->
+    {% if profile.is_subject_teacher %}
+        <div class="card card-subject">
+            <h3>📚 {% trans "Предметник" %}</h3>
+            <p><strong>{% trans "Предметы" %}:</strong>
+                {% for s in profile.subjects.all %}
+                    {{ s.name }}{% if not forloop.last %}, {% endif %}
+                {% empty %}
+                    <em>{% trans "не выбраны" %}</em>
+                {% endfor %}
+            </p>
+
+            <div class="buttons">
+                <a class="btn btn-blue" href="{% url 'core:my_questions' %}">
+                    📝 {% trans "Мои вопросы" %}
+                </a>
+                <a class="btn btn-green" href="{% url 'core:add_question' %}">
+                    + {% trans "Добавить вопрос" %}
+                </a>
+                <a class="btn btn-purple" href="{% url 'core:my_question_groups' %}">
+                    📖 {% trans "Мои контексты" %}
+                </a>
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- Блок классрука -->
+    {% if profile.is_homeroom_teacher %}
+        <div class="card card-homeroom">
+            <h3>👥 {% trans "Классный руководитель" %}</h3>
+            <p><strong>{% trans "Класс" %}:</strong> {{ profile.homeroom_class }}
+               — {% trans "учеников" %}: {{ homeroom_students.count }}</p>
+
+            <div class="buttons">
+                <a class="btn btn-green" href="{% url 'core:class_results' %}">
+                    📊 {% trans "Результаты класса" %}
+                </a>
+                <a class="btn btn-orange" href="{% url 'core:manage_sessions' %}">
+                    📅 {% trans "Сессии ЕНТ" %}
+                </a>
+            </div>
+
+            <!-- Список учеников -->
+            {% if homeroom_students %}
+                <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid #e5e9ee;">
+                    <p style="font-size: 12px; font-weight: 700; color: #64748b; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px;">
+                        🎓 {% trans "Мои ученики" %}
+                    </p>
+                    <table class="students-table">
+                        <thead>
+                            <tr>
+                                <th style="width:40px;">№</th>
+                                <th>{% trans "Ученик" %}</th>
+                                <th>{% trans "Профильные" %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for s in homeroom_students %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td class="student-name">{{ s.user.last_name }} {{ s.user.first_name }}</td>
+                                    <td>
+                                        {% if s.profile_subject_1 %}{{ s.profile_subject_1.name }}{% else %}—{% endif %},
+                                        {% if s.profile_subject_2 %}{{ s.profile_subject_2.name }}{% else %}—{% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="empty-students">
+                    {% trans "В классе пока нет учеников." %}
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    <!-- Если ничего нет -->
+    {% if not profile.is_subject_teacher and not profile.is_homeroom_teacher %}
+        <div class="card">
+            <p>{% trans "Вы не выбрали ни предмет, ни класс. Обратитесь к директору." %}</p>
+        </div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>

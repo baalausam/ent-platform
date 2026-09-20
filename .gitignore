@@ -1,0 +1,42 @@
+# ==== СЕКРЕТЫ ====
+.env
+.env.local
+.env.*.local
+
+# ==== PYTHON ====
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ==== DJANGO ====
+*.log
+db.sqlite3
+db.sqlite3-journal
+staticfiles/
+media/
+
+# ==== ВИРТУАЛЬНОЕ ОКРУЖЕНИЕ ====
+venv/
+env/
+ENV/
+.venv/
+
+# ==== IDE ====
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# ==== ОС ====
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ==== ДРУГОЕ ====
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
