@@ -1,0 +1,17 @@
+name: Renew PythonAnywhere Web App
+
+on:
+  schedule:
+    # Запускать каждый месяц, 1-го числа в 00:00 UTC
+    - cron: '0 0 1 * *'
+  workflow_dispatch:  # Позволяет запустить вручную из GitHub
+
+jobs:
+  renew:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Renew web app
+        run: |
+          curl -X POST \
+          "https://www.pythonanywhere.com/api/v0/user/${{ secrets.PA_USERNAME }}/webapps/${{ secrets.PA_DOMAIN }}/reload/" \
+          -H "Authorization: Token ${{ secrets.PA_API_TOKEN }}"
