@@ -263,11 +263,11 @@ def register_teacher(request):
                 except SchoolClass.DoesNotExist:
                     errors.append(_("Класс не найден."))
 
-        # ✅ ОШИБКИ → возвращаем на шаг 2 с профильными предметами
+        # ✅ При ошибках показываем ВСЕ активные предметы (14)
         if errors:
             return render(request, 'core/register_teacher.html', {
                 'errors': errors, 'school': school,
-                'all_subjects': Subject.objects.filter(category='profile', is_active=True),
+                'all_subjects': Subject.objects.filter(is_active=True),
                 'all_classes': school.classes.all() if school else [],
                 'form_data': request.POST,
                 'role': role,
@@ -318,10 +318,10 @@ def register_teacher(request):
             else:
                 form.add_error('teacher_code', _("Неверный код."))
                 return render(request, 'core/register_teacher.html', {'form': form, 'step': 1})
-            # ✅ Только профильные предметы
+            # ✅ Для учителя — ВСЕ 14 предметов (3 обязательных + 11 профильных)
             return render(request, 'core/register_teacher.html', {
                 'school': school, 'role': role,
-                'all_subjects': Subject.objects.filter(category='profile', is_active=True) if role == 'teacher' else [],
+                'all_subjects': Subject.objects.filter(is_active=True) if role == 'teacher' else [],
                 'all_classes': school.classes.all() if role == 'teacher' else [],
                 'form_data': data,
             })
@@ -411,6 +411,7 @@ def register_student(request):
             subj1 = Subject.objects.filter(id=subj1_id).first()
             subj2 = Subject.objects.filter(id=subj2_id).first()
 
+        # ✅ УЧЕНИК — только профильные (11)
         if errors:
             return render(request, 'core/register_student.html', {
                 'errors': errors, 'school': school,
@@ -437,6 +438,7 @@ def register_student(request):
             data = form.cleaned_data
             try:
                 school = School.objects.get(student_code=data['student_code'].strip().upper())
+                # ✅ УЧЕНИК — только профильные (11)
                 return render(request, 'core/register_student.html', {
                     'school': school, 'all_classes': school.classes.all(),
                     'profile_subjects': Subject.objects.filter(category='profile', is_active=True),
@@ -1340,8 +1342,9 @@ def edit_profile(request):
     error = None
 
     school = profile.school
-    # ✅ Только профильные предметы
-    all_subjects = Subject.objects.filter(category='profile', is_active=True)
+    # ✅ МҰҒАЛІМГЕ — БАРЛЫҚ 14 пән (3 міндетті + 11 профильдік)
+    all_subjects = Subject.objects.filter(is_active=True)
+    # ✅ ОҚУШЫҒА — тек 11 профильдік пән
     profile_subjects = Subject.objects.filter(category='profile', is_active=True)
     all_classes = school.classes.all() if school else []
 
@@ -1351,7 +1354,6 @@ def edit_profile(request):
             school=school,
             is_homeroom_teacher=True
         ).exclude(user=user).values_list('homeroom_class_id', flat=True)
-
         all_classes = all_classes.exclude(id__in=occupied_ids)
 
     # ✅ ID выбранных предметов (для чекбоксов)
