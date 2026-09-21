@@ -252,7 +252,7 @@
                 <option value="">— {% trans "выберите класс" %} —</option>
                 {% for c in all_classes %}
                     <option value="{{ c.id }}"
-                            {% if profile.school_class.id == c.id %}selected{% endif %}>
+                            {% if profile.school_class and profile.school_class.id == c.id %}selected{% endif %}>
                         {{ c.grade }}{{ c.letter }}
                     </option>
                 {% endfor %}
@@ -263,7 +263,7 @@
                 <option value="">— {% trans "выберите предмет" %} —</option>
                 {% for s in profile_subjects %}
                     <option value="{{ s.id }}"
-                            {% if profile.profile_subject_1.id == s.id %}selected{% endif %}>
+                            {% if profile.profile_subject_1 and profile.profile_subject_1.id == s.id %}selected{% endif %}>
                         {{ s.name }}
                     </option>
                 {% endfor %}
@@ -274,7 +274,7 @@
                 <option value="">— {% trans "выберите предмет" %} —</option>
                 {% for s in profile_subjects %}
                     <option value="{{ s.id }}"
-                            {% if profile.profile_subject_2.id == s.id %}selected{% endif %}>
+                            {% if profile.profile_subject_2 and profile.profile_subject_2.id == s.id %}selected{% endif %}>
                         {{ s.name }}
                     </option>
                 {% endfor %}
@@ -298,9 +298,11 @@
                     {% for s in all_subjects %}
                         <div class="subject-item">
                             <input type="checkbox" name="subjects" value="{{ s.id }}" id="subj-{{ s.id }}"
-                                   {% if s in profile.subjects.all %}checked{% endif %}>
+                                   {% if s.id in selected_subject_ids %}checked{% endif %}>
                             <label for="subj-{{ s.id }}">{{ s.name }}</label>
                         </div>
+                    {% empty %}
+                        <p style="color: #c0392b; font-size: 13px;">{% trans "Предметы не найдены." %}</p>
                     {% endfor %}
                 </div>
             </div>
@@ -319,7 +321,7 @@
                     <option value="">— {% trans "выберите класс" %} —</option>
                     {% for c in all_classes %}
                         <option value="{{ c.id }}"
-                                {% if profile.homeroom_class.id == c.id %}selected{% endif %}>
+                                {% if profile.homeroom_class and profile.homeroom_class.id == c.id %}selected{% endif %}>
                             {{ c.grade }}{{ c.letter }}
                         </option>
                     {% endfor %}

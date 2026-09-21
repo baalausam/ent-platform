@@ -263,12 +263,14 @@ def register_teacher(request):
                 except SchoolClass.DoesNotExist:
                     errors.append(_("Класс не найден."))
 
+        # ✅ ОШИБКИ → возвращаем на шаг 2 с профильными предметами
         if errors:
             return render(request, 'core/register_teacher.html', {
                 'errors': errors, 'school': school,
-                'all_subjects': Subject.objects.filter(is_active=True),
+                'all_subjects': Subject.objects.filter(category='profile', is_active=True),
                 'all_classes': school.classes.all() if school else [],
                 'form_data': request.POST,
+                'role': role,
             })
 
         user = User.objects.create_user(
@@ -280,9 +282,11 @@ def register_teacher(request):
             is_subject_teacher=is_subject_teacher,
             is_homeroom_teacher=is_homeroom_teacher,
         )
+        # ✅ СОХРАНЯЕМ ПРЕДМЕТЫ
         if is_subject_teacher:
             subject_ids = request.POST.getlist('subjects')
-            profile.subjects.set(Subject.objects.filter(id__in=subject_ids))
+            if subject_ids:
+                profile.subjects.set(Subject.objects.filter(id__in=subject_ids))
         if is_homeroom_teacher:
             homeroom_id = request.POST.get('homeroom_class')
             if homeroom_id:
@@ -297,6 +301,7 @@ def register_teacher(request):
             return redirect('core:zavuch_dashboard')
         return redirect('core:teacher_dashboard')
 
+    # ================= ШАГ 1 =================
     if request.method == 'POST' and request.POST.get('step') == '1':
         form = TeacherRegistrationForm(request.POST)
         if form.is_valid():
@@ -313,9 +318,10 @@ def register_teacher(request):
             else:
                 form.add_error('teacher_code', _("Неверный код."))
                 return render(request, 'core/register_teacher.html', {'form': form, 'step': 1})
+            # ✅ Только профильные предметы
             return render(request, 'core/register_teacher.html', {
                 'school': school, 'role': role,
-                'all_subjects': Subject.objects.filter(is_active=True) if role == 'teacher' else [],
+                'all_subjects': Subject.objects.filter(category='profile', is_active=True) if role == 'teacher' else [],
                 'all_classes': school.classes.all() if role == 'teacher' else [],
                 'form_data': data,
             })
@@ -331,7 +337,6 @@ def teacher_dashboard(request):
     if profile.role != 'teacher':
         return redirect('core:home')
 
-    # Ученики класса (если классрук)
     homeroom_students = []
     if profile.is_homeroom_teacher and profile.homeroom_class:
         homeroom_students = UserProfile.objects.filter(
@@ -343,6 +348,7 @@ def teacher_dashboard(request):
         'profile': profile,
         'homeroom_students': homeroom_students,
     })
+
 
 @login_required
 def zavuch_dashboard(request):
@@ -1292,9 +1298,10 @@ def teachers_list(request):
     return render(request, 'core/teachers_list.html', {
         'school': school, 'teachers': teachers, 'total': teachers.count(),
     })
+
+
 @login_required
 def class_students_list(request, class_id):
-    """Список учеников конкретного класса — для директора и завуча."""
     profile = request.user.profile
     if profile.role not in ['director', 'zavuch']:
         return redirect('core:home')
@@ -1316,6 +1323,8 @@ def class_students_list(request, class_id):
         'profile': profile,
         'total': students.count(),
     })
+
+
 # ============================================================
 # РЕДАКТИРОВАНИЕ ПРОФИЛЯ
 # ============================================================
@@ -1331,7 +1340,8 @@ def edit_profile(request):
     error = None
 
     school = profile.school
-    all_subjects = Subject.objects.filter(is_active=True)
+    # ✅ Только профильные предметы
+    all_subjects = Subject.objects.filter(category='profile', is_active=True)
     profile_subjects = Subject.objects.filter(category='profile', is_active=True)
     all_classes = school.classes.all() if school else []
 
@@ -1343,6 +1353,9 @@ def edit_profile(request):
         ).exclude(user=user).values_list('homeroom_class_id', flat=True)
 
         all_classes = all_classes.exclude(id__in=occupied_ids)
+
+    # ✅ ID выбранных предметов (для чекбоксов)
+    selected_subject_ids = list(profile.subjects.values_list('id', flat=True))
 
     if request.method == 'POST':
         first_name = request.POST.get('first_name', '').strip()
@@ -1440,6 +1453,7 @@ def edit_profile(request):
             if new_password:
                 update_session_auth_hash(request, user)
 
+    # ✅ ВАЖНО: selected_subject_ids обязательно в контексте
     return render(request, 'core/edit_profile.html', {
         'profile': profile,
         'success': success,
@@ -1447,4 +1461,5 @@ def edit_profile(request):
         'all_subjects': all_subjects,
         'profile_subjects': profile_subjects,
         'all_classes': all_classes,
+        'selected_subject_ids': selected_subject_ids,
     })

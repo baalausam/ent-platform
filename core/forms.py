@@ -117,7 +117,7 @@ class QuestionForm(forms.Form):
 
     block = forms.ChoiceField(choices=BLOCK_CHOICES, label=_("Блок ЕНТ"))
     subject = forms.ModelChoiceField(
-        queryset=Subject.objects.none(),  # заполнится в __init__
+        queryset=Subject.objects.none(),
         required=False,
         label=_("Профильный предмет"),
     )
@@ -146,7 +146,6 @@ class QuestionForm(forms.Form):
         super().__init__(*args, **kwargs)
         if user:
             profile = user.profile
-            # Только предметы учителя
             self.fields['subject'].queryset = profile.subjects.filter(category='profile')
 
     def clean(self):
@@ -156,11 +155,9 @@ class QuestionForm(forms.Form):
         qtype = cleaned.get('question_type')
         correct = (cleaned.get('correct_answer') or '').strip().upper()
 
-        # Профильный блок требует предмет
         if block == 'profile' and not subject:
             self.add_error('subject', _("Выберите профильный предмет."))
 
-        # Проверка правильного ответа
         valid_letters = set('ABCDEF')
         if not correct:
             self.add_error('correct_answer', _("Укажите правильный ответ."))
@@ -177,7 +174,7 @@ class QuestionForm(forms.Form):
 
 
 # ============================================================
-# КОНТЕКСТ (для чтения)
+# КОНТЕКСТ
 # ============================================================
 
 class QuestionGroupForm(forms.ModelForm):
