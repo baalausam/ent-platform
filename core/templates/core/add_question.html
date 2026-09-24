@@ -3,109 +3,534 @@
 <html lang="{{ LANGUAGE_CODE }}">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% trans "Добавить вопрос" %}</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- ✅ MathLive — визуалды формула редакторы -->
+    <script defer src="https://unpkg.com/mathlive"></script>
+    <link rel="stylesheet" href="https://unpkg.com/mathlive/dist/mathlive-static.css">
+
+    <!-- MathJax — сұрақтарды көрсету үшін -->
+    <script>
+    MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Montserrat', sans-serif; background: #f4f6f8; color: #2c3e50; min-height: 100vh; padding: 30px 20px; position: relative; }
-        .container { position: relative; z-index: 10; max-width: 700px; margin: 0 auto; }
-        .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
-        .topbar-title { font-size: 14px; font-weight: 600; color: #64748b; letter-spacing: 0.05em; text-transform: uppercase; }
-        .btn-top { color: #2563eb; text-decoration: none; font-size: 13px; font-weight: 600; padding: 8px 16px; border-radius: 10px; background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); }
-        .btn-top:hover { background: rgba(59,130,246,0.14); }
-        .logout { color: #e74c3c; text-decoration: none; font-size: 13px; font-weight: 600; padding: 8px 16px; border-radius: 10px; background: rgba(231,76,60,0.08); border: 1px solid rgba(231,76,60,0.2); }
-        .logout:hover { background: rgba(231,76,60,0.14); }
-        h1 { font-size: 32px; font-weight: 900; letter-spacing: -0.03em; margin-bottom: 24px; background: linear-gradient(135deg, #2c3e50 0%, #10b981 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .context-info { background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.22); padding: 16px 20px; border-radius: 14px; margin-bottom: 24px; }
-        .context-info strong { color: #2563eb; }
-        .card { background: #ffffff; border: 1px solid #e5e9ee; border-radius: 20px; padding: 28px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
-        label { display: block; margin-top: 18px; margin-bottom: 8px; font-size: 12px; font-weight: 700; color: #34495e; letter-spacing: 0.05em; text-transform: uppercase; }
-        input[type="text"], textarea, select { width: 100%; padding: 14px 18px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; color: #2c3e50; font-family: inherit; font-size: 15px; font-weight: 500; outline: none; }
-        input:focus, textarea:focus, select:focus { background: #ffffff; border-color: #10b981; box-shadow: 0 0 0 4px rgba(16,185,129,0.12); }
+        body { font-family: 'Montserrat', sans-serif; background: #f4f6f8;
+               color: #2c3e50; padding: 30px 20px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { font-size: 32px; font-weight: 900; margin-bottom: 24px; }
+        .card { background: #fff; border: 1px solid #e5e9ee;
+                border-radius: 20px; padding: 28px;
+                box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+        label { display: block; margin-top: 18px; margin-bottom: 8px;
+                font-size: 12px; font-weight: 700; color: #34495e;
+                text-transform: uppercase; letter-spacing: 0.05em; }
+        input[type="text"], input[type="number"], textarea, select {
+            width: 100%; padding: 14px 18px; background: #f8fafc;
+            border: 1px solid #e2e8f0; border-radius: 12px;
+            font-family: inherit; font-size: 15px; outline: none; }
+        input:focus, textarea:focus, select:focus {
+            border-color: #10b981; background: #fff;
+            box-shadow: 0 0 0 4px rgba(16,185,129,0.12); }
         textarea { min-height: 100px; resize: vertical; }
-        select option { color: #2c3e50; }
-        button[type="submit"] { width: 100%; margin-top: 32px; padding: 16px; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; border-radius: 12px; font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 10px 30px -10px rgba(16,185,129,0.5); transition: 0.2s; }
-        button[type="submit"]:hover { transform: translateY(-2px); box-shadow: 0 20px 40px -10px rgba(16,185,129,0.7); }
-        .errors { background: rgba(231,76,60,0.08); border: 1px solid rgba(231,76,60,0.25); color: #c0392b; padding: 12px 16px; border-radius: 12px; margin-bottom: 16px; font-size: 14px; }
+        button[type="submit"] { width: 100%; margin-top: 32px; padding: 16px;
+            background: #10b981; color: white; border: none;
+            border-radius: 12px; font-family: inherit; font-size: 15px;
+            font-weight: 700; cursor: pointer; }
+        button[type="submit"]:hover { background: #059669; }
+        .errors { background: rgba(231,76,60,0.1); color: #c0392b;
+                  padding: 12px 16px; border-radius: 12px;
+                  margin-bottom: 16px; }
         .field-error { color: #c0392b; font-size: 12px; margin-top: 6px; }
-        .back { display: block; text-align: center; margin-top: 24px; color: #64748b; text-decoration: none; font-size: 13px; }
-        .back:hover { color: #2563eb; }
+
+        .difficulty-radios { display: flex; gap: 12px; margin-top: 8px; }
+        .difficulty-radios label { flex: 1; padding: 14px; border: 2px solid #e2e8f0;
+            border-radius: 12px; cursor: pointer; text-align: center;
+            text-transform: none; font-size: 14px; margin: 0;
+            background: #f8fafc; color: #64748b; }
+        .difficulty-radios input { display: none; }
+        .difficulty-radios label:has(input:checked) {
+            border-color: #2563eb; background: rgba(59,130,246,0.08);
+            color: #2563eb; }
+
+        .matching-question { background: #f8fafc; padding: 16px;
+            border-radius: 12px; margin-bottom: 16px;
+            border: 1px solid #e2e8f0; }
+        .matching-question h4 { margin-bottom: 12px; color: #2563eb; }
+        .matching-question input { margin-bottom: 8px; }
+
+        .context-info { background: rgba(59,130,246,0.08);
+            border: 1px solid rgba(59,130,246,0.22);
+            padding: 16px 20px; border-radius: 14px; margin-bottom: 24px; }
+
+        /* ✅ MathLive стильдері */
+        .mathlive-wrapper {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px;
+            margin-top: 10px;
+        }
+        .mathlive-toolbar {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .ml-btn {
+            min-width: 40px;
+            height: 40px;
+            padding: 0 12px;
+            background: #fff;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 700;
+            color: #2c3e50;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+        }
+        .ml-btn:hover {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            color: #fff;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59,130,246,0.3);
+        }
+        .ml-icon { font-style: italic; font-weight: 900; font-size: 15px; }
+
+        math-field.math-input {
+            width: 100%;
+            min-height: 120px;
+            padding: 14px 18px;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 20px;
+            font-family: 'Montserrat', sans-serif;
+            color: #2c3e50;
+            outline: none;
+            display: block;
+        }
+        math-field.math-input:focus-within {
+            border-color: #10b981;
+            box-shadow: 0 0 0 4px rgba(16,185,129,0.12);
+        }
+
+        /* Кіші MathLive (matching үшін) */
+        math-field.math-input-sm {
+            width: 100%;
+            min-height: 60px;
+            padding: 10px 14px;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: 'Montserrat', sans-serif;
+            display: block;
+            margin-bottom: 8px;
+        }
+        math-field.math-input-sm:focus-within {
+            border-color: #10b981;
+            box-shadow: 0 0 0 4px rgba(16,185,129,0.12);
+        }
+
+        /* ✅ СУРЕТ PREVIEW */
+        #image-preview-wrapper {
+            display: none;
+            margin-top: 12px;
+        }
+        .preview-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #64748b;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .preview-box {
+            position: relative;
+            display: inline-block;
+        }
+        #image-preview {
+            max-width: 300px;
+            max-height: 300px;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+            display: block;
+            background: #f8fafc;
+        }
+        .preview-close {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            transition: 0.15s;
+        }
+        .preview-close:hover {
+            background: #c0392b;
+            transform: scale(1.05);
+        }
+        #image-name {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 6px;
+        }
+
+        @media (max-width: 700px) {
+            .ml-btn { min-width: 36px; height: 36px; padding: 0 8px; font-size: 12px; }
+        }
     </style>
 </head>
 <body>
 <div class="container">
-    <div class="topbar">
-        <span class="topbar-title">➕ {% trans "Добавить вопрос" %}</span>
-        <div style="display:flex; gap:8px;">
-            <a href="{% url 'core:my_questions' %}" class="btn-top">← {% trans "Мои вопросы" %}</a>
-            <a href="{% url 'core:logout' %}" class="logout">{% trans "Выйти" %}</a>
-        </div>
-    </div>
-
     <h1>➕ {% trans "Добавить вопрос" %}</h1>
 
     {% if group %}
         <div class="context-info">
-            <strong>📖 {% trans "Контекст" %}:</strong> {{ group.title }}
-            <p style="margin-top: 10px; font-size: 14px; color: #34495e;">{{ group.context_text|truncatechars:300 }}</p>
-            <p style="font-size: 13px; color: #64748b; margin-top: 10px;">{% trans "Все вопросы, которые вы добавите сейчас, будут привязаны к этому контексту." %}</p>
+            <strong>📖 {{ group.title }}</strong>
+            <p>{{ group.context_text|truncatechars:300 }}</p>
+            <p>Қосылған: {{ group.current_question_count }} / {{ group.expected_question_count }} сұрақ</p>
         </div>
     {% endif %}
 
     {% if form.non_field_errors %}
         <div class="errors">
-            {% for error in form.non_field_errors %}<p>{{ error }}</p>{% endfor %}
+            {% for e in form.non_field_errors %}<p>{{ e }}</p>{% endfor %}
         </div>
     {% endif %}
 
-    <div class="card">
-        <form method="post">
-            {% csrf_token %}
-            {% if group %}
-                <input type="hidden" name="group_id" value="{{ group.id }}">
-            {% endif %}
+    <form method="post" enctype="multipart/form-data" id="question-form">
+        {% csrf_token %}
+        {% if group %}<input type="hidden" name="group_id" value="{{ group.id }}">{% endif %}
 
-            <label>{{ form.block.label }}</label>
-            {{ form.block }}
-            {% if form.block.errors %}<div class="field-error">{{ form.block.errors.0 }}</div>{% endif %}
+        <label>{{ form.block.label }}</label>
+        {{ form.block }}
 
-            <label>{{ form.subject.label }}</label>
-            {{ form.subject }}
-            {% if form.subject.errors %}<div class="field-error">{{ form.subject.errors.0 }}</div>{% endif %}
+        <label>{{ form.subject.label }}</label>
+        {{ form.subject }}
 
-            <label>{{ form.question_type.label }}</label>
-            {{ form.question_type }}
-            {% if form.question_type.errors %}<div class="field-error">{{ form.question_type.errors.0 }}</div>{% endif %}
+        <label>{{ form.difficulty.label }}</label>
+        <div class="difficulty-radios">
+            {% for radio in form.difficulty %}
+                <label>{{ radio.tag }} <span>{{ radio.choice_label }}</span></label>
+            {% endfor %}
+        </div>
 
-            <label>{{ form.text.label }}</label>
-            {{ form.text }}
-            {% if form.text.errors %}<div class="field-error">{{ form.text.errors.0 }}</div>{% endif %}
+        <label>{{ form.question_type.label }}</label>
+        {{ form.question_type }}
 
-            <label>{{ form.option_a.label }}</label>
-            {{ form.option_a }}
-            <label>{{ form.option_b.label }}</label>
-            {{ form.option_b }}
-            <label>{{ form.option_c.label }}</label>
-            {{ form.option_c }}
-            <label>{{ form.option_d.label }}</label>
-            {{ form.option_d }}
-            <label>{{ form.option_e.label }}</label>
-            {{ form.option_e }}
-            <label>{{ form.option_f.label }}</label>
-            {{ form.option_f }}
+        <!-- ✅ СҰРАҚ МӘТІНІ — MathLive -->
+        <label>{{ form.text.label }}</label>
+        <div class="mathlive-wrapper">
+            <div class="mathlive-toolbar">
+                <button type="button" class="ml-btn" onclick="mlInsertMain('\\frac{#@}{#?}')" title="Бөлшек">
+                    <span class="ml-icon">½</span>
+                </button>
+                <button type="button" class="ml-btn" onclick="mlInsertMain('\\sqrt{#0}')" title="Квадрат түбір">
+                    <span class="ml-icon">√</span>
+                </button>
+                <button type="button" class="ml-btn" onclick="mlInsertMain('\\sqrt[#0]{#?}')" title="n-түбір">
+                    <span class="ml-icon">ⁿ√</span>
+                </button>
+                <button type="button" class="ml-btn" onclick="mlInsertMain('#@^{#?}')" title="Дәреже">
+                    <span class="ml-icon">x²</span>
+                </button>
+                <button type="button" class="ml-btn" onclick="mlInsertMain('#@_{#?}')" title="Индекс">
+                    <span class="ml-icon">xₙ</span>
+                </button>
+                <button type="button" class="ml-btn" onclick="mlInsertMain('\\sin(#0)')" title="Синус">
+                    <span class="ml-icon">sin</span>
+                </button>
+                <button type="button" class="ml-btn" onclick="mlInsertMain('\\cos(#0)')" title="Косинус">
+                    <span class="ml-icon">cos</span>
+                </button>
+                <button type="button" class="ml-btn" onclick="mlInsertMain('\\tan(#0)')" title="Тангенс">
+                    <span class="ml-icon">tan</span>
+                </button>
+                <button type="button" class="ml-btn" onclick="mlInsertMain('\\cot(#0)')" title="Котангенс">
+                    <span class="ml-icon">cot</span>
+                </button>
+                <button type="button" class="ml-btn" onclick="mlInsertMain('\\log(#0)')" title="Логарифм">
+                    <span class="ml-icon">log</span>
+                </button>
+                <button type="button" class="ml-btn" onclick="mlInsertMain('\\ln(#0)')" title="ln">
+                    <span class="ml-icon">ln</span>
+                </button>
+                <button type="button" class="ml-btn" onclick="mlInsertMain('\\lim_{#0 \\to #?}')" title="Лимит">
+                    <span class="ml-icon">lim</span>
+                </button>
+                <button type="button" class="ml-btn" onclick="mlInsertMain('\\int_{#0}^{#?}')" title="Интеграл">
+                    <span class="ml-icon">∫</span>
+                </button>
+                <button type="button" class="ml-btn" onclick="mlInsertMain('\\sum_{#0}^{#?}')" title="Сумма">
+                    <span class="ml-icon">Σ</span>
+                </button>
+                <button type="button" class="ml-btn" onclick="mlInsertMain('\\pi')" title="π">π</button>
+                <button type="button" class="ml-btn" onclick="mlInsertMain('\\alpha')" title="α">α</button>
+                <button type="button" class="ml-btn" onclick="mlInsertMain('\\beta')" title="β">β</button>
+                <button type="button" class="ml-btn" onclick="mlInsertMain('\\theta')" title="θ">θ</button>
+                <button type="button" class="ml-btn" onclick="mlInsertMain('\\lambda')" title="λ">λ</button>
+                <button type="button" class="ml-btn" onclick="mlInsertMain('\\mu')" title="μ">μ</button>
+                <button type="button" class="ml-btn" onclick="mlInsertMain('\\infty')" title="∞">∞</button>
+                <button type="button" class="ml-btn" onclick="mlInsertMain('\\pm')" title="±">±</button>
+                <button type="button" class="ml-btn" onclick="mlInsertMain('\\times')" title="×">×</button>
+                <button type="button" class="ml-btn" onclick="mlInsertMain('\\div')" title="÷">÷</button>
+                <button type="button" class="ml-btn" onclick="mlInsertMain('\\leq')" title="≤">≤</button>
+                <button type="button" class="ml-btn" onclick="mlInsertMain('\\geq')" title="≥">≥</button>
+                <button type="button" class="ml-btn" onclick="mlInsertMain('\\neq')" title="≠">≠</button>
+            </div>
 
-            <label>{{ form.correct_answer.label }}</label>
-            {{ form.correct_answer }}
-            {% if form.correct_answer.errors %}<div class="field-error">{{ form.correct_answer.errors.0 }}</div>{% endif %}
+            <math-field id="math-input-main" class="math-input"></math-field>
+            <textarea name="text" id="text-hidden-main" style="display:none;"></textarea>
+        </div>
+        {% if form.text.errors %}<div class="field-error">{{ form.text.errors.0 }}</div>{% endif %}
 
-            <button type="submit">💾 {% trans "Сохранить вопрос" %}</button>
-        </form>
-    </div>
+        <!-- ✅ СУРЕТ ЖҮКТЕУ + PREVIEW -->
+        <label>{{ form.image.label }}</label>
+        {{ form.image }}
 
-    <a class="back" href="{% url 'core:my_questions' %}">← {% trans "Назад" %}</a>
+        <div id="image-preview-wrapper">
+            <p class="preview-label">📷 {% trans "Алдын ала көрініс" %}:</p>
+            <div class="preview-box">
+                <img id="image-preview" src="" alt="Preview">
+                <button type="button" class="preview-close" onclick="removeImagePreview()">✕</button>
+            </div>
+            <p id="image-name"></p>
+        </div>
+
+        <!-- STANDARD / MULTIPLE -->
+        <div id="standard-fields">
+            <label>{{ form.option_a.label }}</label>{{ form.option_a }}
+            <label>{{ form.option_b.label }}</label>{{ form.option_b }}
+            <label>{{ form.option_c.label }}</label>{{ form.option_c }}
+            <label>{{ form.option_d.label }}</label>{{ form.option_d }}
+            <label>{{ form.option_e.label }}</label>{{ form.option_e }}
+            <label>{{ form.option_f.label }}</label>{{ form.option_f }}
+            <label>{{ form.correct_answer.label }}</label>{{ form.correct_answer }}
+        </div>
+
+        <!-- MATCHING -->
+        <div id="matching-fields" style="display:none;">
+            <h3 style="margin-top: 20px;">Сәйкестендіру сұрағы</h3>
+            <p style="font-size: 13px; color: #64748b; margin-bottom: 12px;">
+                Бір сұрақ = 4 ортақ нұсқа + 2 кіші сұрақ.
+            </p>
+
+            <div class="matching-question">
+                <h4>4 ортақ нұсқа</h4>
+
+                <label style="margin-top: 0;">1-нұсқа</label>
+                <math-field id="match-opt-0" class="math-input-sm"></math-field>
+                <input type="hidden" name="match_opt_0" id="match-opt-0-hidden">
+
+                <label>2-нұсқа</label>
+                <math-field id="match-opt-1" class="math-input-sm"></math-field>
+                <input type="hidden" name="match_opt_1" id="match-opt-1-hidden">
+
+                <label>3-нұсқа</label>
+                <math-field id="match-opt-2" class="math-input-sm"></math-field>
+                <input type="hidden" name="match_opt_2" id="match-opt-2-hidden">
+
+                <label>4-нұсқа</label>
+                <math-field id="match-opt-3" class="math-input-sm"></math-field>
+                <input type="hidden" name="match_opt_3" id="match-opt-3-hidden">
+
+                <h4 style="margin-top: 16px;">Кіші сұрақ 1</h4>
+                <math-field id="match-sub-0" class="math-input-sm"></math-field>
+                <input type="hidden" name="match_sub_0_text" id="match-sub-0-hidden">
+                <select name="match_sub_0_correct">
+                    <option value="">— дұрыс жауап —</option>
+                    <option value="0">1-нұсқа</option>
+                    <option value="1">2-нұсқа</option>
+                    <option value="2">3-нұсқа</option>
+                    <option value="3">4-нұсқа</option>
+                </select>
+
+                <h4 style="margin-top: 16px;">Кіші сұрақ 2</h4>
+                <math-field id="match-sub-1" class="math-input-sm"></math-field>
+                <input type="hidden" name="match_sub_1_text" id="match-sub-1-hidden">
+                <select name="match_sub_1_correct">
+                    <option value="">— дұрыс жауап —</option>
+                    <option value="0">1-нұсқа</option>
+                    <option value="1">2-нұсқа</option>
+                    <option value="2">3-нұсқа</option>
+                    <option value="3">4-нұсқа</option>
+                </select>
+            </div>
+        </div>
+
+        <button type="submit">💾 {% trans "Сохранить" %}</button>
+    </form>
 </div>
+
+<script>
+// ============================================================
+// ТИПКЕ ҚАРАЙ ӨРІСТЕРДІ АУЫСТЫРУ
+// ============================================================
+const typeSelect = document.querySelector('[name="question_type"]');
+const stdFields = document.getElementById('standard-fields');
+const mtcFields = document.getElementById('matching-fields');
+
+function toggleFields() {
+    if (!typeSelect) return;
+    if (typeSelect.value === 'matching') {
+        stdFields.style.display = 'none';
+        mtcFields.style.display = 'block';
+    } else {
+        stdFields.style.display = 'block';
+        mtcFields.style.display = 'none';
+    }
+}
+
+if (typeSelect) {
+    typeSelect.addEventListener('change', toggleFields);
+    toggleFields();
+}
+
+// ============================================================
+// ✅ MATHLIVE — НЕГІЗГІ СҰРАҚ
+// ============================================================
+let mathMain = null;
+let textHiddenMain = null;
+
+function initMainMathLive() {
+    mathMain = document.getElementById('math-input-main');
+    textHiddenMain = document.getElementById('text-hidden-main');
+    if (!mathMain || !textHiddenMain) return;
+
+    mathMain.addEventListener('input', () => {
+        textHiddenMain.value = mathMain.getValue('latex');
+    });
+}
+
+function mlInsertMain(latex) {
+    if (!mathMain) return;
+    mathMain.executeCommand(['insert', latex]);
+    mathMain.focus();
+    textHiddenMain.value = mathMain.getValue('latex');
+}
+
+// ============================================================
+// ✅ MATHLIVE — MATCHING ӨРІСТЕРІ
+// ============================================================
+const matchingFields = [
+    { id: 'match-opt-0', hidden: 'match-opt-0-hidden' },
+    { id: 'match-opt-1', hidden: 'match-opt-1-hidden' },
+    { id: 'match-opt-2', hidden: 'match-opt-2-hidden' },
+    { id: 'match-opt-3', hidden: 'match-opt-3-hidden' },
+    { id: 'match-sub-0', hidden: 'match-sub-0-hidden' },
+    { id: 'match-sub-1', hidden: 'match-sub-1-hidden' },
+];
+
+function initMatchingMathLive() {
+    matchingFields.forEach(field => {
+        const mf = document.getElementById(field.id);
+        const hidden = document.getElementById(field.hidden);
+        if (!mf || !hidden) return;
+
+        mf.addEventListener('input', () => {
+            hidden.value = mf.getValue('latex');
+        });
+    });
+}
+
+// ============================================================
+// ✅ СУРЕТ PREVIEW
+// ============================================================
+const imageInput = document.querySelector('input[type="file"][name="image"]');
+const previewWrapper = document.getElementById('image-preview-wrapper');
+const previewImg = document.getElementById('image-preview');
+const imageNameEl = document.getElementById('image-name');
+
+if (imageInput) {
+    imageInput.addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        if (!file) {
+            removeImagePreview();
+            return;
+        }
+
+        // ✅ Сурет пе?
+        if (!file.type.startsWith('image/')) {
+            alert('{% trans "Тек сурет файлдарын жүктеуге болады (JPG, PNG, GIF)" %}');
+            imageInput.value = '';
+            removeImagePreview();
+            return;
+        }
+
+        // ✅ Өлшемі 5 МБ-тан аспауы керек
+        if (file.size > 5 * 1024 * 1024) {
+            alert('{% trans "Файл өлшемі 5 МБ-тан аспауы керек" %}');
+            imageInput.value = '';
+            removeImagePreview();
+            return;
+        }
+
+        // ✅ FileReader арқылы preview
+        const reader = new FileReader();
+        reader.onload = function (event) {
+            previewImg.src = event.target.result;
+            imageNameEl.textContent = `${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+            previewWrapper.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+function removeImagePreview() {
+    if (imageInput) imageInput.value = '';
+    if (previewImg) previewImg.src = '';
+    if (imageNameEl) imageNameEl.textContent = '';
+    if (previewWrapper) previewWrapper.style.display = 'none';
+}
+
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+    // MathLive кітапханасы жүктелгенше күту
+    const waitMathLive = setInterval(() => {
+        if (window.customElements && customElements.get('math-field')) {
+            clearInterval(waitMathLive);
+            initMainMathLive();
+            initMatchingMathLive();
+        }
+    }, 100);
+});
+
+// Форма жіберілгенде соңғы мәнді жазу
+document.getElementById('question-form')?.addEventListener('submit', () => {
+    if (mathMain && textHiddenMain) {
+        textHiddenMain.value = mathMain.getValue('latex');
+    }
+    matchingFields.forEach(field => {
+        const mf = document.getElementById(field.id);
+        const hidden = document.getElementById(field.hidden);
+        if (mf && hidden) {
+            hidden.value = mf.getValue('latex');
+        }
+    });
+});
+</script>
 </body>
 </html>

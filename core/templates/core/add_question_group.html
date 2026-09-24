@@ -3,263 +3,278 @@
 <html lang="{{ LANGUAGE_CODE }}">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% trans "Создать контекст" %}</title>
 
-    <!-- Montserrat -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- ✅ MathLive -->
+    <script defer src="https://unpkg.com/mathlive"></script>
+    <link rel="stylesheet" href="https://unpkg.com/mathlive/dist/mathlive-static.css">
+
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Montserrat', sans-serif; background: #f4f6f8;
+               color: #2c3e50; min-height: 100vh; padding: 30px 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        h1 { font-size: 36px; font-weight: 900; letter-spacing: -0.03em;
+             margin-bottom: 16px;
+             background: linear-gradient(135deg, #2c3e50, #8b5cf6);
+             -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .info { background: rgba(59,130,246,0.08);
+                border: 1px solid rgba(59,130,246,0.22);
+                color: #1e40af; padding: 18px 22px;
+                border-radius: 16px; margin-bottom: 28px;
+                font-size: 14px; line-height: 1.65; }
+        .card { background: #fff; border: 1px solid #e5e9ee;
+                border-radius: 20px; padding: 32px 28px;
+                box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+        label { display: block; margin-top: 22px; margin-bottom: 8px;
+                font-weight: 700; font-size: 13px; color: #34495e; }
+        input[type="text"] { width: 100%; padding: 14px 16px;
+            background: #f8fafc; border: 1px solid #e2e8f0;
+            border-radius: 12px; font-family: inherit;
+            font-size: 14px; outline: none; }
+        input[type="text"]:focus { border-color: #3b82f6;
+            background: #fff; box-shadow: 0 0 0 4px rgba(59,130,246,0.12); }
+        .field-error { color: #e74c3c; font-size: 13px;
+                       font-weight: 600; margin-top: 6px; }
 
-        body {
-            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-            background: #f4f6f8;
-            color: #2c3e50;
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+        .difficulty-radios, .block-radios {
+            display: flex; gap: 12px; margin-top: 8px; flex-wrap: wrap;
         }
-
-        /* ==== TOPBAR ==== */
-        .topbar {
-            position: relative;
-            z-index: 10;
-            display: flex;
-            justify-content: flex-end;
-            padding: 20px 40px;
+        .difficulty-radios label, .block-radios label {
+            flex: 1; min-width: 140px; padding: 16px 12px;
+            border: 2px solid #e2e8f0; border-radius: 14px;
+            cursor: pointer; text-align: center; font-weight: 700;
+            font-size: 14px; margin: 0; background: #f8fafc;
+            color: #64748b; transition: 0.2s;
         }
-        .lang-switch {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            padding: 10px 16px;
-            color: #2c3e50;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: 0.2s;
-            outline: none;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        .difficulty-radios label:hover, .block-radios label:hover {
+            border-color: #cbd5e1; background: #fff;
         }
-        .lang-switch:hover {
-            background: #f8fafc;
-            border-color: #cbd5e1;
-        }
-        .lang-switch option { color: #2c3e50; }
-
-        /* ==== MAIN ==== */
-        .main {
-            position: relative;
-            z-index: 10;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px 24px 80px;
+        .difficulty-radios input[type="radio"],
+        .block-radios input[type="radio"] { display: none; }
+        .difficulty-radios label:has(input:checked),
+        .block-radios label:has(input:checked) {
+            border-color: #3b82f6; background: rgba(59,130,246,0.08);
+            color: #2563eb; box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
         }
 
-        /* ==== ЗАГОЛОВОК ==== */
-        .page-header {
-            margin-bottom: 28px;
-        }
-        .page-header h1 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 42px;
-            font-weight: 900;
-            line-height: 1.1;
-            letter-spacing: -0.03em;
-            margin-bottom: 16px;
-            background: linear-gradient(135deg, #2c3e50 0%, #3b82f6 50%, #8b5cf6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
+        .btn-submit { margin-top: 28px; padding: 16px 32px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white; border: none; border-radius: 14px;
+            font-family: inherit; font-size: 15px; font-weight: 700;
+            cursor: pointer; }
+        .btn-submit:hover { transform: translateY(-2px); }
+        .hidden { display: none !important; }
 
-        /* ==== ИНФО-БЛОК ==== */
-        .info {
-            background: rgba(59,130,246,0.08);
-            border: 1px solid rgba(59,130,246,0.22);
-            color: #1e40af;
-            padding: 18px 22px;
-            border-radius: 16px;
-            margin-bottom: 28px;
-            font-size: 14px;
-            line-height: 1.65;
-        }
-
-        /* ==== ФОРМА-КАРТОЧКА ==== */
-        .form-card {
-            background: #ffffff;
-            border: 1px solid #e5e9ee;
-            border-radius: 20px;
-            padding: 32px 28px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
-        }
-
-        label {
-            display: block;
-            margin-top: 22px;
-            margin-bottom: 8px;
-            font-weight: 700;
-            font-size: 13px;
-            letter-spacing: 0.02em;
-            color: #34495e;
-        }
-        label:first-of-type { margin-top: 0; }
-
-        input[type="text"],
-        textarea,
-        select {
-            width: 100%;
-            padding: 14px 16px;
+        /* ✅ MathLive стильдері */
+        .mathlive-wrapper {
             background: #f8fafc;
             border: 1px solid #e2e8f0;
             border-radius: 12px;
-            color: #2c3e50;
-            font-family: 'Montserrat', sans-serif;
+            padding: 12px;
+            margin-top: 10px;
+        }
+        .mathlive-toolbar {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .ml-btn {
+            min-width: 40px;
+            height: 40px;
+            padding: 0 12px;
+            background: #fff;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-family: inherit;
             font-size: 14px;
-            font-weight: 500;
-            outline: none;
-            transition: all 0.2s;
+            font-weight: 700;
+            color: #2c3e50;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
         }
-        input[type="text"]::placeholder,
-        textarea::placeholder {
-            color: #94a3b8;
-        }
-        input[type="text"]:focus,
-        textarea:focus,
-        select:focus {
+        .ml-btn:hover {
+            background: #3b82f6;
             border-color: #3b82f6;
-            background: #ffffff;
-            box-shadow: 0 0 0 4px rgba(59,130,246,0.12);
+            color: #fff;
         }
-        textarea {
+        .ml-icon { font-style: italic; font-weight: 900; font-size: 15px; }
+
+        math-field.math-input {
+            width: 100%;
             min-height: 250px;
-            resize: vertical;
+            padding: 18px 20px;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 18px;
+            font-family: 'Montserrat', sans-serif;
+            color: #2c3e50;
+            outline: none;
+            display: block;
             line-height: 1.6;
         }
-        select option { color: #2c3e50; }
-
-        /* ==== ОШИБКИ ПОЛЕЙ ==== */
-        .field-error {
-            color: #e74c3c;
-            font-size: 13px;
-            font-weight: 600;
-            margin-top: 6px;
-        }
-
-        /* ==== КНОПКА ==== */
-        .btn-submit {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 28px;
-            padding: 16px 32px;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            color: white;
-            border: none;
-            border-radius: 14px;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 15px;
-            font-weight: 700;
-            letter-spacing: -0.01em;
-            cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 10px 30px -10px rgba(59,130,246,0.5),
-                        0 4px 12px rgba(0,0,0,0.08);
-        }
-        .btn-submit:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 20px 40px -10px rgba(59,130,246,0.7),
-                        0 8px 20px rgba(0,0,0,0.12);
-        }
-
-        /* ==== ССЫЛКА НАЗАД ==== */
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            margin-top: 32px;
-            color: #64748b;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: 0.2s;
-        }
-        .back-link:hover {
-            color: #2563eb;
-            transform: translateX(-3px);
-        }
-
-        /* ==== АДАПТИВ ==== */
-        @media (max-width: 700px) {
-            .topbar { padding: 15px 20px; }
-            .main { padding: 16px 16px 60px; }
-            .page-header h1 { font-size: 30px; }
-            .form-card { padding: 24px 20px; }
-            .btn-submit { padding: 14px 24px; font-size: 14px; width: 100%; justify-content: center; }
+        math-field.math-input:focus-within {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59,130,246,0.12);
         }
     </style>
 </head>
 <body>
-
-<div class="topbar">
-    <form action="{% url 'set_language' %}" method="post" style="display:inline;">
-        {% csrf_token %}
-        <input name="next" type="hidden" value="{{ request.path }}">
-        <select name="language" class="lang-switch" onchange="this.form.submit()">
-            {% get_current_language as LANGUAGE_CODE %}
-            {% get_available_languages as LANGUAGES %}
-            {% for lang_code, lang_name in LANGUAGES %}
-                <option value="{{ lang_code }}" {% if lang_code == LANGUAGE_CODE %}selected{% endif %}>
-                    {{ lang_name }}
-                </option>
-            {% endfor %}
-        </select>
-    </form>
-</div>
-
-<div class="main">
-
-    <div class="page-header">
-        <h1>📖 {% trans "Создать контекст для вопросов" %}</h1>
-    </div>
+<div class="container">
+    <h1>📖 {% trans "Создать контекст" %}</h1>
 
     <div class="info">
-        {% trans "Контекст — это текст (рассказ, отрывок), к которому вы привяжете несколько вопросов. Ученик увидит текст и 10 вопросов к нему." %}
+        {% trans "Контекст — текст, к которому привязываются вопросы." %}
     </div>
 
-    <div class="form-card">
-        <form method="post">
+    <div class="card">
+        <form method="post" id="group-form">
             {% csrf_token %}
+
+            {# БЛОК ТАҢДАУ #}
+            {% if can_create_reading and can_create_profile %}
+                <label>{% trans "Қай блок үшін контекст?" %}</label>
+                <div class="block-radios">
+                    <label>
+                        <input type="radio" name="block_choice" value="reading" checked>
+                        📖 {% trans "Оқу сауаттылығы" %}
+                    </label>
+                    <label>
+                        <input type="radio" name="block_choice" value="profile">
+                        📚 {% trans "Бейіндік пән" %}
+                    </label>
+                </div>
+            {% elif can_create_profile %}
+                <input type="hidden" name="block_choice" value="profile">
+            {% else %}
+                <input type="hidden" name="block_choice" value="reading">
+            {% endif %}
 
             <label>{{ form.title.label }}</label>
             {{ form.title }}
             {% if form.title.errors %}<div class="field-error">{{ form.title.errors.0 }}</div>{% endif %}
 
-            <label>{{ form.block.label }}</label>
-            {{ form.block }}
-            {% if form.block.errors %}<div class="field-error">{{ form.block.errors.0 }}</div>{% endif %}
+            {# ДЕҢГЕЙ — тек оқу сауаттылығында #}
+            <div id="difficulty-section">
+                <label>{{ form.difficulty.label }}</label>
+                <div class="difficulty-radios">
+                    {% for radio in form.difficulty %}
+                        <label>{{ radio.tag }} <span>{{ radio.choice_label }}</span></label>
+                    {% endfor %}
+                </div>
+            </div>
 
-            <label>{{ form.subject.label }}</label>
-            {{ form.subject }}
-            {% if form.subject.errors %}<div class="field-error">{{ form.subject.errors.0 }}</div>{% endif %}
-
+            <!-- ✅ КОНТЕКСТ МӘТІНІ — MathLive -->
             <label>{{ form.context_text.label }}</label>
-            {{ form.context_text }}
+            <div class="mathlive-wrapper">
+                <div class="mathlive-toolbar">
+                    <button type="button" class="ml-btn" onclick="mlInsert('\\frac{#@}{#?}')" title="Бөлшек">
+                        <span class="ml-icon">½</span>
+                    </button>
+                    <button type="button" class="ml-btn" onclick="mlInsert('\\sqrt{#0}')" title="Түбір">
+                        <span class="ml-icon">√</span>
+                    </button>
+                    <button type="button" class="ml-btn" onclick="mlInsert('#@^{#?}')" title="Дәреже">
+                        <span class="ml-icon">x²</span>
+                    </button>
+                    <button type="button" class="ml-btn" onclick="mlInsert('#@_{#?}')" title="Индекс">
+                        <span class="ml-icon">xₙ</span>
+                    </button>
+                    <button type="button" class="ml-btn" onclick="mlInsert('\\sin(#0)')" title="sin">sin</button>
+                    <button type="button" class="ml-btn" onclick="mlInsert('\\cos(#0)')" title="cos">cos</button>
+                    <button type="button" class="ml-btn" onclick="mlInsert('\\tan(#0)')" title="tan">tan</button>
+                    <button type="button" class="ml-btn" onclick="mlInsert('\\log(#0)')" title="log">log</button>
+                    <button type="button" class="ml-btn" onclick="mlInsert('\\ln(#0)')" title="ln">ln</button>
+                    <button type="button" class="ml-btn" onclick="mlInsert('\\pi')" title="π">π</button>
+                    <button type="button" class="ml-btn" onclick="mlInsert('\\alpha')" title="α">α</button>
+                    <button type="button" class="ml-btn" onclick="mlInsert('\\beta')" title="β">β</button>
+                    <button type="button" class="ml-btn" onclick="mlInsert('\\theta')" title="θ">θ</button>
+                    <button type="button" class="ml-btn" onclick="mlInsert('\\lambda')" title="λ">λ</button>
+                    <button type="button" class="ml-btn" onclick="mlInsert('\\mu')" title="μ">μ</button>
+                    <button type="button" class="ml-btn" onclick="mlInsert('\\infty')" title="∞">∞</button>
+                    <button type="button" class="ml-btn" onclick="mlInsert('\\pm')" title="±">±</button>
+                    <button type="button" class="ml-btn" onclick="mlInsert('\\times')" title="×">×</button>
+                    <button type="button" class="ml-btn" onclick="mlInsert('\\div')" title="÷">÷</button>
+                    <button type="button" class="ml-btn" onclick="mlInsert('\\leq')" title="≤">≤</button>
+                    <button type="button" class="ml-btn" onclick="mlInsert('\\geq')" title="≥">≥</button>
+                </div>
+
+                <math-field id="math-input-group" class="math-input"></math-field>
+                <textarea name="context_text" id="text-hidden-group" style="display:none;"></textarea>
+            </div>
             {% if form.context_text.errors %}<div class="field-error">{{ form.context_text.errors.0 }}</div>{% endif %}
 
-            <button type="submit" class="btn-submit">💾 {% trans "Сохранить контекст" %}</button>
+            <button type="submit" class="btn-submit">💾 {% trans "Сохранить" %}</button>
         </form>
     </div>
-
-    <a class="back-link" href="{% url 'core:teacher_dashboard' %}">← {% trans "В панель учителя" %}</a>
-
 </div>
 
+<script>
+// ============================================================
+// ✅ MATHLIVE — КОНТЕКСТ МӘТІНІ
+// ============================================================
+let mathGroup = null;
+let textHiddenGroup = null;
+
+function mlInsert(latex) {
+    if (!mathGroup) return;
+    mathGroup.executeCommand(['insert', latex]);
+    mathGroup.focus();
+    textHiddenGroup.value = mathGroup.getValue('latex');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const waitMathLive = setInterval(() => {
+        if (window.customElements && customElements.get('math-field')) {
+            clearInterval(waitMathLive);
+            mathGroup = document.getElementById('math-input-group');
+            textHiddenGroup = document.getElementById('text-hidden-group');
+            if (mathGroup && textHiddenGroup) {
+                mathGroup.addEventListener('input', () => {
+                    textHiddenGroup.value = mathGroup.getValue('latex');
+                });
+            }
+        }
+    }, 100);
+});
+
+document.getElementById('group-form')?.addEventListener('submit', () => {
+    if (mathGroup && textHiddenGroup) {
+        textHiddenGroup.value = mathGroup.getValue('latex');
+    }
+});
+
+// ============================================================
+// ✅ ДЕҢГЕЙ КӨРІНУІ (профильде жасыру)
+// ============================================================
+const difficultySection = document.getElementById('difficulty-section');
+const blockRadios = document.querySelectorAll('input[name="block_choice"]');
+
+function updateDifficultyVisibility() {
+    const selected = document.querySelector('input[name="block_choice"]:checked')
+                  || document.querySelector('input[name="block_choice"][type="hidden"]');
+    if (!selected) {
+        difficultySection.classList.add('hidden');
+        return;
+    }
+    if (selected.value === 'profile') {
+        difficultySection.classList.add('hidden');
+    } else {
+        difficultySection.classList.remove('hidden');
+    }
+}
+
+blockRadios.forEach(r => r.addEventListener('change', updateDifficultyVisibility));
+updateDifficultyVisibility();
+</script>
 </body>
 </html>

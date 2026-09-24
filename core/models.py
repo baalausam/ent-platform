@@ -4,6 +4,38 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 import secrets
 
 
+# ============================================================
+# ТҰРАҚТЫЛАР
+# ============================================================
+
+DIFFICULTY_A = 'A'
+DIFFICULTY_B = 'B'
+DIFFICULTY_C = 'C'
+
+DIFFICULTY_CHOICES = [
+    (DIFFICULTY_A, 'Оңай'),
+    (DIFFICULTY_B, 'Орташа'),
+    (DIFFICULTY_C, 'Қиын'),
+]
+
+CONTEXT_DIFFICULTY_COUNT = {
+    DIFFICULTY_A: 5,
+    DIFFICULTY_B: 3,
+    DIFFICULTY_C: 2,
+}
+
+TEST_DISTRIBUTION = {
+    'kaz_history':   {DIFFICULTY_A: 10, DIFFICULTY_B: 6,  DIFFICULTY_C: 4},
+    'reading':       {DIFFICULTY_A: 5,  DIFFICULTY_B: 3,  DIFFICULTY_C: 2},
+    'math_literacy': {DIFFICULTY_A: 5,  DIFFICULTY_B: 3,  DIFFICULTY_C: 2},
+    'profile':       {DIFFICULTY_A: 20, DIFFICULTY_B: 12, DIFFICULTY_C: 8},
+}
+
+
+# ============================================================
+# SUBJECT
+# ============================================================
+
 class Subject(models.Model):
     CATEGORY_CHOICES = [
         ('mandatory', 'Обязательный'),
@@ -37,13 +69,18 @@ class Subject(models.Model):
         return self.name_ru
 
 
+# ============================================================
+# SCHOOL
+# ============================================================
+
 class School(models.Model):
     name = models.CharField(max_length=200)
     city = models.CharField(max_length=100)
     teacher_code = models.CharField(max_length=20, unique=True, blank=True)
     zavuch_code = models.CharField(max_length=20, unique=True, blank=True)
     student_code = models.CharField(max_length=20, unique=True, blank=True)
-    director = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='directed_school')
+    director = models.OneToOneField(User, on_delete=models.SET_NULL, null=True,
+                                    blank=True, related_name='directed_school')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
@@ -76,6 +113,10 @@ class SchoolClass(models.Model):
         return f"{self.grade}{self.letter}"
 
 
+# ============================================================
+# USER PROFILE
+# ============================================================
+
 class UserProfile(models.Model):
     ROLE_CHOICES = [
         ('student', 'Ученик'),
@@ -92,11 +133,15 @@ class UserProfile(models.Model):
     subjects = models.ManyToManyField(Subject, blank=True, related_name='teachers')
 
     is_homeroom_teacher = models.BooleanField(default=False)
-    homeroom_class = models.ForeignKey(SchoolClass, on_delete=models.SET_NULL, null=True, blank=True, related_name='homeroom_teacher')
+    homeroom_class = models.ForeignKey(SchoolClass, on_delete=models.SET_NULL,
+                                       null=True, blank=True, related_name='homeroom_teacher')
 
-    school_class = models.ForeignKey(SchoolClass, on_delete=models.SET_NULL, null=True, blank=True, related_name='students')
-    profile_subject_1 = models.ForeignKey(Subject, on_delete=models.SET_NULL, null=True, blank=True, related_name='students_profile_1')
-    profile_subject_2 = models.ForeignKey(Subject, on_delete=models.SET_NULL, null=True, blank=True, related_name='students_profile_2')
+    school_class = models.ForeignKey(SchoolClass, on_delete=models.SET_NULL,
+                                     null=True, blank=True, related_name='students')
+    profile_subject_1 = models.ForeignKey(Subject, on_delete=models.SET_NULL, null=True,
+                                          blank=True, related_name='students_profile_1')
+    profile_subject_2 = models.ForeignKey(Subject, on_delete=models.SET_NULL, null=True,
+                                          blank=True, related_name='students_profile_2')
 
     class Meta:
         constraints = [
@@ -111,6 +156,10 @@ class UserProfile(models.Model):
         return f"{self.user.get_full_name()} — {self.get_role_display()}"
 
 
+# ============================================================
+# QUESTION GROUP
+# ============================================================
+
 class QuestionGroup(models.Model):
     BLOCK_CHOICES = [
         ('reading', 'Грамотность чтения'),
@@ -123,26 +172,58 @@ class QuestionGroup(models.Model):
     title = models.CharField(max_length=200)
     context_text = models.TextField()
     block = models.CharField(max_length=20, choices=BLOCK_CHOICES)
-    subject = models.ForeignKey(Subject, on_delete=models.SET_NULL, null=True, blank=True, related_name='question_groups')
-    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='authored_groups')
+    subject = models.ForeignKey(Subject, on_delete=models.SET_NULL, null=True,
+                                blank=True, related_name='question_groups')
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True,
+                               blank=True, related_name='authored_groups')
     status = models.CharField(max_length=20, choices=[
         ('draft', 'Черновик'),
         ('pending', 'На проверке'),
         ('approved', 'Одобрен'),
         ('rejected', 'Отклонён'),
     ], default='draft')
-    approved_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='approved_groups')
+
+    difficulty = models.CharField(
+        max_length=1, choices=DIFFICULTY_CHOICES, default=DIFFICULTY_A,
+    )
+
+    approved_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True,
+                                    blank=True, related_name='approved_groups')
     approved_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.title} ({self.get_block_display()})"
+        return f"{self.title} ({self.get_difficulty_display()})"
 
+    @property
+    def expected_question_count(self):
+        # Профильде ӘРҚАШАН 5 сұрақ
+        if self.block == 'profile':
+            return 5
+        return CONTEXT_DIFFICULTY_COUNT.get(self.difficulty, 0)
+
+    @property
+    def current_question_count(self):
+        return self.questions.filter(is_deleted_by_author=False).count()
+
+    @property
+    def is_complete(self):
+        return self.current_question_count == self.expected_question_count
+
+
+# ============================================================
+# QUESTION
+# ============================================================
 
 class Question(models.Model):
     QUESTION_TYPE = [
         ('single', 'Один правильный ответ'),
         ('multiple', 'Несколько правильных'),
+        ('matching', 'Сопоставление'),
+    ]
+    KIND_CHOICES = [
+        ('standard', 'Стандартный'),
+        ('context', 'Контекстный'),
     ]
     STATUS_CHOICES = [
         ('draft', 'Черновик'),
@@ -150,54 +231,90 @@ class Question(models.Model):
         ('approved', 'Одобрен'),
         ('rejected', 'Отклонён'),
     ]
-
-    block = models.CharField(max_length=20, choices=[
+    BLOCK_CHOICES = [
         ('kaz_history', 'История Казахстана'),
         ('reading', 'Грамотность чтения'),
         ('math_literacy', 'Математическая грамотность'),
         ('profile', 'Профильный предмет'),
-    ])
-    subject = models.ForeignKey(Subject, on_delete=models.SET_NULL, null=True, blank=True, related_name='questions')
-    group = models.ForeignKey(QuestionGroup, on_delete=models.SET_NULL, null=True, blank=True, related_name='questions')
+    ]
+
+    block = models.CharField(max_length=20, choices=BLOCK_CHOICES)
+    subject = models.ForeignKey(Subject, on_delete=models.SET_NULL, null=True,
+                                blank=True, related_name='questions')
+    group = models.ForeignKey(QuestionGroup, on_delete=models.SET_NULL, null=True,
+                              blank=True, related_name='questions')
     question_type = models.CharField(max_length=10, choices=QUESTION_TYPE, default='single')
+    kind = models.CharField(max_length=20, choices=KIND_CHOICES, default='standard')
+
+    difficulty = models.CharField(
+        max_length=1, choices=DIFFICULTY_CHOICES, default=DIFFICULTY_A,
+        db_index=True,
+    )
+
     text = models.TextField()
-    option_a = models.CharField(max_length=500)
-    option_b = models.CharField(max_length=500)
-    option_c = models.CharField(max_length=500)
-    option_d = models.CharField(max_length=500)
+    option_a = models.CharField(max_length=500, blank=True)
+    option_b = models.CharField(max_length=500, blank=True)
+    option_c = models.CharField(max_length=500, blank=True)
+    option_d = models.CharField(max_length=500, blank=True)
     option_e = models.CharField(max_length=500, blank=True)
     option_f = models.CharField(max_length=500, blank=True)
-    correct_answer = models.CharField(max_length=6)
+    correct_answer = models.CharField(max_length=6, blank=True)
 
-    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='authored_questions')
-    school = models.ForeignKey(School, on_delete=models.CASCADE, null=True, blank=True, related_name='questions')
+    # ✅ Бір matching сұрағының деректері:
+    # {"options": ["a","b","c","d"], "sub_questions": [{"text":"...","correct":"a"}, ...]}
+    matching_data = models.JSONField(null=True, blank=True)
+
+    image = models.ImageField(
+        upload_to='questions/images/%Y/%m/', null=True, blank=True,
+        verbose_name="Сурет",
+    )
+
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True,
+                               blank=True, related_name='authored_questions')
+    school = models.ForeignKey(School, on_delete=models.CASCADE, null=True,
+                               blank=True, related_name='questions')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='draft')
-    approved_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='approved_questions')
-    approved_at = models.DateTimeField(null=True, blank=True)
 
+    is_deleted_by_author = models.BooleanField(default=False)
+
+    approved_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True,
+                                    blank=True, related_name='approved_questions')
+    approved_at = models.DateTimeField(null=True, blank=True)
     times_used = models.IntegerField(default=0)
     is_locked = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['block', 'difficulty', 'status']),
+            models.Index(fields=['subject', 'difficulty', 'status']),
+        ]
 
     def __str__(self):
         subj = self.subject.name if self.subject else self.get_block_display()
-        return f"[{subj}] {self.text[:50]}"
+        return f"[{subj}/{self.get_difficulty_display()}] {self.text[:50]}"
 
     @property
     def max_score(self):
-        return 2 if self.question_type == 'multiple' else 1
+        if self.question_type == 'multiple':
+            return 2
+        if self.question_type == 'matching':
+            return 2  # бір matching сұрағы = 2 балл макс
+        return 1
 
 
-# ============ СЕССИЯ ЕНТ ============
+# ============================================================
+# EXAM SESSION
+# ============================================================
+
 class ExamSession(models.Model):
     school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='exam_sessions')
     title = models.CharField(max_length=200)
     opens_at = models.DateTimeField()
     closes_at = models.DateTimeField()
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='created_sessions')
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True,
+                                   blank=True, related_name='created_sessions')
     created_at = models.DateTimeField(auto_now_add=True)
     classes = models.ManyToManyField(SchoolClass, blank=True, related_name='exam_sessions')
     is_active = models.BooleanField(default=True)
@@ -212,7 +329,10 @@ class ExamSession(models.Model):
         return self.is_active and self.opens_at <= now <= self.closes_at
 
 
-# ============ ПОПЫТКА ТЕСТА ============
+# ============================================================
+# TEST ATTEMPT
+# ============================================================
+
 class TestAttempt(models.Model):
     STATUS_CHOICES = [
         ('in_progress', 'В процессе'),
@@ -221,7 +341,8 @@ class TestAttempt(models.Model):
     ]
 
     student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='test_attempts')
-    session = models.ForeignKey(ExamSession, on_delete=models.SET_NULL, null=True, blank=True, related_name='attempts')
+    session = models.ForeignKey(ExamSession, on_delete=models.SET_NULL, null=True,
+                                blank=True, related_name='attempts')
     started_at = models.DateTimeField(auto_now_add=True)
     finished_at = models.DateTimeField(null=True, blank=True)
 
@@ -243,6 +364,10 @@ class TestAttempt(models.Model):
         return f"{self.student.get_full_name()} — {self.get_status_display()} ({self.total_score})"
 
 
+# ============================================================
+# ANSWER
+# ============================================================
+
 class Answer(models.Model):
     attempt = models.ForeignKey(TestAttempt, on_delete=models.CASCADE, related_name='answers')
     question = models.ForeignKey(Question, on_delete=models.SET_NULL, null=True, blank=True)
@@ -251,8 +376,15 @@ class Answer(models.Model):
     correct_answer_snapshot = models.CharField(max_length=6, blank=True)
     question_type_snapshot = models.CharField(max_length=10, blank=True)
     subject_snapshot = models.CharField(max_length=30, blank=True)
+    difficulty_snapshot = models.CharField(max_length=1, blank=True)
+    kind_snapshot = models.CharField(max_length=20, blank=True)
+    matching_data_snapshot = models.JSONField(null=True, blank=True)
+    image_snapshot = models.CharField(max_length=500, blank=True)
 
     chosen = models.CharField(max_length=6, blank=True)
+    # Matching үшін: {"0": "2", "1": "2"} — sub_question индексі → таңдаған нұсқа
+    matching_answers = models.JSONField(null=True, blank=True)
+
     score = models.IntegerField(default=0)
     group_context_snapshot = models.TextField(blank=True)
     group_title_snapshot = models.CharField(max_length=200, blank=True)
@@ -261,4 +393,4 @@ class Answer(models.Model):
         unique_together = ('attempt', 'question')
 
     def __str__(self):
-        return f"Ответ на {self.question_id}: {self.chosen} → {self.score} б."
+        return f"Ответ на {self.question_id}: {self.chosen or 'matching'} → {self.score} б."

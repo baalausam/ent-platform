@@ -1,0 +1,369 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ q.text|truncatechars:50 }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+    MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Montserrat', sans-serif; background: #f4f6f8;
+            color: #2c3e50; min-height: 100vh; padding: 30px 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        .topbar {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 24px; flex-wrap: wrap; gap: 12px;
+        }
+        .back-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            color: #64748b; text-decoration: none; font-size: 14px;
+            font-weight: 600; padding: 8px 14px; border-radius: 10px;
+            background: #fff; border: 1px solid #e5e9ee;
+        }
+        .back-link:hover { color: #2563eb; border-color: #cbd5e1; }
+
+        h1 {
+            font-size: 28px; font-weight: 900; letter-spacing: -0.02em;
+            margin-bottom: 6px; color: #2c3e50;
+        }
+        .subtitle {
+            font-size: 14px; color: #64748b; margin-bottom: 24px;
+        }
+
+        .card {
+            background: #fff; border: 1px solid #e5e9ee; border-radius: 20px;
+            padding: 24px; margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        /* Badges */
+        .badges {
+            display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;
+        }
+        .badge {
+            display: inline-block; padding: 5px 12px; border-radius: 8px;
+            font-size: 11px; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .badge-A { background: #d1fae5; color: #065f46; }
+        .badge-B { background: #fef3c7; color: #92400e; }
+        .badge-C { background: #fee2e2; color: #991b1b; }
+        .badge-type { background: #e0e7ff; color: #3730a3; }
+        .badge-block { background: #f3e8ff; color: #6b21a8; }
+        .badge-subject { background: #dbeafe; color: #1e40af; }
+        .badge-draft { background: #f1f5f9; color: #64748b; }
+        .badge-pending { background: #fef3c7; color: #92400e; }
+        .badge-approved { background: #d1fae5; color: #065f46; }
+        .badge-rejected { background: #fee2e2; color: #991b1b; }
+
+        /* Question text */
+        .question-text {
+            font-size: 18px; font-weight: 700; color: #2c3e50;
+            line-height: 1.6; margin-bottom: 16px;
+        }
+        .question-image {
+            max-width: 100%; max-height: 500px;
+            border-radius: 12px; border: 1px solid #e2e8f0;
+            margin: 12px 0; display: block;
+        }
+
+        /* Options */
+        .options { margin-top: 16px; }
+        .option-row {
+            display: flex; align-items: flex-start; gap: 12px;
+            padding: 12px 16px; margin: 6px 0;
+            background: #fafbfc; border: 1px solid #e2e8f0;
+            border-radius: 12px; font-size: 15px; font-weight: 500;
+        }
+        .option-row.correct {
+            background: #f0fdf4; border-color: #86efac;
+        }
+        .option-letter {
+            font-weight: 800; color: #2563eb; min-width: 24px;
+        }
+        .option-row.correct .option-letter { color: #059669; }
+        .option-row.correct::after {
+            content: '✓'; color: #059669; font-weight: 900;
+            font-size: 18px; margin-left: auto;
+        }
+
+        /* Matching */
+        .matching-section {
+            margin-top: 16px; padding: 16px;
+            background: #f8fafc; border-radius: 14px;
+            border: 1px solid #e2e8f0;
+        }
+        .matching-section h3 {
+            font-size: 13px; font-weight: 800; color: #2563eb;
+            text-transform: uppercase; letter-spacing: 0.05em;
+            margin-bottom: 12px;
+        }
+        .matching-options {
+            display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;
+        }
+        .option-chip {
+            background: #fff; border: 1px solid #cbd5e1;
+            padding: 6px 14px; border-radius: 10px;
+            font-size: 13px; font-weight: 700; color: #2c3e50;
+        }
+        .matching-sub {
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px 16px; margin: 6px 0;
+            background: #fff; border: 1px solid #e2e8f0;
+            border-radius: 10px;
+        }
+        .matching-sub .num {
+            font-weight: 800; color: #2563eb;
+        }
+        .matching-sub .text {
+            flex: 1; font-weight: 600;
+        }
+        .matching-sub .correct {
+            color: #059669; font-weight: 800;
+            background: #f0fdf4; padding: 4px 12px; border-radius: 8px;
+            font-size: 13px;
+        }
+
+        /* Context */
+        .context-box {
+            background: #f0f7fd; border-left: 4px solid #2980b9;
+            padding: 16px 20px; border-radius: 10px; margin-bottom: 16px;
+        }
+        .context-box h3 {
+            color: #2980b9; font-weight: 800; font-size: 13px;
+            margin-bottom: 8px; text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .context-box p {
+            font-size: 14px; line-height: 1.7; color: #34495e;
+            white-space: pre-wrap;
+        }
+
+        /* Meta */
+        .meta-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+        .meta-item {
+            padding: 12px 16px; background: #f8fafc;
+            border-radius: 10px; border: 1px solid #e5e9ee;
+        }
+        .meta-item .label {
+            font-size: 11px; font-weight: 700; color: #64748b;
+            text-transform: uppercase; letter-spacing: 0.08em;
+            margin-bottom: 4px;
+        }
+        .meta-item .value {
+            font-size: 14px; font-weight: 700; color: #2c3e50;
+        }
+
+        /* Siblings */
+        .siblings-list { margin-top: 12px; }
+        .sibling-item {
+            display: flex; gap: 12px; align-items: flex-start;
+            padding: 12px 16px; margin: 6px 0;
+            background: #fafbfc; border: 1px solid #e2e8f0;
+            border-radius: 10px; text-decoration: none; color: #2c3e50;
+            transition: 0.2s;
+        }
+        .sibling-item:hover {
+            background: #fff; border-color: #cbd5e1;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .sibling-num {
+            font-weight: 800; color: #2563eb; min-width: 30px;
+        }
+        .sibling-text { font-size: 14px; font-weight: 500; }
+
+        @media (max-width: 700px) {
+            h1 { font-size: 22px; }
+            .question-text { font-size: 16px; }
+            .card { padding: 18px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="topbar">
+        <a href="{{ back_url }}" class="back-link">← {% trans "Назад" %}</a>
+    </div>
+
+    <h1>📄 {% trans "Сұрақты толық көру" %}</h1>
+    <p class="subtitle">
+        {% trans "ID" %}: #{{ q.id }}
+        &nbsp;|&nbsp;
+        {{ q.created_at|date:"d.m.Y H:i" }}
+    </p>
+
+    <!-- Badges -->
+    <div class="badges">
+        <span class="badge badge-{{ q.difficulty }}">{{ q.get_difficulty_display }}</span>
+        <span class="badge badge-block">{{ q.get_block_display }}</span>
+        {% if q.subject %}
+            <span class="badge badge-subject">{{ q.subject.name }}</span>
+        {% endif %}
+        <span class="badge badge-type">{{ q.get_question_type_display }}</span>
+        <span class="badge badge-{{ q.status }}">{{ q.get_status_display }}</span>
+    </div>
+
+    <!-- Контекст -->
+    {% if group_info %}
+        <div class="context-box">
+            <h3>📖 {{ group_info.title }} ({{ group_info.difficulty }})</h3>
+            <p>{{ group_info.context_text }}</p>
+            <p style="font-size: 12px; color: #64748b; margin-top: 10px;">
+                {% trans "Контекстегі сұрақтар" %}: {{ group_info.current }} / {{ group_info.expected }}
+            </p>
+        </div>
+    {% endif %}
+
+    <!-- Сұрақ -->
+    <div class="card">
+        <div class="question-text">{{ q.text }}</div>
+
+        {% if q.image %}
+            <img src="{{ q.image.url }}" class="question-image" alt="img">
+        {% endif %}
+
+        {# SINGLE / MULTIPLE #}
+        {% if q.question_type == 'single' or q.question_type == 'multiple' %}
+            <div class="options">
+                {% if q.option_a %}
+                    <div class="option-row {% if 'A' in q.correct_answer %}correct{% endif %}">
+                        <span class="option-letter">A.</span>
+                        <span>{{ q.option_a }}</span>
+                    </div>
+                {% endif %}
+                {% if q.option_b %}
+                    <div class="option-row {% if 'B' in q.correct_answer %}correct{% endif %}">
+                        <span class="option-letter">B.</span>
+                        <span>{{ q.option_b }}</span>
+                    </div>
+                {% endif %}
+                {% if q.option_c %}
+                    <div class="option-row {% if 'C' in q.correct_answer %}correct{% endif %}">
+                        <span class="option-letter">C.</span>
+                        <span>{{ q.option_c }}</span>
+                    </div>
+                {% endif %}
+                {% if q.option_d %}
+                    <div class="option-row {% if 'D' in q.correct_answer %}correct{% endif %}">
+                        <span class="option-letter">D.</span>
+                        <span>{{ q.option_d }}</span>
+                    </div>
+                {% endif %}
+                {% if q.option_e %}
+                    <div class="option-row {% if 'E' in q.correct_answer %}correct{% endif %}">
+                        <span class="option-letter">E.</span>
+                        <span>{{ q.option_e }}</span>
+                    </div>
+                {% endif %}
+                {% if q.option_f %}
+                    <div class="option-row {% if 'F' in q.correct_answer %}correct{% endif %}">
+                        <span class="option-letter">F.</span>
+                        <span>{{ q.option_f }}</span>
+                    </div>
+                {% endif %}
+            </div>
+            <p style="margin-top: 12px; font-size: 14px; color: #059669; font-weight: 700;">
+                ✓ {% trans "Дұрыс жауап" %}: {{ q.correct_answer }}
+            </p>
+
+        {# MATCHING #}
+        {% elif q.question_type == 'matching' and q.matching_data %}
+            <div class="matching-section">
+                <h3>🔗 {% trans "Сәйкестендіру" %}</h3>
+
+                <p style="font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 8px; text-transform: uppercase;">
+                    {% trans "4 ортақ нұсқа" %}:
+                </p>
+                <div class="matching-options">
+                    {% for opt in q.matching_data.options %}
+                        <span class="option-chip">{{ opt }}</span>
+                    {% endfor %}
+                </div>
+
+                <p style="font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 8px; text-transform: uppercase;">
+                    {% trans "2 кіші сұрақ" %}:
+                </p>
+                {% for sub in matching_detail %}
+                    <div class="matching-sub">
+                        <span class="num">{{ forloop.counter }}.</span>
+                        <span class="text">{{ sub.text }}</span>
+                        <span class="correct">✓ {{ sub.correct }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Meta -->
+    <div class="card">
+        <div class="meta-grid">
+            <div class="meta-item">
+                <div class="label">{% trans "Автор" %}</div>
+                <div class="value">
+                    {{ q.author.last_name }} {{ q.author.first_name }}
+                </div>
+            </div>
+            <div class="meta-item">
+                <div class="label">{% trans "Мектеп" %}</div>
+                <div class="value">{{ q.school.name|default:"—" }}</div>
+            </div>
+            <div class="meta-item">
+                <div class="label">{% trans "Жасалған" %}</div>
+                <div class="value">{{ q.created_at|date:"d.m.Y H:i" }}</div>
+            </div>
+            {% if q.approved_by %}
+                <div class="meta-item">
+                    <div class="label">{% trans "Тексерген" %}</div>
+                    <div class="value">{{ q.approved_by.last_name }} {{ q.approved_by.first_name }}</div>
+                </div>
+                <div class="meta-item">
+                    <div class="label">{% trans "Тексерілген" %}</div>
+                    <div class="value">{{ q.approved_at|date:"d.m.Y H:i" }}</div>
+                </div>
+            {% endif %}
+            <div class="meta-item">
+                <div class="label">{% trans "Қолданылған" %}</div>
+                <div class="value">{{ q.times_used }} {% trans "рет" %}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Басқа сұрақтар (сол контексте) -->
+    {% if siblings %}
+        <div class="card">
+            <h3 style="font-size: 15px; font-weight: 800; margin-bottom: 12px; color: #2c3e50;">
+                📚 {% trans "Сол контекстегі басқа сұрақтар" %}
+            </h3>
+            <div class="siblings-list">
+                {% for s in siblings %}
+                    <a href="{% url 'core:question_detail' s.id %}" class="sibling-item">
+                        <span class="sibling-num">{{ forloop.counter }}.</span>
+                        <span class="sibling-text">{{ s.text|truncatechars:100 }}</span>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
+</div>
+
+<script>
+if (window.MathJax && window.MathJax.typesetPromise) {
+    window.MathJax.typesetPromise();
+}
+</script>
+</body>
+</html>

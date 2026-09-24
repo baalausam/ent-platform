@@ -2,12 +2,14 @@ from django import forms
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 
-from .models import (School, SchoolClass, Subject, Question,
-                     ExamSession, QuestionGroup)
+from .models import (
+    School, SchoolClass, Subject, Question, ExamSession,
+    QuestionGroup, DIFFICULTY_CHOICES,
+)
 
 
 # ============================================================
-# РЕГИСТРАЦИЯ ДИРЕКТОРА
+# ТІРКЕЛУ
 # ============================================================
 
 class DirectorRegistrationForm(forms.Form):
@@ -16,7 +18,6 @@ class DirectorRegistrationForm(forms.Form):
     username = forms.CharField(max_length=150, label=_("Логин"))
     password = forms.CharField(widget=forms.PasswordInput, label=_("Пароль"))
     password2 = forms.CharField(widget=forms.PasswordInput, label=_("Повторите пароль"))
-
     school_name = forms.CharField(max_length=200, label=_("Название школы"))
     city = forms.CharField(max_length=100, label=_("Город"))
 
@@ -37,16 +38,9 @@ class DirectorRegistrationForm(forms.Form):
     def clean_school_name(self):
         name = self.cleaned_data['school_name']
         if School.objects.filter(name=name).exists():
-            raise forms.ValidationError(
-                _("Школа с таким названием уже зарегистрирована. "
-                  "Если вы её директор — обратитесь к администратору.")
-            )
+            raise forms.ValidationError(_("Школа с таким названием уже зарегистрирована."))
         return name
 
-
-# ============================================================
-# РЕГИСТРАЦИЯ УЧИТЕЛЯ / ЗАВУЧА
-# ============================================================
 
 class TeacherRegistrationForm(forms.Form):
     first_name = forms.CharField(max_length=100, label=_("Имя"))
@@ -71,17 +65,13 @@ class TeacherRegistrationForm(forms.Form):
         return cleaned
 
 
-# ============================================================
-# РЕГИСТРАЦИЯ УЧЕНИКА
-# ============================================================
-
 class StudentRegistrationForm(forms.Form):
     first_name = forms.CharField(max_length=100, label=_("Имя"))
     last_name = forms.CharField(max_length=100, label=_("Фамилия"))
     username = forms.CharField(max_length=150, label=_("Логин"))
     password = forms.CharField(widget=forms.PasswordInput, label=_("Пароль"))
     password2 = forms.CharField(widget=forms.PasswordInput, label=_("Повторите пароль"))
-    student_code = forms.CharField(max_length=20, label=_("Код школы (для учеников)"))
+    student_code = forms.CharField(max_length=20, label=_("Код школы"))
 
     def clean_username(self):
         username = self.cleaned_data['username']
@@ -99,7 +89,7 @@ class StudentRegistrationForm(forms.Form):
 
 
 # ============================================================
-# ВОПРОС
+# СҰРАҚ
 # ============================================================
 
 class QuestionForm(forms.Form):
@@ -109,37 +99,44 @@ class QuestionForm(forms.Form):
         ('math_literacy', _('Математическая грамотность')),
         ('profile', _('Профильный предмет')),
     ]
-
     QUESTION_TYPE_CHOICES = [
         ('single', _('Один правильный ответ')),
         ('multiple', _('Несколько правильных ответов')),
+        ('matching', _('Сопоставление')),
+    ]
+    DIFFICULTY_CHOICES = [
+        ('A', _('Оңай')),
+        ('B', _('Орташа')),
+        ('C', _('Қиын')),
     ]
 
     block = forms.ChoiceField(choices=BLOCK_CHOICES, label=_("Блок ЕНТ"))
     subject = forms.ModelChoiceField(
-        queryset=Subject.objects.none(),
-        required=False,
+        queryset=Subject.objects.none(), required=False,
         label=_("Профильный предмет"),
     )
+    difficulty = forms.ChoiceField(
+        choices=DIFFICULTY_CHOICES, label=_("Қиындық деңгейі"),
+        widget=forms.RadioSelect,
+    )
     question_type = forms.ChoiceField(
-        choices=QUESTION_TYPE_CHOICES,
-        label=_("Тип вопроса"),
+        choices=QUESTION_TYPE_CHOICES, label=_("Тип вопроса"),
     )
     text = forms.CharField(
         widget=forms.Textarea(attrs={'rows': 4}),
         label=_("Текст вопроса"),
+        help_text=_("Формула үшін LaTeX: $x^2$, $\\frac{a}{b}$"),
     )
-    option_a = forms.CharField(max_length=500, label=_("Вариант A"))
-    option_b = forms.CharField(max_length=500, label=_("Вариант B"))
-    option_c = forms.CharField(max_length=500, label=_("Вариант C"))
-    option_d = forms.CharField(max_length=500, label=_("Вариант D"))
+    option_a = forms.CharField(max_length=500, required=False, label=_("Вариант A"))
+    option_b = forms.CharField(max_length=500, required=False, label=_("Вариант B"))
+    option_c = forms.CharField(max_length=500, required=False, label=_("Вариант C"))
+    option_d = forms.CharField(max_length=500, required=False, label=_("Вариант D"))
     option_e = forms.CharField(max_length=500, required=False, label=_("Вариант E"))
     option_f = forms.CharField(max_length=500, required=False, label=_("Вариант F"))
-    correct_answer = forms.CharField(
-        max_length=6,
-        label=_("Правильный ответ"),
-        help_text=_("Для одного: A, B, C или D. "
-                    "Для нескольких: AB, ACD, ABCD, ABCDEF."),
+    correct_answer = forms.CharField(max_length=6, required=False, label=_("Правильный ответ"))
+
+    image = forms.ImageField(
+        required=False, label=_("Сурет (міндетті емес)"),
     )
 
     def __init__(self, *args, user=None, **kwargs):
@@ -158,17 +155,18 @@ class QuestionForm(forms.Form):
         if block == 'profile' and not subject:
             self.add_error('subject', _("Выберите профильный предмет."))
 
+        if qtype == 'matching':
+            return cleaned
+
         valid_letters = set('ABCDEF')
         if not correct:
             self.add_error('correct_answer', _("Укажите правильный ответ."))
         elif not set(correct).issubset(valid_letters):
-            self.add_error('correct_answer', _("Допустимы только A, B, C, D, E, F."))
+            self.add_error('correct_answer', _("Допустимы только A-F."))
         elif qtype == 'single' and len(correct) != 1:
-            self.add_error('correct_answer', _("Для одного ответа укажите одну букву."))
+            self.add_error('correct_answer', _("Для одного ответа — одна буква."))
         elif qtype == 'multiple' and len(correct) < 2:
-            self.add_error('correct_answer', _("Для нескольких ответов укажите минимум две буквы."))
-        elif len(correct) != len(set(correct)):
-            self.add_error('correct_answer', _("Буквы не должны повторяться."))
+            self.add_error('correct_answer', _("Минимум две буквы."))
 
         return cleaned
 
@@ -178,16 +176,27 @@ class QuestionForm(forms.Form):
 # ============================================================
 
 class QuestionGroupForm(forms.ModelForm):
+    difficulty = forms.ChoiceField(
+        choices=[
+            ('A', _('Оңай — 5 сұрақ')),
+            ('B', _('Орташа — 3 сұрақ')),
+            ('C', _('Қиын — 2 сұрақ')),
+        ],
+        label=_("Контекст деңгейі (тек оқу сауаттылығы үшін)"),
+        widget=forms.RadioSelect,
+        required=False,
+    )
+
     class Meta:
         model = QuestionGroup
-        fields = ['title', 'context_text']
+        fields = ['title', 'context_text', 'difficulty']
         widgets = {
             'context_text': forms.Textarea(attrs={'rows': 12}),
         }
 
 
 # ============================================================
-# СЕССИЯ ЕНТ
+# СЕССИЯ
 # ============================================================
 
 class ExamSessionForm(forms.Form):
@@ -201,8 +210,7 @@ class ExamSessionForm(forms.Form):
         widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}),
     )
     classes = forms.ModelMultipleChoiceField(
-        queryset=SchoolClass.objects.none(),
-        required=False,
+        queryset=SchoolClass.objects.none(), required=False,
         widget=forms.CheckboxSelectMultiple,
         label=_("Классы (пусто = для всех)"),
     )

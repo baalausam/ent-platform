@@ -7,502 +7,237 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% trans "Пробное ЕНТ" %}</title>
 
-    <!-- Montserrat -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
+    <!-- ✅ MathJax — формулаларды көрсету -->
+    <script>
+    MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        },
+        svg: { fontCache: 'global' }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
         body {
-            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-            background: #f4f6f8;
-            color: #2c3e50;
-            min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+            font-family: 'Montserrat', sans-serif; background: #f4f6f8;
+            color: #2c3e50; min-height: 100vh;
         }
-
-        /* ==== HEADER ==== */
         .header {
             position: sticky; top: 0; z-index: 101;
-            background: #2c3e50;
-            color: white;
-            padding: 12px 20px;
+            background: #2c3e50; color: white; padding: 12px 20px;
             display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-            flex-wrap: wrap;
-            gap: 8px;
+            flex-wrap: wrap; gap: 8px;
         }
-        .timer { font-size: 22px; font-weight: 800; letter-spacing: 0.02em; }
+        .timer { font-size: 22px; font-weight: 800; }
         .timer.warning { color: #f39c12; }
         .timer.danger { color: #e74c3c; animation: pulse 1s infinite; }
         @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
         .progress { font-size: 15px; font-weight: 600; }
         .progress span { color: #27ae60; font-weight: 800; }
-
-        .ref-btn {
-            padding: 8px 14px;
-            background: rgba(255,255,255,0.12);
-            color: white;
-            border: 1px solid rgba(255,255,255,0.25);
-            border-radius: 8px;
-            cursor: pointer;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 13px;
-            font-weight: 600;
-            transition: 0.2s;
-        }
-        .ref-btn:hover {
-            background: rgba(255,255,255,0.2);
-            border-color: rgba(255,255,255,0.4);
-        }
-
-        /* ==== TABS ==== */
         .tabs {
-            display: flex;
-            background: #34495e;
-            position: sticky; top: 56px;
-            z-index: 99;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-            width: 100%;
+            display: flex; background: #34495e; position: sticky; top: 56px;
+            z-index: 99; overflow-x: auto;
         }
         .tab {
-            flex: 1 1 0;
-            padding: 12px 8px;
-            color: white;
-            cursor: pointer;
-            border: none;
-            background: transparent;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 14px;
-            font-weight: 600;
-            text-align: center;
-            border-bottom: 4px solid transparent;
-            transition: 0.15s;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            min-width: 0;
+            flex: 1 1 0; padding: 12px 8px; color: white; cursor: pointer;
+            border: none; background: transparent; font-family: inherit;
+            font-size: 14px; font-weight: 600; text-align: center;
+            border-bottom: 4px solid transparent; white-space: nowrap;
+            min-width: 100px;
         }
-        .tab:hover { background: #3d566e; }
         .tab.active {
-            background: #2c3e50;
-            border-bottom-color: #27ae60;
-            font-weight: 800;
+            background: #2c3e50; border-bottom-color: #27ae60; font-weight: 800;
         }
         .tab .tab-badge {
-            background: #27ae60;
-            color: white;
-            border-radius: 12px;
-            padding: 2px 8px;
-            font-size: 12px;
-            font-weight: 700;
+            background: #27ae60; color: white; border-radius: 12px;
+            padding: 2px 8px; font-size: 12px; font-weight: 700;
             margin-left: 6px;
         }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 30px 20px 100px;
-        }
-
-        /* ==== ВОПРОСЫ ==== */
+        .container { max-width: 900px; margin: 0 auto; padding: 30px 20px 100px; }
         .question {
-            background: white;
-            padding: 20px 22px;
-            margin-bottom: 14px;
-            border-radius: 14px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            background: white; padding: 20px 22px; margin-bottom: 14px;
+            border-radius: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             border: 1px solid #e5e9ee;
-            transition: 0.2s;
         }
-        .question:hover {
-            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+        .q-header {
+            display: flex; justify-content: space-between;
+            align-items: center; margin-bottom: 8px;
         }
-        .q-text { font-size: 16px; margin-bottom: 14px; font-weight: 600; line-height: 1.55; color: #2c3e50; }
+        .q-text {
+            font-size: 16px; margin-bottom: 14px; font-weight: 600;
+            line-height: 1.7; color: #2c3e50;
+        }
         .q-num {
-            color: #94a3b8;
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 0.1em;
+            color: #94a3b8; font-size: 12px; font-weight: 700;
             text-transform: uppercase;
-            margin-bottom: 8px;
         }
-
-        /* ==== КОНТЕКСТ ==== */
+        .difficulty-badge {
+            display: inline-block; padding: 3px 10px; border-radius: 8px;
+            font-size: 11px; font-weight: 800; text-transform: uppercase;
+        }
+        .difficulty-A { background: #d1fae5; color: #065f46; }
+        .difficulty-B { background: #fef3c7; color: #92400e; }
+        .difficulty-C { background: #fee2e2; color: #991b1b; }
+        .question-image {
+            max-width: 100%; height: auto; display: block; margin: 12px 0;
+            border-radius: 10px; border: 1px solid #e2e8f0;
+        }
         .context-block {
-            background: #f0f7fd;
-            border-left: 4px solid #2980b9;
-            padding: 15px 18px;
-            margin-bottom: 16px;
-            border-radius: 8px;
+            background: #f0f7fd; border-left: 4px solid #2980b9;
+            padding: 15px 18px; margin-bottom: 16px; border-radius: 8px;
         }
         .context-block strong {
-            display: block;
-            margin-bottom: 8px;
-            color: #2980b9;
-            font-weight: 800;
-            font-size: 14px;
+            display: block; margin-bottom: 8px; color: #2980b9;
+            font-weight: 800; font-size: 14px;
         }
         .context-block p {
-            margin: 0;
-            line-height: 1.7;
-            white-space: pre-wrap;
-            font-size: 14px;
-            color: #34495e;
+            margin: 0; line-height: 1.7; white-space: pre-wrap;
+            font-size: 14px; color: #34495e;
         }
-
-        /* ==== ВАРИАНТЫ ОТВЕТА ==== */
         .option {
-            display: block;
-            padding: 12px 16px;
-            margin: 8px 0;
-            background: #fafbfc;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: 0.15s;
-            font-size: 15px;
-            font-weight: 500;
-            color: #2c3e50;
+            display: block; padding: 12px 16px; margin: 8px 0;
+            background: #fafbfc; border: 1px solid #e2e8f0;
+            border-radius: 10px; cursor: pointer;
+            font-size: 15px; font-weight: 500;
         }
-        .option:hover {
-            background: #f0f4f8;
-            border-color: #cbd5e1;
-        }
+        .option:hover { background: #f0f4f8; border-color: #cbd5e1; }
         .option input {
-            margin-right: 12px;
-            accent-color: #2980b9;
-            width: 18px; height: 18px;
-            cursor: pointer;
+            margin-right: 12px; accent-color: #2980b9;
+            width: 18px; height: 18px; cursor: pointer;
             vertical-align: middle;
         }
         .option.selected {
-            background: #e8f4fd;
-            border-color: #2980b9;
+            background: #e8f4fd; border-color: #2980b9;
             box-shadow: 0 0 0 3px rgba(41,128,185,0.12);
         }
-
+        .matching-block { padding: 14px 0; }
+        .matching-block h4 {
+            font-size: 14px; font-weight: 800; color: #2563eb;
+            margin-bottom: 12px; text-transform: uppercase;
+        }
+        .matching-row {
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 12px; padding: 10px 0;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+        .matching-row:last-child { border-bottom: none; }
+        .matching-row .sub-text {
+            flex: 1; font-size: 14px; font-weight: 600;
+            color: #2c3e50; line-height: 1.6;
+        }
+        .matching-row select {
+            min-width: 180px; padding: 10px 14px; border-radius: 10px;
+            border: 1px solid #cbd5e1; background: #f8fafc;
+            font-family: inherit; font-size: 14px; font-weight: 600;
+            outline: none;
+        }
+        .matching-row select.chosen {
+            background: #e8f4fd; border-color: #2980b9;
+        }
         .subject-block { display: none; }
         .subject-block.active { display: block; }
-
-        /* ==== FINISH BAR ==== */
         .finish-bar {
-            position: sticky;
-            bottom: 0;
-            background: white;
-            border-top: 1px solid #e5e9ee;
-            padding: 15px 20px;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.06);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 99;
-            flex-wrap: wrap;
-            gap: 10px;
-            color: #34495e;
-            font-size: 14px;
-            font-weight: 600;
+            position: sticky; bottom: 0; background: white;
+            border-top: 1px solid #e5e9ee; padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 99; flex-wrap: wrap; gap: 10px;
+            font-size: 14px; font-weight: 600;
         }
         .finish-bar strong { color: #27ae60; }
         .finish-btn {
-            padding: 14px 30px;
-            background: #27ae60;
-            color: white;
-            border: none;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            border-radius: 10px;
-            transition: 0.2s;
-            box-shadow: 0 4px 12px rgba(39,174,96,0.25);
+            padding: 14px 30px; background: #27ae60; color: white;
+            border: none; font-family: inherit; font-size: 15px;
+            font-weight: 700; cursor: pointer; border-radius: 10px;
         }
-        .finish-btn:hover {
-            background: #219a52;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(39,174,96,0.35);
-        }
-
-        /* ==== КНОПКИ НАВИГАЦИИ ==== */
         .btn-nav {
-            padding: 14px 30px;
-            color: white;
-            border: none;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 15px;
-            font-weight: 700;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: 0.2s;
+            padding: 14px 30px; color: white; border: none;
+            font-family: inherit; font-size: 15px; font-weight: 700;
+            border-radius: 10px; cursor: pointer;
         }
-        .btn-nav-blue {
-            background: #2980b9;
-            box-shadow: 0 4px 12px rgba(41,128,185,0.25);
-        }
-        .btn-nav-blue:hover {
-            background: #2471a3;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(41,128,185,0.35);
-        }
-        .btn-nav-green {
-            background: #27ae60;
-            box-shadow: 0 4px 12px rgba(39,174,96,0.25);
-        }
-        .btn-nav-green:hover {
-            background: #219a52;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(39,174,96,0.35);
-        }
-
-        /* ==== OVERLAY ==== */
+        .btn-nav-blue { background: #2980b9; }
+        .btn-nav-green { background: #27ae60; }
         #warning-overlay {
-            display: none;
-            position: fixed; top: 0; left: 0;
+            display: none; position: fixed; top: 0; left: 0;
             width: 100%; height: 100%;
-            background: rgba(15,23,42,0.92);
-            color: white;
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 40px;
+            background: rgba(15,23,42,0.92); color: white;
+            z-index: 9999; justify-content: center; align-items: center;
+            text-align: center; padding: 40px;
         }
-        #warning-overlay div { max-width: 600px; }
-        #warning-overlay h1 { color: #ff4d4d; font-size: 42px; font-weight: 900; letter-spacing: -0.03em; }
-        #warning-overlay p { font-size: 20px; margin: 15px 0; font-weight: 600; }
-        #warning-overlay button {
-            margin-top: 25px;
-            padding: 15px 40px;
-            background: #27ae60;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        #warning-overlay button:hover {
-            background: #219a52;
-            transform: translateY(-2px);
-        }
-
-        /* ==== МОДАЛКИ ==== */
         .modal-bg {
-            display: none;
-            position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 500;
-            justify-content: center;
-            align-items: center;
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(0,0,0,0.5);
+            z-index: 500; justify-content: center; align-items: center;
             padding: 20px;
         }
         .modal {
-            background: white;
-            padding: 32px 28px;
-            border-radius: 16px;
-            max-width: 500px;
-            width: 100%;
-            text-align: center;
-            color: #2c3e50;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            background: white; padding: 32px 28px; border-radius: 16px;
+            max-width: 500px; width: 100%; text-align: center;
         }
-        .modal h2 { margin-top: 0; font-weight: 800; letter-spacing: -0.02em; }
-        .modal p { color: #64748b; margin: 12px 0; font-size: 15px; }
         .modal button {
-            margin: 8px;
-            padding: 12px 24px;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 15px;
-            font-weight: 700;
-            border: none;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: 0.2s;
+            margin: 8px; padding: 12px 24px; font-family: inherit;
+            font-size: 15px; font-weight: 700; border: none;
+            cursor: pointer; border-radius: 8px;
         }
         .modal .yes { background: #27ae60; color: white; }
-        .modal .yes:hover { background: #219a52; transform: translateY(-2px); }
-        .modal .no {
-            background: #ecf0f1;
-            color: #34495e;
-        }
-        .modal .no:hover { background: #d5dbdb; transform: translateY(-2px); }
-
-        /* ==== КАЛЬКУЛЯТОР ==== */
+        .modal .no { background: #ecf0f1; color: #34495e; }
         #calc {
-            display: none;
-            position: fixed;
-            bottom: 160px; right: 20px;
-            background: white;
-            border: 1px solid #e5e9ee;
-            border-radius: 12px;
-            padding: 15px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.18);
-            width: 260px;
-            max-width: calc(100vw - 40px);
-            z-index: 1001;
+            display: none; position: fixed; bottom: 160px; right: 20px;
+            background: white; border: 1px solid #e5e9ee;
+            border-radius: 12px; padding: 15px; width: 260px; z-index: 1001;
         }
-        #calc .calc-head {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            color: #2c3e50;
-            font-size: 14px;
-            font-weight: 700;
-        }
-        #calc .calc-head button {
-            background: none; border: none;
-            color: #94a3b8; font-size: 20px;
-            cursor: pointer; padding: 0 6px;
-            transition: 0.2s;
-        }
-        #calc .calc-head button:hover { color: #e74c3c; }
         #calc-display {
-            width: 100%;
-            padding: 10px;
-            font-size: 18px;
-            font-weight: 700;
-            text-align: right;
-            background: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            color: #2c3e50;
-            box-sizing: border-box;
-            font-family: 'Montserrat', sans-serif;
-            outline: none;
+            width: 100%; padding: 10px; font-size: 18px;
+            font-weight: 700; text-align: right; background: #f9f9f9;
+            border: 1px solid #ddd; border-radius: 6px;
         }
         .calc-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 5px;
-            margin-top: 10px;
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            gap: 5px; margin-top: 10px;
         }
         .calc-key {
-            padding: 12px;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 15px;
-            font-weight: 700;
-            border: none;
-            background: #ecf0f1;
-            color: #2c3e50;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: 0.15s;
+            padding: 12px; font-family: inherit; font-size: 15px;
+            font-weight: 700; border: none; background: #ecf0f1;
+            border-radius: 6px; cursor: pointer;
         }
-        .calc-key:hover { background: #d5dbdb; }
-        .calc-op {
-            background: #2980b9;
-            color: white;
-        }
-        .calc-op:hover { background: #2471a3; }
-        .calc-eq {
-            background: #27ae60;
-            color: white;
-        }
-        .calc-eq:hover { background: #219a52; }
-        .calc-clear {
-            grid-column: span 4;
-            background: #e74c3c;
-            color: white;
-        }
-        .calc-clear:hover { background: #c0392b; }
-
+        .calc-op { background: #2980b9; color: white; }
+        .calc-eq { background: #27ae60; color: white; }
+        .calc-clear { grid-column: span 4; background: #e74c3c; color: white; }
         .calc-fab {
-            position: fixed;
-            bottom: 90px; right: 20px;
-            width: 60px; height: 60px;
-            border-radius: 50%;
-            background: #2980b9;
-            color: white;
-            font-size: 24px;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(41,128,185,0.4);
-            z-index: 1000;
-            transition: 0.2s;
+            position: fixed; bottom: 90px; right: 20px;
+            width: 60px; height: 60px; border-radius: 50%;
+            background: #2980b9; color: white; font-size: 24px;
+            border: none; cursor: pointer; z-index: 1000;
         }
-        .calc-fab:hover {
-            background: #2471a3;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(41,128,185,0.5);
-        }
-
-        /* ==== МОДАЛКИ ТАБЛИЦ ==== */
         .table-modal {
-            display: none;
-            position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(0,0,0,0.85);
+            z-index: 9999; justify-content: center; align-items: center;
             padding: 20px;
         }
         .table-modal-content {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            max-width: 95%;
-            max-height: 95%;
-            overflow: auto;
-            position: relative;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-        }
-        .table-modal-content h2 {
-            margin-bottom: 15px;
-            color: #2c3e50;
-            font-size: 20px;
-            font-weight: 800;
-            letter-spacing: -0.02em;
-        }
-        .table-modal-content img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            border-radius: 8px;
+            background: white; border-radius: 12px; padding: 20px;
+            max-width: 95%; max-height: 95%; overflow: auto; position: relative;
         }
         .table-modal-close {
-            position: absolute;
-            top: 10px; right: 10px;
-            background: #e74c3c;
-            color: white;
-            border: none;
-            width: 36px; height: 36px;
-            border-radius: 50%;
-            font-size: 18px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.2s;
+            position: absolute; top: 10px; right: 10px;
+            background: #e74c3c; color: white; border: none;
+            width: 36px; height: 36px; border-radius: 50%;
+            font-size: 18px; cursor: pointer;
         }
-        .table-modal-close:hover { background: #c0392b; transform: scale(1.05); }
-
-        /* ==== АДАПТИВ ==== */
         @media (max-width: 700px) {
             .tab { font-size: 11px; padding: 10px 4px; }
-            .tab .tab-badge { font-size: 10px; padding: 1px 5px; margin-left: 2px; }
             .container { padding: 20px 10px 100px; }
             .q-text { font-size: 15px; }
-            .option { font-size: 14px; padding: 10px 12px; }
-            .timer { font-size: 18px; }
-            .progress { font-size: 13px; }
-            .header { padding: 10px 12px; }
-            .ref-btn { font-size: 11px; padding: 6px 10px; }
-            .question { padding: 16px 16px; }
-            .tabs { top: 52px; }
-            #calc { width: calc(100% - 40px); right: 20px; left: 20px; }
-        }
-        @media (max-width: 450px) {
-            .tab { font-size: 9px; padding: 8px 2px; }
-            .tab .tab-badge { display: none; }
-            .timer { font-size: 16px; }
-            .progress { font-size: 12px; }
-            .ref-btn { font-size: 10px; padding: 5px 8px; }
+            .option { font-size: 14px; }
+            .matching-row { flex-direction: column; align-items: stretch; }
+            .matching-row select { min-width: 100%; }
         }
     </style>
 </head>
@@ -513,8 +248,8 @@
         {% trans "Отвечено" %}: <span id="answered-count">0</span> / {{ answers.count }}
     </div>
     <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-        <button class="ref-btn" onclick="toggleMendeleev()">🧪 {% trans "Менделеев" %}</button>
-        <button class="ref-btn" onclick="toggleSolubility()">💧 {% trans "Растворимость" %}</button>
+        <button class="ref-btn" onclick="toggleMendeleev()" style="padding: 8px 14px; background: rgba(255,255,255,0.12); color: white; border: 1px solid rgba(255,255,255,0.25); border-radius: 8px; cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 600;">🧪 {% trans "Менделеев" %}</button>
+        <button class="ref-btn" onclick="toggleSolubility()" style="padding: 8px 14px; background: rgba(255,255,255,0.12); color: white; border: 1px solid rgba(255,255,255,0.25); border-radius: 8px; cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 600;">💧 {% trans "Растворимость" %}</button>
         <div class="timer" id="timer">4:00:00</div>
     </div>
 </div>
@@ -524,7 +259,6 @@
 <div class="tabs">
     {% for block in answer_blocks %}
         <button class="tab {% if forloop.first %}active{% endif %}"
-                data-target="block-{{ forloop.counter }}"
                 onclick="switchTab(this, 'block-{{ forloop.counter }}')">
             {% if block.grouper == 'kaz_history' %}📜 {% trans "Ист. КЗ" %}
             {% elif block.grouper == 'reading' %}📖 {% trans "Чтение" %}
@@ -538,12 +272,18 @@
 
 <div class="container">
     {% for block in answer_blocks %}
-        <div class="subject-block {% if forloop.first %}active{% endif %}"
-             id="block-{{ forloop.counter }}">
+        <div class="subject-block {% if forloop.first %}active{% endif %}" id="block-{{ forloop.counter }}">
 
             {% for ans in block.list %}
                 <div class="question" data-answer-id="{{ ans.id }}" data-qtype="{{ ans.question_type_snapshot }}">
-                    <div class="q-num">№ {{ forloop.counter }}</div>
+                    <div class="q-header">
+                        <div class="q-num">№ {{ forloop.counter }}</div>
+                        {% if ans.difficulty_snapshot %}
+                            <span class="difficulty-badge difficulty-{{ ans.difficulty_snapshot }}">
+                                {{ ans.difficulty_snapshot }}
+                            </span>
+                        {% endif %}
+                    </div>
 
                     {% if ans.group_context_snapshot %}
                         <div class="context-block">
@@ -554,35 +294,47 @@
 
                     <div class="q-text">{{ ans.question_snapshot }}</div>
 
-                    {% if ans.question.option_a %}
-                        <label class="option {% if 'A' in ans.chosen %}selected{% endif %}">
-                            <input type="{% if ans.question_type_snapshot == 'single' %}radio{% else %}checkbox{% endif %}"
-                                   name="q-{{ ans.id }}" value="A"
-                                   {% if 'A' in ans.chosen %}checked{% endif %}
-                                   onchange="saveAnswer({{ ans.id }})">
-                            A. {{ ans.question.option_a }}
-                        </label>
-                        <label class="option {% if 'B' in ans.chosen %}selected{% endif %}">
-                            <input type="{% if ans.question_type_snapshot == 'single' %}radio{% else %}checkbox{% endif %}"
-                                   name="q-{{ ans.id }}" value="B"
-                                   {% if 'B' in ans.chosen %}checked{% endif %}
-                                   onchange="saveAnswer({{ ans.id }})">
-                            B. {{ ans.question.option_b }}
-                        </label>
-                        <label class="option {% if 'C' in ans.chosen %}selected{% endif %}">
-                            <input type="{% if ans.question_type_snapshot == 'single' %}radio{% else %}checkbox{% endif %}"
-                                   name="q-{{ ans.id }}" value="C"
-                                   {% if 'C' in ans.chosen %}checked{% endif %}
-                                   onchange="saveAnswer({{ ans.id }})">
-                            C. {{ ans.question.option_c }}
-                        </label>
-                        <label class="option {% if 'D' in ans.chosen %}selected{% endif %}">
-                            <input type="{% if ans.question_type_snapshot == 'single' %}radio{% else %}checkbox{% endif %}"
-                                   name="q-{{ ans.id }}" value="D"
-                                   {% if 'D' in ans.chosen %}checked{% endif %}
-                                   onchange="saveAnswer({{ ans.id }})">
-                            D. {{ ans.question.option_d }}
-                        </label>
+                    {% if ans.image_snapshot %}
+                        <img src="{{ ans.image_snapshot }}" alt="" class="question-image">
+                    {% endif %}
+
+                    {% if ans.question_type_snapshot == 'single' or ans.question_type_snapshot == 'multiple' %}
+                        {% if ans.question.option_a %}
+                            <label class="option {% if 'A' in ans.chosen %}selected{% endif %}">
+                                <input type="{% if ans.question_type_snapshot == 'single' %}radio{% else %}checkbox{% endif %}"
+                                       name="q-{{ ans.id }}" value="A"
+                                       {% if 'A' in ans.chosen %}checked{% endif %}
+                                       onchange="saveAnswer({{ ans.id }})">
+                                A. {{ ans.question.option_a }}
+                            </label>
+                        {% endif %}
+                        {% if ans.question.option_b %}
+                            <label class="option {% if 'B' in ans.chosen %}selected{% endif %}">
+                                <input type="{% if ans.question_type_snapshot == 'single' %}radio{% else %}checkbox{% endif %}"
+                                       name="q-{{ ans.id }}" value="B"
+                                       {% if 'B' in ans.chosen %}checked{% endif %}
+                                       onchange="saveAnswer({{ ans.id }})">
+                                B. {{ ans.question.option_b }}
+                            </label>
+                        {% endif %}
+                        {% if ans.question.option_c %}
+                            <label class="option {% if 'C' in ans.chosen %}selected{% endif %}">
+                                <input type="{% if ans.question_type_snapshot == 'single' %}radio{% else %}checkbox{% endif %}"
+                                       name="q-{{ ans.id }}" value="C"
+                                       {% if 'C' in ans.chosen %}checked{% endif %}
+                                       onchange="saveAnswer({{ ans.id }})">
+                                C. {{ ans.question.option_c }}
+                            </label>
+                        {% endif %}
+                        {% if ans.question.option_d %}
+                            <label class="option {% if 'D' in ans.chosen %}selected{% endif %}">
+                                <input type="{% if ans.question_type_snapshot == 'single' %}radio{% else %}checkbox{% endif %}"
+                                       name="q-{{ ans.id }}" value="D"
+                                       {% if 'D' in ans.chosen %}checked{% endif %}
+                                       onchange="saveAnswer({{ ans.id }})">
+                                D. {{ ans.question.option_d }}
+                            </label>
+                        {% endif %}
                         {% if ans.question.option_e %}
                             <label class="option {% if 'E' in ans.chosen %}selected{% endif %}">
                                 <input type="{% if ans.question_type_snapshot == 'single' %}radio{% else %}checkbox{% endif %}"
@@ -601,6 +353,24 @@
                                 F. {{ ans.question.option_f }}
                             </label>
                         {% endif %}
+
+                    {% elif ans.question_type_snapshot == 'matching' %}
+                        <div class="matching-block">
+                            <h4>Сәйкестендіріңіз</h4>
+                            {% for sub in ans.matching_data_snapshot.sub_questions %}
+                                <div class="matching-row">
+                                    <span class="sub-text">{{ sub.text }}</span>
+                                    <select class="match-select"
+                                            data-sub-idx="{{ forloop.counter0 }}"
+                                            onchange="saveMatching({{ ans.id }})">
+                                        <option value="">— таңдаңыз —</option>
+                                        {% for opt in ans.matching_data_snapshot.options %}
+                                            <option value="{{ opt }}">{{ opt }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            {% endfor %}
+                        </div>
                     {% endif %}
                 </div>
             {% endfor %}
@@ -628,9 +398,9 @@
 <button onclick="toggleCalc()" class="calc-fab">🧮</button>
 
 <div id="calc">
-    <div class="calc-head">
+    <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
         <strong>🧮 {% trans "Калькулятор" %}</strong>
-        <button onclick="toggleCalc()">✕</button>
+        <button onclick="toggleCalc()" style="background:none;border:none;font-size:20px;cursor:pointer;">✕</button>
     </div>
     <input type="text" id="calc-display" readonly>
     <div class="calc-grid">
@@ -654,21 +424,19 @@
     </div>
 </div>
 
-<!-- Модалка: Таблица Менделеева -->
 <div id="mendeleev-modal" class="table-modal">
     <div class="table-modal-content">
         <button class="table-modal-close" onclick="toggleMendeleev()">✕</button>
-        <h2>🧪 {% trans "Периодическая таблица Менделеева" %}</h2>
-        <img src="{% static 'core/images/periodic_table.png' %}" alt="Mendeleev Table">
+        <h2>🧪 {% trans "Периодическая таблица" %}</h2>
+        <img src="{% static 'core/images/periodic_table.png' %}" alt="Table" style="max-width:100%">
     </div>
 </div>
 
-<!-- Модалка: Таблица растворимости -->
 <div id="solubility-modal" class="table-modal">
     <div class="table-modal-content">
         <button class="table-modal-close" onclick="toggleSolubility()">✕</button>
         <h2>💧 {% trans "Таблица растворимости" %}</h2>
-        <img src="{% static 'core/images/solubility.png' %}" alt="Solubility Table">
+        <img src="{% static 'core/images/solubility.png' %}" alt="Table" style="max-width:100%">
     </div>
 </div>
 
@@ -678,7 +446,7 @@
         <p>{% trans "Ваши результаты будут аннулированы." %}</p>
         <p>{% trans "Не покидайте вкладку с тестом!" %}</p>
         <p id="violation-count"></p>
-        <button onclick="closeWarning()">{% trans "Понятно, продолжить" %}</button>
+        <button onclick="closeWarning()" style="margin-top: 25px; padding: 15px 40px; background: #27ae60; color: white; border: none; border-radius: 10px; font-family: inherit; font-size: 16px; font-weight: 700; cursor: pointer;">{% trans "Понятно" %}</button>
     </div>
 </div>
 
@@ -686,7 +454,7 @@
     <div class="modal">
         <h2>{% trans "Завершить тест?" %}</h2>
         <p id="unanswered-info"></p>
-        <button class="yes" onclick="doFinish()">{% trans "Да, завершить" %}</button>
+        <button class="yes" onclick="doFinish()">{% trans "Да" %}</button>
         <button class="no" onclick="closeModal()">{% trans "Отмена" %}</button>
     </div>
 </div>
@@ -698,6 +466,7 @@ const MAX_VIOLATIONS = 3;
 const LANG = '{{ LANGUAGE_CODE }}';
 let violations = 0;
 let testActive = true;
+let secondsLeft = SECONDS_LEFT;
 
 function getCookie(name) {
     let cookieValue = null;
@@ -724,47 +493,58 @@ function switchTab(btn, blockId) {
 
 function nextTab(currentIndex) {
     const tabs = document.querySelectorAll('.tab');
-    if (currentIndex < tabs.length) {
-        tabs[currentIndex].click();
-    }
+    if (currentIndex < tabs.length) tabs[currentIndex].click();
 }
 
 function saveAnswer(answerId) {
     const q = document.querySelector(`[data-answer-id="${answerId}"]`);
     const type = q.dataset.qtype;
     let chosen = '';
-
     if (type === 'single') {
         const checked = q.querySelector('input:checked');
         chosen = checked ? checked.value : '';
-    } else {
+    } else if (type === 'multiple') {
         const checked = q.querySelectorAll('input:checked');
         chosen = Array.from(checked).map(i => i.value).sort().join('');
     }
-
     q.querySelectorAll('.option').forEach(opt => {
         const inp = opt.querySelector('input');
         opt.classList.toggle('selected', inp.checked);
     });
-
     fetch(`/${LANG}/api/test/${ATTEMPT_ID}/answer/${answerId}/`, {
         method: 'POST',
         headers: {
             'X-CSRFToken': getCookie('csrftoken'),
             'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: `chosen=${chosen}`,
-    })
-    .then(r => r.json())
-    .then(data => {
-        if (data.ok) {
-            document.getElementById('answered-count').textContent = data.answered;
-        }
-    })
-    .catch(e => console.error(e));
+        body: `chosen=${encodeURIComponent(chosen)}`,
+    }).then(r => r.json()).then(data => {
+        if (data.ok) document.getElementById('answered-count').textContent = data.answered;
+    });
 }
 
-let secondsLeft = SECONDS_LEFT;
+function saveMatching(answerId) {
+    const q = document.querySelector(`[data-answer-id="${answerId}"]`);
+    const matching = {};
+    q.querySelectorAll('.match-select').forEach(sel => {
+        if (sel.value) {
+            matching[sel.dataset.subIdx] = sel.value;
+            sel.classList.add('chosen');
+        } else {
+            sel.classList.remove('chosen');
+        }
+    });
+    fetch(`/${LANG}/api/test/${ATTEMPT_ID}/answer/${answerId}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `matching=${encodeURIComponent(JSON.stringify(matching))}`,
+    }).then(r => r.json()).then(data => {
+        if (data.ok) document.getElementById('answered-count').textContent = data.answered;
+    });
+}
 
 function formatTime(sec) {
     const h = Math.floor(sec / 3600);
@@ -779,7 +559,6 @@ function updateTimer() {
     const text = formatTime(secondsLeft);
     timer.textContent = text;
     timer2.textContent = text;
-
     timer.classList.remove('warning', 'danger');
     if (secondsLeft < 900) timer.classList.add('danger');
     else if (secondsLeft < 1800) timer.classList.add('warning');
@@ -790,7 +569,7 @@ setInterval(() => {
         secondsLeft--;
         updateTimer();
         if (secondsLeft === 0) {
-            alert('{% trans "Время вышло! Тест завершается." %}');
+            alert('{% trans "Время вышло" %}');
             doFinish();
         }
     }
@@ -800,38 +579,25 @@ updateTimer();
 
 function reportViolation() {
     if (!testActive) return;
-
     fetch(`/${LANG}/api/test/${ATTEMPT_ID}/violation/`, {
         method: 'POST',
         headers: { 'X-CSRFToken': getCookie('csrftoken') },
-    })
-    .then(r => r.json())
-    .then(data => {
+    }).then(r => r.json()).then(data => {
         violations = data.count;
         const overlay = document.getElementById('warning-overlay');
-        document.getElementById('violation-count').textContent =
-            `{% trans "Нарушений" %}: ${violations} / ${data.max}`;
+        document.getElementById('violation-count').textContent = `${violations} / ${data.max}`;
         overlay.style.display = 'flex';
-
         if (data.annulled) {
             testActive = false;
-            overlay.innerHTML = `<div>
-                <h1>❌ {% trans "ТЕСТ АННУЛИРОВАН" %}</h1>
-                <p>{% trans "Вы покинули вкладку" %} ${violations} {% trans "раз(а)." %}</p>
-                <p>{% trans "Результат не будет засчитан." %}</p>
-            </div>`;
+            overlay.innerHTML = `<div><h1>❌ {% trans "ТЕСТ АННУЛИРОВАН" %}</h1><p>{% trans "Вы покинули вкладку" %} ${violations} {% trans "раз(а)." %}</p></div>`;
         }
-    })
-    .catch(e => console.error(e));
+    });
 }
 
 function closeWarning() {
     document.getElementById('warning-overlay').style.display = 'none';
 }
 
-// ============================================================
-// ЗАЩИТА ОТ ЛОЖНОГО СРАБАТЫВАНИЯ ПРИ F5 / ПЕРЕЗАГРУЗКЕ
-// ============================================================
 let pageReady = false;
 setTimeout(() => { pageReady = true; }, 2000);
 
@@ -840,19 +606,8 @@ document.addEventListener('visibilitychange', () => {
     if (document.hidden) reportViolation();
 });
 
-window.addEventListener('blur', () => {
-    if (!pageReady) return;
-    if (document.readyState !== 'complete') return;
-    reportViolation();
-});
+window.addEventListener('beforeunload', () => { pageReady = false; });
 
-window.addEventListener('beforeunload', () => {
-    pageReady = false;
-});
-
-// ============================================================
-// МОДАЛЬНЫЕ ОКНА ТАБЛИЦ
-// ============================================================
 function toggleMendeleev() {
     const m = document.getElementById('mendeleev-modal');
     m.style.display = (m.style.display === 'none' || m.style.display === '') ? 'flex' : 'none';
@@ -868,9 +623,7 @@ function confirmFinish() {
     const total = {{ answers.count }};
     const unanswered = total - answered;
     document.getElementById('unanswered-info').textContent =
-        unanswered > 0
-            ? `{% trans "Вы не ответили на" %} ${unanswered} {% trans "вопросов. Точно завершить?" %}`
-            : `{% trans "Вы ответили на все вопросы. Завершить?" %}`;
+        unanswered > 0 ? `{% trans "Вы не ответили на" %} ${unanswered} {% trans "вопросов." %}` : `{% trans "Вы ответили на все вопросы." %}`;
     document.getElementById('confirm-modal').style.display = 'flex';
 }
 
@@ -898,30 +651,30 @@ function toggleCalc() {
     c.style.display = c.style.display === 'none' || c.style.display === '' ? 'block' : 'none';
 }
 
-function calcInput(v) {
-    document.getElementById('calc-display').value += v;
-}
-
-function calcClear() {
-    document.getElementById('calc-display').value = '';
-}
-
+function calcInput(v) { document.getElementById('calc-display').value += v; }
+function calcClear() { document.getElementById('calc-display').value = ''; }
 function calcResult() {
     const display = document.getElementById('calc-display');
-    try {
-        display.value = eval(display.value);
-    } catch (e) {
-        display.value = 'Ошибка';
-    }
+    try { display.value = eval(display.value); }
+    catch (e) { display.value = 'Ошибка'; }
 }
 
 document.querySelectorAll('input[type=radio]:checked, input[type=checkbox]:checked').forEach(inp => {
     inp.closest('.option').classList.add('selected');
 });
-let initialAnswered = document.querySelectorAll('.question').length -
-    document.querySelectorAll('.question:not(:has(input:checked))').length;
-document.getElementById('answered-count').textContent = initialAnswered;
-</script>
 
+document.querySelectorAll('.match-select').forEach(sel => {
+    if (sel.value) sel.classList.add('chosen');
+});
+
+let initialAnswered = document.querySelectorAll('.question').length -
+    document.querySelectorAll('.question:not(:has(input:checked)):not(:has(.match-select.chosen))').length;
+document.getElementById('answered-count').textContent = initialAnswered;
+
+// ✅ MathJax — барлық формулаларды өңдеу
+if (window.MathJax && window.MathJax.typesetPromise) {
+    window.MathJax.typesetPromise();
+}
+</script>
 </body>
 </html>

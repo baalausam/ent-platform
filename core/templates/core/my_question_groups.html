@@ -3,316 +3,126 @@
 <html lang="{{ LANGUAGE_CODE }}">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% trans "Мои контексты" %}</title>
-
-    <!-- Montserrat -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
-        body {
-            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-            background: #f4f6f8;
-            color: #2c3e50;
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        /* ==== ВЕРХНЯЯ ПАНЕЛЬ С ЯЗЫКОМ ==== */
-        .topbar {
-            position: relative;
-            z-index: 10;
-            display: flex;
-            justify-content: flex-end;
-            padding: 20px 40px;
-        }
-        .lang-switch {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            padding: 10px 16px;
-            color: #2c3e50;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: 0.2s;
-            outline: none;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-        }
-        .lang-switch:hover {
-            background: #f8fafc;
-            border-color: #cbd5e1;
-        }
-        .lang-switch option { color: #2c3e50; }
-
-        /* ==== ОСНОВНОЙ КОНТЕЙНЕР ==== */
-        .main {
-            position: relative;
-            z-index: 10;
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 20px 24px 80px;
-        }
-
-        /* ==== ЗАГОЛОВОК ==== */
-        .page-header {
-            margin-bottom: 32px;
-        }
-        .page-header h1 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 48px;
-            font-weight: 900;
-            line-height: 1.1;
-            letter-spacing: -0.03em;
-            margin-bottom: 16px;
-            background: linear-gradient(135deg, #2c3e50 0%, #3b82f6 50%, #8b5cf6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            color: #64748b;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: 0.2s;
-            padding: 8px 0;
-        }
-        .back-link:hover {
-            color: #2563eb;
-            transform: translateX(-3px);
-        }
-
-        /* ==== КНОПКИ ==== */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 14px 26px;
-            border-radius: 12px;
-            text-decoration: none;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 14px;
-            font-weight: 700;
-            letter-spacing: -0.01em;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid transparent;
-            cursor: pointer;
-            margin: 10px 0;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            color: white;
-            box-shadow: 0 10px 30px -10px rgba(59,130,246,0.5),
-                        0 4px 12px rgba(0,0,0,0.08);
-        }
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 20px 40px -10px rgba(59,130,246,0.7),
-                        0 8px 20px rgba(0,0,0,0.12);
-        }
-        .btn-secondary {
-            background: #ffffff;
-            color: #2c3e50;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-        }
-        .btn-secondary:hover {
-            background: #f8fafc;
-            border-color: #cbd5e1;
-            transform: translateY(-3px);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
-        }
-        .btn-small {
-            padding: 8px 16px;
-            font-size: 13px;
-            border-radius: 10px;
-            margin: 0;
-        }
-
-        /* ==== ТАБЛИЦА В КАРТОЧКЕ ==== */
-        .table-wrap {
-            background: #ffffff;
-            border: 1px solid #e5e9ee;
-            border-radius: 20px;
-            padding: 8px;
-            margin-top: 24px;
-            overflow: hidden;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 16px 18px;
-            text-align: left;
-            font-size: 14px;
-            vertical-align: top;
-            border-bottom: 1px solid #f1f5f9;
-        }
-        th {
-            background: #f8fafc;
-            color: #2563eb;
-            font-weight: 700;
-            font-size: 12px;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            border-bottom: 1px solid #e5e9ee;
-        }
-        tbody tr {
-            transition: 0.2s;
-        }
-        tbody tr:hover {
-            background: #f8fafc;
-        }
-        tbody tr:last-child td {
-            border-bottom: none;
-        }
-        td strong {
-            color: #2c3e50;
-            font-weight: 700;
-            display: block;
-            margin-bottom: 4px;
-        }
-        .context-preview {
-            font-size: 13px;
-            color: #64748b;
-            margin-top: 6px;
-            line-height: 1.5;
-        }
-
-        /* ==== СТАТУСЫ ==== */
-        .status-draft {
-            color: #94a3b8;
-            font-weight: 600;
-        }
-        .status-pending {
-            color: #b45309;
-            font-weight: 700;
-        }
-        .status-approved {
-            color: #059669;
-            font-weight: 700;
-        }
-        .status-rejected {
-            color: #c0392b;
-            font-weight: 700;
-        }
-
-        /* ==== ПУСТОЕ СОСТОЯНИЕ ==== */
-        .empty {
-            text-align: center;
-            padding: 80px 40px;
-            color: #94a3b8;
-            font-size: 16px;
-            font-weight: 500;
-            background: #ffffff;
-            border: 1px dashed #cbd5e1;
-            border-radius: 20px;
-            margin-top: 24px;
-        }
-
-        /* ==== АДАПТИВ ==== */
-        @media (max-width: 700px) {
-            .topbar { padding: 15px 20px; }
-            .main { padding: 16px 16px 60px; }
-            .page-header h1 { font-size: 32px; }
-            th, td { padding: 12px 10px; font-size: 13px; }
-            .btn { padding: 12px 20px; font-size: 13px; }
-            .btn-small { padding: 7px 12px; font-size: 12px; }
-        }
+        body { font-family: 'Montserrat', sans-serif; background: #f4f6f8; color: #2c3e50; padding: 30px 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+        .btn-top { color: #2563eb; text-decoration: none; font-size: 13px; font-weight: 600; padding: 8px 16px; border-radius: 10px; background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); }
+        .logout { color: #e74c3c; text-decoration: none; font-size: 13px; font-weight: 600; padding: 8px 16px; border-radius: 10px; background: rgba(231,76,60,0.08); border: 1px solid rgba(231,76,60,0.2); }
+        h1 { font-size: 38px; font-weight: 900; letter-spacing: -0.03em; margin-bottom: 8px; background: linear-gradient(135deg, #2c3e50 0%, #3b82f6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { color: #64748b; font-size: 15px; margin-bottom: 32px; }
+        .btn-add { display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; text-decoration: none; border-radius: 12px; font-size: 15px; font-weight: 700; box-shadow: 0 8px 25px -8px rgba(59,130,246,0.5); margin-top: 16px; }
+        .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 16px; margin-top: 24px; }
+        .group-card { background: #ffffff; border: 1px solid #e5e9ee; border-radius: 20px; padding: 24px; display: flex; flex-direction: column; }
+        .group-card:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; gap: 8px; }
+        .card-title { font-size: 18px; font-weight: 800; color: #2c3e50; line-height: 1.3; }
+        .badge { display: inline-block; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; text-transform: uppercase; white-space: nowrap; }
+        .diff-A { background: #d1fae5; color: #065f46; }
+        .diff-B { background: #fef3c7; color: #92400e; }
+        .diff-C { background: #fee2e2; color: #991b1b; }
+        .status-badge { display: inline-block; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; }
+        .status-draft { background: #f1f5f9; color: #64748b; }
+        .status-pending { background: #fef3c7; color: #92400e; }
+        .status-approved { background: #d1fae5; color: #065f46; }
+        .status-rejected { background: #fee2e2; color: #991b1b; }
+        .context-preview { color: #64748b; font-size: 13px; line-height: 1.6; margin-bottom: 16px; flex-grow: 1; }
+        .progress-info { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 6px; }
+        .progress-info .count-current { color: #2563eb; }
+        .progress-info .count-full { color: #059669; }
+        .progress-bar { width: 100%; height: 8px; background: #f1f5f9; border-radius: 4px; overflow: hidden; margin-bottom: 16px; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #3b82f6, #8b5cf6); border-radius: 4px; transition: 0.3s; }
+        .progress-fill.complete { background: linear-gradient(90deg, #10b981, #059669); }
+        .card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+        .btn-sm { display: inline-flex; align-items: center; gap: 4px; padding: 9px 14px; border: none; cursor: pointer; border-radius: 10px; font-size: 12px; font-weight: 700; font-family: inherit; text-decoration: none; }
+        .btn-view { background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; }
+        .btn-blue { background: rgba(59,130,246,0.1); color: #2563eb; }
+        .btn-green { background: rgba(16,185,129,0.1); color: #059669; }
+        .btn-red { background: #fee2e2; color: #991b1b; }
+        .empty { text-align: center; padding: 80px 40px; color: #94a3b8; font-size: 16px; background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 20px; margin-top: 24px; }
     </style>
 </head>
 <body>
-
-<div class="topbar">
-    <form action="{% url 'set_language' %}" method="post" style="display:inline;">
-        {% csrf_token %}
-        <input name="next" type="hidden" value="{{ request.path }}">
-        <select name="language" class="lang-switch" onchange="this.form.submit()">
-            {% get_current_language as LANGUAGE_CODE %}
-            {% get_available_languages as LANGUAGES %}
-            {% for lang_code, lang_name in LANGUAGES %}
-                <option value="{{ lang_code }}" {% if lang_code == LANGUAGE_CODE %}selected{% endif %}>
-                    {{ lang_name }}
-                </option>
-            {% endfor %}
-        </select>
-    </form>
-</div>
-
-<div class="main">
-
-    <div class="page-header">
-        <h1>📖 {% trans "Мои контексты" %}</h1>
-        <a class="back-link" href="{% url 'core:teacher_dashboard' %}">← {% trans "В панель учителя" %}</a>
+<div class="container">
+    <div class="topbar">
+        <span style="font-size: 14px; font-weight: 600; color: #64748b;">📚 {% trans "Мои контексты" %}</span>
+        <div style="display:flex; gap:8px;">
+            <a href="{% url 'core:teacher_dashboard' %}" class="btn-top">← {% trans "В панель учителя" %}</a>
+            <a href="{% url 'core:logout' %}" class="logout">{% trans "Выйти" %}</a>
+        </div>
     </div>
 
-    <a class="btn btn-primary" href="{% url 'core:add_question_group' %}">
+    <h1>📚 {% trans "Мои контексты" %}</h1>
+    <p class="subtitle">{{ profile.school.name }}</p>
+
+    <a class="btn-add" href="{% url 'core:add_question_group' %}">
         + {% trans "Создать контекст" %}
     </a>
 
     {% if groups %}
-        <div class="table-wrap">
-            <table>
-                <thead>
-                    <tr>
-                        <th>{% trans "Название" %}</th>
-                        <th>{% trans "Блок" %}</th>
-                        <th>{% trans "Вопросов" %}</th>
-                        <th>{% trans "Статус" %}</th>
-                        <th>{% trans "Действия" %}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for g in groups %}
-                        <tr>
-                            <td>
-                                <strong>{{ g.title }}</strong>
-                                <div class="context-preview">{{ g.context_text|truncatechars:120 }}</div>
-                            </td>
-                            <td>{{ g.get_block_display }}</td>
-                            <td>{{ g.questions.count }}</td>
-                            <td class="status-{{ g.status }}">{{ g.get_status_display }}</td>
-                            <td>
-                                {% if g.status == 'draft' %}
-                                    <a class="btn btn-small btn-secondary" href="{% url 'core:add_question' %}?group={{ g.id }}">
-                                        + {% trans "Вопрос" %}
-                                    </a>
-                                    <form method="post" action="{% url 'core:submit_group_for_review' g.id %}" style="display:inline;">
-                                        {% csrf_token %}
-                                        <button type="submit" class="btn btn-small btn-secondary">
-                                            {% trans "На проверку" %}
-                                        </button>
-                                    </form>
-                                {% else %}
-                                    <span style="color:#94a3b8; font-size:13px;">—</span>
-                                {% endif %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <div class="cards">
+            {% for g in groups %}
+                <div class="group-card">
+                    <div class="card-header">
+                        <div class="card-title">{{ g.title }}</div>
+                        <span class="badge diff-{{ g.difficulty }}">{{ g.get_difficulty_display }}</span>
+                    </div>
+
+                    <div style="margin-bottom: 12px;">
+                        <span class="status-badge status-{{ g.status }}">{{ g.get_status_display }}</span>
+                        <span style="font-size: 12px; color: #94a3b8; margin-left: 8px;">{{ g.get_block_display }}</span>
+                    </div>
+
+                    <div class="context-preview">{{ g.context_text|truncatechars:150 }}</div>
+
+                    <div class="progress-info">
+                        <span>{% trans "Сұрақтар" %}:</span>
+                        <span>
+                            <span class="{% if g.is_complete %}count-full{% else %}count-current{% endif %}">
+                                {{ g.current_question_count }}
+                            </span>
+                            / {{ g.expected_question_count }}
+                        </span>
+                    </div>
+                    <div class="progress-bar">
+                        {% widthratio g.current_question_count g.expected_question_count 100 as percent %}
+                        <div class="progress-fill {% if g.is_complete %}complete{% endif %}"
+                             style="width: {{ percent }}%;"></div>
+                    </div>
+
+                    <div class="card-actions">
+                        <a class="btn-sm btn-view" href="{% url 'core:group_detail' g.id %}">
+                            👁 {% trans "Толық көру" %}
+                        </a>
+                        {% if g.status == 'draft' %}
+                            {% if not g.is_complete %}
+                                <a class="btn-sm btn-blue" href="{% url 'core:add_question' %}?group={{ g.id }}">
+                                    ➕ {% trans "Сұрақ қосу" %}
+                                </a>
+                            {% endif %}
+                            {% if g.is_complete %}
+                                <form method="post" action="{% url 'core:submit_group_for_review' g.id %}" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn-sm btn-green">📤 {% trans "Жіберу" %}</button>
+                                </form>
+                            {% endif %}
+                            <form method="post" action="{% url 'core:cancel_group' g.id %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-sm btn-red" onclick="return confirm('Контексті өшіруге сенімдісіз бе?')">
+                                    ❌ {% trans "Өшіру" %}
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
         </div>
     {% else %}
-        <div class="empty">
-            {% trans "У вас пока нет контекстов. Создайте первый!" %}
-        </div>
+        <div class="empty">{% trans "У вас пока нет контекстов. Создайте первый!" %}</div>
     {% endif %}
-
 </div>
-
 </body>
 </html>

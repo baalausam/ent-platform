@@ -8,42 +8,115 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- ✅ MathJax — формулаларды көрсету -->
+    <script>
+    MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$']]
+        }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Montserrat', sans-serif; background: #f4f6f8; color: #2c3e50; min-height: 100vh; padding: 30px 20px; position: relative; }
-        .container { position: relative; z-index: 10; max-width: 1100px; margin: 0 auto; }
-        .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
-        .topbar-title { font-size: 14px; font-weight: 600; color: #64748b; letter-spacing: 0.05em; text-transform: uppercase; }
-        .topbar-actions { display: flex; gap: 8px; }
-        .btn-top { color: #2563eb; text-decoration: none; font-size: 13px; font-weight: 600; padding: 8px 16px; border-radius: 10px; background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); transition: 0.2s; }
-        .btn-top:hover { background: rgba(59,130,246,0.14); }
-        .logout { color: #e74c3c; text-decoration: none; font-size: 13px; font-weight: 600; padding: 8px 16px; border-radius: 10px; background: rgba(231,76,60,0.08); border: 1px solid rgba(231,76,60,0.2); transition: 0.2s; }
-        .logout:hover { background: rgba(231,76,60,0.14); }
-        h1 { font-size: 38px; font-weight: 900; letter-spacing: -0.03em; margin-bottom: 8px; background: linear-gradient(135deg, #2c3e50 0%, #8b5cf6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        body {
+            font-family: 'Montserrat', sans-serif; background: #f4f6f8;
+            color: #2c3e50; padding: 30px 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .topbar {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 32px; flex-wrap: wrap; gap: 12px;
+        }
+        .btn-top {
+            color: #2563eb; text-decoration: none; font-size: 13px;
+            font-weight: 600; padding: 8px 16px; border-radius: 10px;
+            background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2);
+        }
+        .logout {
+            color: #e74c3c; text-decoration: none; font-size: 13px;
+            font-weight: 600; padding: 8px 16px; border-radius: 10px;
+            background: rgba(231,76,60,0.08); border: 1px solid rgba(231,76,60,0.2);
+        }
+        h1 {
+            font-size: 38px; font-weight: 900; letter-spacing: -0.03em;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #2c3e50 0%, #8b5cf6 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
         .subtitle { color: #64748b; font-size: 15px; margin-bottom: 32px; }
         .stats { display: flex; gap: 12px; margin: 20px 0; flex-wrap: wrap; }
-        .stat { background: #ffffff; border: 1px solid #e5e9ee; padding: 16px 22px; border-radius: 14px; min-width: 130px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
-        .stat strong { display: block; font-size: 28px; font-weight: 900; margin-top: 4px; color: #2c3e50; }
-        .btn-add { display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; background: linear-gradient(135deg, #10b981, #059669); color: white; text-decoration: none; border-radius: 12px; font-size: 15px; font-weight: 700; box-shadow: 0 8px 25px -8px rgba(16,185,129,0.5); transition: 0.2s; }
-        .btn-add:hover { transform: translateY(-2px); box-shadow: 0 15px 35px -8px rgba(16,185,129,0.7); }
-        .card { background: #ffffff; border: 1px solid #e5e9ee; border-radius: 20px; padding: 24px; margin-top: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+        .stat {
+            background: #ffffff; border: 1px solid #e5e9ee;
+            padding: 16px 22px; border-radius: 14px; min-width: 130px;
+        }
+        .stat strong { display: block; font-size: 28px; font-weight: 900; margin-top: 4px; }
+        .btn-add {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 14px 28px; background: linear-gradient(135deg, #10b981, #059669);
+            color: white; text-decoration: none; border-radius: 12px;
+            font-size: 15px; font-weight: 700;
+            box-shadow: 0 8px 25px -8px rgba(16,185,129,0.5); margin-top: 16px;
+        }
+        .card {
+            background: #ffffff; border: 1px solid #e5e9ee;
+            border-radius: 20px; padding: 8px; margin-top: 24px; overflow: hidden;
+        }
         table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 12px 10px; text-align: left; font-size: 13px; border-bottom: 1px solid #f1f5f9; }
-        th { color: #2563eb; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; }
-        .status-draft { color: #94a3b8; }
+        th, td {
+            padding: 14px 12px; text-align: left; font-size: 13px;
+            border-bottom: 1px solid #f1f5f9; vertical-align: top;
+        }
+        th {
+            background: #f8fafc; color: #2563eb; font-size: 11px;
+            text-transform: uppercase; letter-spacing: 0.08em;
+        }
+        tbody tr:hover { background: #f8fafc; }
+        .badge {
+            display: inline-block; padding: 4px 10px; border-radius: 8px;
+            font-size: 11px; font-weight: 800; letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        .diff-A { background: #d1fae5; color: #065f46; }
+        .diff-B { background: #fef3c7; color: #92400e; }
+        .diff-C { background: #fee2e2; color: #991b1b; }
+        .type-badge {
+            display: inline-block; padding: 3px 8px; border-radius: 6px;
+            font-size: 10px; font-weight: 700; background: #e0e7ff;
+            color: #3730a3; text-transform: uppercase;
+        }
+        .status-draft { color: #94a3b8; font-weight: 600; }
         .status-pending { color: #b45309; font-weight: 700; }
         .status-approved { color: #059669; font-weight: 700; }
         .status-rejected { color: #c0392b; font-weight: 700; }
-        .btn-small { padding: 8px 16px; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; border: none; cursor: pointer; border-radius: 8px; font-size: 12px; font-weight: 700; font-family: inherit; transition: 0.2s; }
-        .btn-small:hover { transform: translateY(-2px); box-shadow: 0 8px 20px -8px rgba(245,158,11,0.6); }
-        .empty { text-align: center; padding: 40px; color: #94a3b8; background: #ffffff; border-radius: 14px; border: 1px dashed #cbd5e1; margin-top: 20px; }
+        .q-img { max-width: 80px; max-height: 60px; border-radius: 6px; margin-top: 6px; display: block; }
+        .q-text-preview { color: #2c3e50; font-weight: 600; line-height: 1.5; }
+        .btn-small {
+            padding: 8px 14px; border: none; cursor: pointer;
+            border-radius: 8px; font-size: 12px; font-weight: 700;
+            font-family: inherit; margin-right: 6px;
+            display: inline-block; text-decoration: none;
+        }
+        .btn-view { background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; }
+        .btn-submit { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
+        .btn-cancel { background: #fee2e2; color: #991b1b; }
+        .empty {
+            text-align: center; padding: 60px 40px; color: #94a3b8;
+            background: #ffffff; border-radius: 14px;
+            border: 1px dashed #cbd5e1; margin-top: 20px;
+        }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="topbar">
-        <span class="topbar-title">📝 {% trans "Мои вопросы" %}</span>
-        <div class="topbar-actions">
+        <span style="font-size: 14px; font-weight: 600; color: #64748b;">
+            📝 {% trans "Мои вопросы" %}
+        </span>
+        <div style="display:flex; gap:8px;">
             <a href="{% url 'core:teacher_dashboard' %}" class="btn-top">← {% trans "В панель учителя" %}</a>
             <a href="{% url 'core:logout' %}" class="logout">{% trans "Выйти" %}</a>
         </div>
@@ -59,36 +132,68 @@
         <div class="stat">{% trans "Одобрено" %}<strong>{{ stats.approved }}</strong></div>
     </div>
 
-    <a class="btn-add" href="{% url 'core:add_question' %}">+ {% trans "Добавить вопрос" %}</a>
+    <a class="btn-add" href="{% url 'core:add_question' %}">
+        + {% trans "Добавить вопрос" %}
+    </a>
 
     {% if questions %}
         <div class="card">
             <table>
                 <thead>
                     <tr>
+                        <th>{% trans "Деңгей" %}</th>
                         <th>{% trans "Блок" %}</th>
                         <th>{% trans "Предмет" %}</th>
                         <th>{% trans "Тип" %}</th>
                         <th>{% trans "Текст" %}</th>
-                        <th>{% trans "Ответ" %}</th>
+                        <th>{% trans "Жауап" %}</th>
                         <th>{% trans "Статус" %}</th>
-                        <th></th>
+                        <th>{% trans "Әрекет" %}</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for q in questions %}
                         <tr>
+                            <td>
+                                <span class="badge diff-{{ q.difficulty }}">{{ q.get_difficulty_display }}</span>
+                            </td>
                             <td>{{ q.get_block_display }}</td>
                             <td>{{ q.subject.name|default:"—" }}</td>
-                            <td>{{ q.get_question_type_display }}</td>
-                            <td>{{ q.text|truncatechars:60 }}</td>
-                            <td>{{ q.correct_answer }}</td>
+                            <td><span class="type-badge">{{ q.get_question_type_display }}</span></td>
+                            <td>
+                                <a href="{% url 'core:question_detail' q.id %}"
+                                   style="text-decoration: none; color: inherit;">
+                                    <div class="q-text-preview">{{ q.text|truncatechars:80 }}</div>
+                                    {% if q.image %}
+                                        <img src="{{ q.image.url }}" class="q-img" alt="img">
+                                    {% endif %}
+                                </a>
+                            </td>
+                            <td>
+                                {% if q.question_type == 'matching' %}
+                                    <em style="color:#64748b;">2 кіші сұрақ</em>
+                                {% else %}
+                                    {{ q.correct_answer }}
+                                {% endif %}
+                            </td>
                             <td class="status-{{ q.status }}">{{ q.get_status_display }}</td>
                             <td>
+                                <a href="{% url 'core:question_detail' q.id %}" class="btn-small btn-view">
+                                    👁 {% trans "Көру" %}
+                                </a>
                                 {% if q.status == 'draft' %}
                                     <form method="post" action="{% url 'core:submit_question_for_review' q.id %}" style="display:inline;">
                                         {% csrf_token %}
-                                        <button class="btn-small">{% trans "На проверку" %}</button>
+                                        <button class="btn-small btn-submit">{% trans "Жіберу" %}</button>
+                                    </form>
+                                {% endif %}
+                                {% if q.status == 'draft' or q.status == 'pending' %}
+                                    <form method="post" action="{% url 'core:cancel_question' q.id %}" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button class="btn-small btn-cancel"
+                                                onclick="return confirm('Сұрақты өшіруге сенімдісіз бе?')">
+                                            ❌ {% trans "Өшіру" %}
+                                        </button>
                                     </form>
                                 {% endif %}
                             </td>
@@ -101,5 +206,12 @@
         <div class="empty">{% trans "У вас пока нет вопросов. Нажмите «Добавить вопрос»." %}</div>
     {% endif %}
 </div>
+
+<script>
+// ✅ MathJax — формулаларды өңдеу
+if (window.MathJax && window.MathJax.typesetPromise) {
+    window.MathJax.typesetPromise();
+}
+</script>
 </body>
 </html>

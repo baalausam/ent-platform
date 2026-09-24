@@ -5,333 +5,207 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% trans "Панель ученика" %}</title>
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
         body {
-            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-            background: #f4f6f8;
-            color: #2c3e50;
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            padding: 30px 20px;
+            font-family: 'Montserrat', sans-serif;
+            background: #f4f6f8; color: #2c3e50;
+            min-height: 100vh; padding: 30px 20px;
         }
-
-        .container {
-            position: relative;
-            z-index: 10;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        /* Topbar */
+        .container { max-width: 900px; margin: 0 auto; }
         .topbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 32px;
-            flex-wrap: wrap;
-            gap: 12px;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 32px; flex-wrap: wrap; gap: 12px;
         }
         .topbar-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: #64748b;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
+            font-size: 14px; font-weight: 600;
+            color: #64748b; letter-spacing: 0.05em; text-transform: uppercase;
         }
-        .topbar-actions {
-            display: flex;
-            gap: 8px;
-        }
+        .topbar-actions { display: flex; gap: 8px; }
         .btn-top {
-            color: #2563eb;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 600;
-            padding: 8px 16px;
-            border-radius: 10px;
+            color: #2563eb; text-decoration: none; font-size: 13px;
+            font-weight: 600; padding: 8px 16px; border-radius: 10px;
             background: rgba(59,130,246,0.08);
             border: 1px solid rgba(59,130,246,0.2);
-            transition: 0.2s;
         }
-        .btn-top:hover {
-            background: rgba(59,130,246,0.14);
-            color: #1e40af;
-        }
+        .btn-top:hover { background: rgba(59,130,246,0.14); }
         .logout {
-            color: #e74c3c;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 600;
-            padding: 8px 16px;
-            border-radius: 10px;
+            color: #e74c3c; text-decoration: none; font-size: 13px;
+            font-weight: 600; padding: 8px 16px; border-radius: 10px;
             background: rgba(231,76,60,0.08);
             border: 1px solid rgba(231,76,60,0.2);
-            transition: 0.2s;
         }
-        .logout:hover {
-            background: rgba(231,76,60,0.14);
-            color: #c0392b;
-        }
+        .logout:hover { background: rgba(231,76,60,0.14); }
 
-        /* Заголовок */
         h1 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 40px;
-            font-weight: 900;
-            letter-spacing: -0.03em;
-            line-height: 1.1;
-            margin-bottom: 8px;
+            font-size: 40px; font-weight: 900; letter-spacing: -0.03em;
+            line-height: 1.1; margin-bottom: 8px;
             background: linear-gradient(135deg, #2c3e50 0%, #10b981 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
         .school-name {
-            color: #64748b;
-            font-size: 15px;
-            font-weight: 500;
-            margin-bottom: 32px;
+            color: #64748b; font-size: 15px;
+            font-weight: 500; margin-bottom: 32px;
         }
 
-        /* Инфо-карточки */
         .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 18px;
-            margin-bottom: 32px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 18px; margin-bottom: 32px;
         }
         .info-card {
-            background: #ffffff;
-            border: 1px solid #e5e9ee;
-            border-radius: 18px;
-            padding: 22px 24px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+            background: #fff; border: 1px solid #e5e9ee;
+            border-radius: 18px; padding: 22px 24px;
         }
         .info-card h3 {
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: #64748b;
-            margin-bottom: 10px;
+            font-size: 12px; font-weight: 700;
+            letter-spacing: 0.08em; text-transform: uppercase;
+            color: #64748b; margin-bottom: 10px;
         }
-        .info-card p {
-            font-size: 20px;
-            font-weight: 700;
-            color: #2c3e50;
-        }
+        .info-card p { font-size: 20px; font-weight: 700; color: #2c3e50; }
         .info-card .sub {
-            font-size: 14px;
-            font-weight: 500;
-            color: #34495e;
-            margin-top: 4px;
+            font-size: 14px; font-weight: 500;
+            color: #34495e; margin-top: 4px;
         }
-        .info-card .missing {
-            color: #e74c3c;
-            font-size: 16px;
-        }
+        .info-card .missing { color: #e74c3c; font-size: 16px; }
 
-        /* Блок активной сессии */
+        /* ✅ Сессия блогы */
         .card-session {
             background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(59,130,246,0.05));
-            border: 1px solid rgba(16,185,129,0.25);
-            border-radius: 20px;
-            padding: 28px 30px;
-            margin-bottom: 24px;
-            animation: pulseGlow 3s ease-in-out infinite;
-        }
-        @keyframes pulseGlow {
-            0%, 100% { box-shadow: 0 4px 20px -8px rgba(16,185,129,0.3); }
-            50% { box-shadow: 0 8px 30px -8px rgba(16,185,129,0.5); }
+            border: 2px solid rgba(16,185,129,0.35);
+            border-radius: 20px; padding: 24px 28px;
+            margin-bottom: 18px;
         }
         .card-session h3 {
-            font-size: 20px;
-            font-weight: 800;
-            margin-bottom: 8px;
-            color: #059669;
+            font-size: 20px; font-weight: 800;
+            margin-bottom: 8px; color: #059669;
         }
         .card-session .meta {
-            font-size: 14px;
-            color: #64748b;
-            margin-bottom: 16px;
+            font-size: 14px; color: #64748b;
+            margin-bottom: 16px; line-height: 1.6;
         }
+        .card-session .meta strong { color: #2c3e50; }
+
+        .card-session.closed {
+            background: linear-gradient(135deg, rgba(251,191,36,0.08), rgba(249,115,22,0.05));
+            border-color: rgba(251,191,36,0.4);
+        }
+        .card-session.closed h3 { color: #b45309; }
+
+        .card-session.done {
+            background: linear-gradient(135deg, rgba(59,130,246,0.05), rgba(139,92,246,0.05));
+            border-color: rgba(59,130,246,0.3);
+        }
+        .card-session.done h3 { color: #2563eb; }
 
         .card-warning {
             background: linear-gradient(135deg, rgba(251,191,36,0.08), rgba(249,115,22,0.05));
             border: 1px solid rgba(251,191,36,0.3);
-            border-radius: 20px;
-            padding: 28px 30px;
+            border-radius: 20px; padding: 28px 30px;
             margin-bottom: 24px;
         }
         .card-warning h3 {
-            font-size: 20px;
-            font-weight: 800;
-            margin-bottom: 8px;
-            color: #b45309;
+            font-size: 20px; font-weight: 800;
+            margin-bottom: 8px; color: #b45309;
         }
 
         .card-closed {
-            background: #ffffff;
-            border: 1px solid #e5e9ee;
-            border-radius: 20px;
-            padding: 28px 30px;
+            background: #fff; border: 1px solid #e5e9ee;
+            border-radius: 20px; padding: 28px 30px;
             margin-bottom: 24px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
         }
         .card-closed h3 {
-            font-size: 20px;
-            font-weight: 800;
-            margin-bottom: 8px;
-            color: #94a3b8;
+            font-size: 20px; font-weight: 800;
+            margin-bottom: 8px; color: #94a3b8;
         }
 
-        /* Кнопки */
         .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 15px 32px;
-            border-radius: 14px;
-            text-decoration: none;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 15px;
-            font-weight: 700;
-            letter-spacing: -0.01em;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            border: none;
-            cursor: pointer;
+            display: inline-flex; align-items: center; gap: 10px;
+            padding: 15px 32px; border-radius: 14px;
+            text-decoration: none; font-family: inherit;
+            font-size: 15px; font-weight: 700;
+            transition: all 0.25s; border: none; cursor: pointer;
         }
         .btn-green {
             background: linear-gradient(135deg, #10b981, #059669);
             color: white;
-            box-shadow: 0 10px 30px -10px rgba(16,185,129,0.5),
-                        0 4px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 10px 30px -10px rgba(16,185,129,0.5);
         }
-        .btn-green:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 20px 40px -10px rgba(16,185,129,0.7),
-                        0 8px 20px rgba(0,0,0,0.12);
-        }
+        .btn-green:hover { transform: translateY(-3px); }
         .btn-blue {
             background: linear-gradient(135deg, #3b82f6, #8b5cf6);
             color: white;
-            box-shadow: 0 10px 30px -10px rgba(59,130,246,0.5),
-                        0 4px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 10px 30px -10px rgba(59,130,246,0.5);
         }
-        .btn-blue:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 20px 40px -10px rgba(59,130,246,0.7),
-                        0 8px 20px rgba(0,0,0,0.12);
+        .btn-blue:hover { transform: translateY(-3px); }
+        .btn-disabled {
+            background: #e5e7eb; color: #94a3b8;
+            cursor: not-allowed; pointer-events: none;
         }
 
-        /* История */
         h2 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 22px;
-            font-weight: 800;
-            letter-spacing: -0.02em;
-            margin-bottom: 18px;
+            font-size: 22px; font-weight: 800;
+            letter-spacing: -0.02em; margin-bottom: 18px;
             color: #2c3e50;
         }
 
         table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            background: #ffffff;
+            width: 100%; border-collapse: separate;
+            border-spacing: 0; background: #fff;
             border: 1px solid #e5e9ee;
-            border-radius: 18px;
-            overflow: hidden;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+            border-radius: 18px; overflow: hidden;
         }
         th {
-            background: #f8fafc;
-            padding: 14px 16px;
-            text-align: left;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: #2563eb;
+            background: #f8fafc; padding: 14px 16px;
+            text-align: left; font-size: 11px;
+            font-weight: 700; letter-spacing: 0.08em;
+            text-transform: uppercase; color: #2563eb;
             border-bottom: 1px solid #e5e9ee;
         }
         td {
-            padding: 14px 16px;
-            font-size: 14px;
-            font-weight: 500;
-            color: #34495e;
+            padding: 14px 16px; font-size: 14px;
+            font-weight: 500; color: #34495e;
             border-bottom: 1px solid #f1f5f9;
         }
         tr:last-child td { border-bottom: none; }
         tr:hover td { background: #f8fafc; }
 
         .status-badge {
-            display: inline-block;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 12px;
+            display: inline-block; padding: 5px 12px;
+            border-radius: 20px; font-size: 12px;
             font-weight: 700;
-            letter-spacing: 0.02em;
         }
         .status-finished {
-            background: rgba(16,185,129,0.1);
-            color: #059669;
+            background: rgba(16,185,129,0.1); color: #059669;
             border: 1px solid rgba(16,185,129,0.3);
         }
         .status-annulled {
-            background: rgba(239,68,68,0.1);
-            color: #c0392b;
+            background: rgba(239,68,68,0.1); color: #c0392b;
             border: 1px solid rgba(239,68,68,0.3);
         }
         .status-in_progress {
-            background: rgba(251,191,36,0.12);
-            color: #b45309;
+            background: rgba(251,191,36,0.12); color: #b45309;
             border: 1px solid rgba(251,191,36,0.35);
         }
 
-        .score {
-            font-size: 16px;
-            font-weight: 800;
-            color: #059669;
-        }
-        .violations {
-            color: #c0392b;
-            font-weight: 700;
-        }
+        .score { font-size: 16px; font-weight: 800; color: #059669; }
+        .violations { color: #c0392b; font-weight: 700; }
 
         .btn-small {
-            display: inline-block;
-            padding: 7px 16px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 12px;
-            font-weight: 700;
+            display: inline-block; padding: 7px 16px;
+            border-radius: 8px; text-decoration: none;
+            font-size: 12px; font-weight: 700;
             background: linear-gradient(135deg, #3b82f6, #8b5cf6);
             color: white;
-            transition: 0.2s;
         }
-        .btn-small:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 15px -3px rgba(59,130,246,0.5);
-        }
+        .btn-small:hover { transform: translateY(-1px); }
 
         .empty {
-            text-align: center;
-            padding: 60px 20px;
-            color: #94a3b8;
-            font-size: 15px;
-            background: #ffffff;
-            border: 1px dashed #cbd5e1;
+            text-align: center; padding: 60px 20px;
+            color: #94a3b8; font-size: 15px;
+            background: #fff; border: 1px dashed #cbd5e1;
             border-radius: 18px;
         }
 
@@ -340,6 +214,7 @@
             .info-card p { font-size: 18px; }
             table { font-size: 12px; }
             th, td { padding: 10px 12px; }
+            .card-session { padding: 20px; }
         }
     </style>
 </head>
@@ -347,7 +222,6 @@
 
 <div class="container">
 
-    <!-- Topbar -->
     <div class="topbar">
         <span class="topbar-title">🎓 {% trans "Панель ученика" %}</span>
         <div class="topbar-actions">
@@ -356,7 +230,6 @@
         </div>
     </div>
 
-    <!-- Заголовок -->
     <h1>{{ user.last_name }} {{ user.first_name }}</h1>
     <p class="school-name">{{ user.profile.school.name }}</p>
 
@@ -381,41 +254,69 @@
         </div>
     </div>
 
-    <!-- Блок сессии -->
+    <!-- ============================================================ -->
+    <!-- ✅ ЖАЛПЫ in_progress (кез келген сессияда) -->
+    <!-- ============================================================ -->
     {% if in_progress %}
         <div class="card-warning">
             <h3>⏳ {% trans "У вас есть незавершённый тест" %}</h3>
-            <p class="meta">{% trans "Вы начали тест, но не завершили. Продолжите." %}</p>
+            <p class="meta" style="font-size: 14px; color: #64748b; margin-bottom: 16px;">
+                {% trans "Вы начали тест, но не завершили. Продолжите." %}
+            </p>
             <a class="btn btn-blue" href="{% url 'core:take_test' in_progress.id %}">
                 ▶ {% trans "Продолжить тест" %}
             </a>
         </div>
-    {% elif active_session %}
-        <div class="card-session">
-            <h3>🟢 {% trans "Сессия ЕНТ открыта" %}</h3>
-            <p class="meta">
-                <strong>{{ active_session.title }}</strong><br>
-                {% trans "До" %}: {{ active_session.closes_at|date:"d.m.Y H:i" }}
-            </p>
+    {% endif %}
 
-            {% if already_in_session %}
-                <p style="color: #b45309; font-weight: 700; font-size: 14px;">
-                    ✅ {% trans "Вы уже сдали в этой сессии. Повторно нельзя." %}
+    <!-- ============================================================ -->
+    <!-- ✅ БАРЛЫҚ АШЫҚ СЕССИЯЛАР -->
+    <!-- ============================================================ -->
+    {% if active_sessions %}
+        <h2>🟢 {% trans "Ашық сессиялар" %} ({{ active_sessions|length }})</h2>
+
+        {% for item in active_sessions %}
+            <div class="card-session {% if item.finished %}done{% endif %}">
+                <h3>
+                    {% if item.finished %}
+                        ✅ {{ item.session.title }}
+                    {% else %}
+                        🟢 {{ item.session.title }}
+                    {% endif %}
+                </h3>
+                <p class="meta">
+                    <strong>{% trans "Ашық" %}:</strong> {{ item.session.opens_at|date:"d.m.Y H:i" }}
+                    &nbsp;—&nbsp;
+                    <strong>{% trans "Жабылады" %}:</strong> {{ item.session.closes_at|date:"d.m.Y H:i" }}
                 </p>
-            {% else %}
-                <a class="btn btn-green" href="{% url 'core:start_test' %}">
-                    ▶ {% trans "Начать пробное ЕНТ" %}
-                </a>
-            {% endif %}
-        </div>
+
+                {% if item.finished %}
+                    <p style="color: #2563eb; font-weight: 700; font-size: 14px;">
+                        ✅ {% trans "Сіз бұл сессияны тапсырдыңыз" %}
+                    </p>
+                {% elif item.in_progress %}
+                    <a class="btn btn-blue" href="{% url 'core:take_test' item.in_progress.id %}">
+                        ▶ {% trans "Жалғастыру" %}
+                    </a>
+                {% else %}
+                    <a class="btn btn-green" href="{% url 'core:start_test' %}?session={{ item.session.id }}">
+                        ▶ {% trans "Тест бастау" %}
+                    </a>
+                {% endif %}
+            </div>
+        {% endfor %}
     {% else %}
         <div class="card-closed">
-            <h3>🔒 {% trans "Сессия закрыта" %}</h3>
-            <p class="meta">{% trans "Директор пока не открыл новую сессию. Дождитесь сигнала." %}</p>
+            <h3>🔒 {% trans "Ашық сессия жоқ" %}</h3>
+            <p style="font-size: 14px; color: #64748b;">
+                {% trans "Директор пока не открыл новую сессию. Дождитесь сигнала." %}
+            </p>
         </div>
     {% endif %}
 
-    <!-- История -->
+    <!-- ============================================================ -->
+    <!-- ✅ ИСТОРИЯ -->
+    <!-- ============================================================ -->
     <h2>📊 {% trans "История пробных ЕНТ" %}</h2>
 
     {% if has_attempts %}
@@ -423,6 +324,7 @@
             <thead>
                 <tr>
                     <th>№</th>
+                    <th>{% trans "Сессия" %}</th>
                     <th>{% trans "Дата" %}</th>
                     <th>{% trans "Статус" %}</th>
                     <th>{% trans "Нарушений" %}</th>
@@ -434,6 +336,7 @@
                 {% for a in attempts %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
+                        <td>{{ a.session.title|default:"—" }}</td>
                         <td>{{ a.started_at|date:"d.m.Y H:i" }}</td>
                         <td>
                             {% if a.status == 'finished' %}
@@ -444,15 +347,21 @@
                                 <span class="status-badge status-in_progress">⏳ {% trans "В процессе" %}</span>
                             {% endif %}
                         </td>
-                        <td class="{% if a.tab_switch_count > 0 %}violations{% endif %}">{{ a.tab_switch_count }}</td>
+                        <td class="{% if a.tab_switch_count > 0 %}violations{% endif %}">
+                            {{ a.tab_switch_count }}
+                        </td>
                         <td class="score">
                             {% if a.status == 'finished' %}{{ a.total_score }} / 140{% else %}—{% endif %}
                         </td>
                         <td>
                             {% if a.status == 'finished' or a.status == 'annulled' %}
-                                <a class="btn-small" href="{% url 'core:test_result' a.id %}">{% trans "Подробнее" %}</a>
+                                <a class="btn-small" href="{% url 'core:test_result' a.id %}">
+                                    {% trans "Подробнее" %}
+                                </a>
                             {% elif a.status == 'in_progress' %}
-                                <a class="btn-small" href="{% url 'core:take_test' a.id %}">{% trans "Продолжить" %}</a>
+                                <a class="btn-small" href="{% url 'core:take_test' a.id %}">
+                                    {% trans "Продолжить" %}
+                                </a>
                             {% endif %}
                         </td>
                     </tr>
