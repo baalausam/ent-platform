@@ -9,7 +9,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script>
-    MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+    MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        }
+    };
     </script>
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
     <style>
@@ -43,8 +48,7 @@
             background: #fff; border: 1px solid #e5e9ee; border-radius: 20px;
             padding: 24px; margin-bottom: 16px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-            /* ✅ Карточка ішіндегі элементтер шетке шығып кетпеуі үшін */
-            overflow: hidden; 
+            /* ✅ overflow: hidden; АЛЫП ТАСТАЛДЫ — мәтін кесілмейді */
             word-wrap: break-word;
         }
 
@@ -132,6 +136,8 @@
             background: #fff; border: 1px solid #cbd5e1;
             padding: 6px 14px; border-radius: 10px;
             font-size: 13px; font-weight: 700; color: #2c3e50;
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
         }
         .matching-sub {
             display: flex; align-items: center; gap: 12px;
@@ -224,6 +230,27 @@
             max-width: 100%;
             overflow-x: auto;
             overflow-y: hidden;
+        }
+
+        /* ✅ Блоктық формулалар ($$...$$) үшін */
+        mjx-container[display="true"] {
+            max-width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            display: block;
+            padding: 8px 0;
+        }
+
+        /* ✅ Инлайн формулалар ($...$) үшін */
+        mjx-container:not([display="true"]) {
+            max-width: 100%;
+            overflow-wrap: anywhere;
+        }
+
+        /* ✅ Формуланың SVG элементтері де асып кетпеуі үшін */
+        mjx-container svg {
+            max-width: 100%;
+            height: auto;
         }
 
         @media (max-width: 700px) {

@@ -9,7 +9,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script>
-    MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+    MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        }
+    };
     </script>
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
     <style>
@@ -66,6 +71,7 @@
             width: 100%;
             border-collapse: collapse;
             min-width: 1000px;
+            table-layout: fixed;
         }
         th, td {
             padding: 14px 12px;
@@ -73,6 +79,10 @@
             font-size: 13px;
             border-bottom: 1px solid #f1f5f9;
             vertical-align: top;
+            /* ✅ Кесте ұяшықтарының ішіндегі мәтін шетке шықпауы үшін */
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
+            word-break: break-word;
         }
         th {
             background: #f8fafc;
@@ -111,7 +121,10 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
             max-width: 250px;
+            /* ✅ Мәтіннің шетке асып кетпеуі үшін */
             word-wrap: break-word;
+            overflow-wrap: anywhere;
+            word-break: break-word;
         }
         .btn-small {
             padding: 8px 14px; border: none; cursor: pointer;
@@ -147,6 +160,35 @@
         .card::-webkit-scrollbar-thumb:hover {
             background: #94a3b8;
         }
+
+        /* ✅ MathJax формулалары шетке асып кетпеуі үшін */
+        mjx-container {
+            max-width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+
+        /* ✅ Блоктық формулалар ($$...$$) үшін */
+        mjx-container[display="true"] {
+            max-width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            display: block;
+            padding: 4px 0;
+        }
+
+        /* ✅ Инлайн формулалар ($...$) үшін */
+        mjx-container:not([display="true"]) {
+            max-width: 100%;
+            overflow-wrap: anywhere;
+        }
+
+        /* ✅ Формуланың SVG элементтері де асып кетпеуі үшін */
+        mjx-container svg {
+            max-width: 100%;
+            height: auto;
+        }
+
         @media (max-width: 700px) {
             h1 { font-size: 28px; }
             .q-text-preview { max-width: 150px; }

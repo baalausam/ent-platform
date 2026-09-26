@@ -65,6 +65,8 @@
             background: white; padding: 20px 22px; margin-bottom: 14px;
             border-radius: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             border: 1px solid #e5e9ee;
+            /* ✅ overflow: hidden; АЛЫП ТАСТАЛДЫ — мәтін кесілмейді */
+            word-wrap: break-word;
         }
         .q-header {
             display: flex; justify-content: space-between;
@@ -73,6 +75,10 @@
         .q-text {
             font-size: 16px; margin-bottom: 14px; font-weight: 600;
             line-height: 1.7; color: #2c3e50;
+            /* ✅ Мәтіннің шетке асып кетпеуі үшін */
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
+            word-break: break-word;
         }
         .q-num {
             color: #94a3b8; font-size: 12px; font-weight: 700;
@@ -88,10 +94,14 @@
         .question-image {
             max-width: 100%; height: auto; display: block; margin: 12px 0;
             border-radius: 10px; border: 1px solid #e2e8f0;
+            object-fit: contain;
         }
         .context-block {
             background: #f0f7fd; border-left: 4px solid #2980b9;
             padding: 15px 18px; margin-bottom: 16px; border-radius: 8px;
+            /* ✅ Контекст мәтінінің шетке асып кетпеуі үшін */
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
         }
         .context-block strong {
             display: block; margin-bottom: 8px; color: #2980b9;
@@ -100,12 +110,18 @@
         .context-block p {
             margin: 0; line-height: 1.7; white-space: pre-wrap;
             font-size: 14px; color: #34495e;
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
         }
         .option {
             display: block; padding: 12px 16px; margin: 8px 0;
             background: #fafbfc; border: 1px solid #e2e8f0;
             border-radius: 10px; cursor: pointer;
             font-size: 15px; font-weight: 500;
+            /* ✅ Жауап мәтінінің шетке асып кетпеуі үшін */
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
+            word-break: break-word;
         }
         .option:hover { background: #f0f4f8; border-color: #cbd5e1; }
         .option input {
@@ -126,11 +142,16 @@
             display: flex; align-items: center; justify-content: space-between;
             gap: 12px; padding: 10px 0;
             border-bottom: 1px dashed #e2e8f0;
+            /* ✅ Сәйкестендіру мәтінінің шетке асып кетпеуі үшін */
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
         }
         .matching-row:last-child { border-bottom: none; }
         .matching-row .sub-text {
             flex: 1; font-size: 14px; font-weight: 600;
             color: #2c3e50; line-height: 1.6;
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
         }
         .matching-row select {
             min-width: 180px; padding: 10px 14px; border-radius: 10px;
@@ -231,6 +252,35 @@
             width: 36px; height: 36px; border-radius: 50%;
             font-size: 18px; cursor: pointer;
         }
+
+        /* ✅ MathJax формулалары шетке асып кетпеуі үшін */
+        mjx-container {
+            max-width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+
+        /* ✅ Блоктық формулалар ($$...$$) үшін */
+        mjx-container[display="true"] {
+            max-width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            display: block;
+            padding: 8px 0;
+        }
+
+        /* ✅ Инлайн формулалар ($...$) үшін */
+        mjx-container:not([display="true"]) {
+            max-width: 100%;
+            overflow-wrap: anywhere;
+        }
+
+        /* ✅ Формуланың SVG элементтері де асып кетпеуі үшін */
+        mjx-container svg {
+            max-width: 100%;
+            height: auto;
+        }
+
         @media (max-width: 700px) {
             .tab { font-size: 11px; padding: 10px 4px; }
             .container { padding: 20px 10px 100px; }
