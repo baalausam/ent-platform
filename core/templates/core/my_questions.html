@@ -26,7 +26,7 @@
             font-family: 'Montserrat', sans-serif; background: #f4f6f8;
             color: #2c3e50; padding: 30px 20px;
         }
-        .container { max-width: 1200px; margin: 0 auto; }
+        .container { max-width: 1300px; margin: 0 auto; }
         .topbar {
             display: flex; justify-content: space-between; align-items: center;
             margin-bottom: 32px; flex-wrap: wrap; gap: 12px;
@@ -61,20 +61,47 @@
             font-size: 15px; font-weight: 700;
             box-shadow: 0 8px 25px -8px rgba(16,185,129,0.5); margin-top: 16px;
         }
+
+        /* ✅ КЕСТЕ КОНТЕЙНЕРІ — СКРОЛЛ */
         .card {
-            background: #ffffff; border: 1px solid #e5e9ee;
-            border-radius: 20px; padding: 8px; margin-top: 24px; overflow: hidden;
+            background: #ffffff;
+            border: 1px solid #e5e9ee;
+            border-radius: 20px;
+            padding: 8px;
+            margin-top: 24px;
+            overflow-x: auto;        /* ✅ ГОРИЗОНТАЛДЫ СКРОЛЛ */
+            -webkit-overflow-scrolling: touch;
         }
-        table { width: 100%; border-collapse: collapse; }
+
+        /* ✅ КЕСТЕ — МИНИМАЛДЫ ЕН */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1000px;       /* ✅ МИНИМАЛДЫ ЕН */
+        }
+
         th, td {
-            padding: 14px 12px; text-align: left; font-size: 13px;
-            border-bottom: 1px solid #f1f5f9; vertical-align: top;
+            padding: 14px 12px;
+            text-align: left;
+            font-size: 13px;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: top;
         }
+
         th {
-            background: #f8fafc; color: #2563eb; font-size: 11px;
-            text-transform: uppercase; letter-spacing: 0.08em;
+            background: #f8fafc;
+            color: #2563eb;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            white-space: nowrap;     /* ✅ ТАҚЫРЫП СЫНБАЙДЫ */
+            position: sticky;
+            top: 0;
+            z-index: 1;
         }
+
         tbody tr:hover { background: #f8fafc; }
+
         .badge {
             display: inline-block; padding: 4px 10px; border-radius: 8px;
             font-size: 11px; font-weight: 800; letter-spacing: 0.05em;
@@ -83,30 +110,78 @@
         .diff-A { background: #d1fae5; color: #065f46; }
         .diff-B { background: #fef3c7; color: #92400e; }
         .diff-C { background: #fee2e2; color: #991b1b; }
+
         .type-badge {
             display: inline-block; padding: 3px 8px; border-radius: 6px;
             font-size: 10px; font-weight: 700; background: #e0e7ff;
             color: #3730a3; text-transform: uppercase;
+            white-space: nowrap;
         }
+
         .status-draft { color: #94a3b8; font-weight: 600; }
         .status-pending { color: #b45309; font-weight: 700; }
         .status-approved { color: #059669; font-weight: 700; }
         .status-rejected { color: #c0392b; font-weight: 700; }
+
         .q-img { max-width: 80px; max-height: 60px; border-radius: 6px; margin-top: 6px; display: block; }
-        .q-text-preview { color: #2c3e50; font-weight: 600; line-height: 1.5; }
+
+        /* ✅ МӘТІН — 2 ЖОЛМЕН ШЕКТЕУ */
+        .q-text-preview {
+            color: #2c3e50;
+            font-weight: 600;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            max-width: 250px;
+            word-wrap: break-word;
+        }
+
         .btn-small {
             padding: 8px 14px; border: none; cursor: pointer;
             border-radius: 8px; font-size: 12px; font-weight: 700;
             font-family: inherit; margin-right: 6px;
+            margin-bottom: 4px;
             display: inline-block; text-decoration: none;
+            white-space: nowrap;
         }
         .btn-view { background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; }
         .btn-submit { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
         .btn-cancel { background: #fee2e2; color: #991b1b; }
+
+        .actions-cell {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 120px;
+        }
+
         .empty {
             text-align: center; padding: 60px 40px; color: #94a3b8;
             background: #ffffff; border-radius: 14px;
             border: 1px dashed #cbd5e1; margin-top: 20px;
+        }
+
+        /* ✅ СКРОЛЛ БАРЫ КӨРІНЕДІ */
+        .card::-webkit-scrollbar {
+            height: 8px;
+        }
+        .card::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+        .card::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .card::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        @media (max-width: 700px) {
+            h1 { font-size: 28px; }
+            .q-text-preview { max-width: 150px; }
         }
     </style>
 </head>
@@ -157,8 +232,8 @@
                             <td>
                                 <span class="badge diff-{{ q.difficulty }}">{{ q.get_difficulty_display }}</span>
                             </td>
-                            <td>{{ q.get_block_display }}</td>
-                            <td>{{ q.subject.name|default:"—" }}</td>
+                            <td style="white-space: nowrap;">{{ q.get_block_display }}</td>
+                            <td style="white-space: nowrap;">{{ q.subject.name|default:"—" }}</td>
                             <td><span class="type-badge">{{ q.get_question_type_display }}</span></td>
                             <td>
                                 <a href="{% url 'core:question_detail' q.id %}"
@@ -171,31 +246,35 @@
                             </td>
                             <td>
                                 {% if q.question_type == 'matching' %}
-                                    <em style="color:#64748b;">2 кіші сұрақ</em>
+                                    <em style="color:#64748b; white-space: nowrap;">2 кіші сұрақ</em>
                                 {% else %}
-                                    {{ q.correct_answer }}
+                                    <span style="white-space: nowrap;">{{ q.correct_answer }}</span>
                                 {% endif %}
                             </td>
-                            <td class="status-{{ q.status }}">{{ q.get_status_display }}</td>
+                            <td class="status-{{ q.status }}" style="white-space: nowrap;">
+                                {{ q.get_status_display }}
+                            </td>
                             <td>
-                                <a href="{% url 'core:question_detail' q.id %}" class="btn-small btn-view">
-                                    👁 {% trans "Көру" %}
-                                </a>
-                                {% if q.status == 'draft' %}
-                                    <form method="post" action="{% url 'core:submit_question_for_review' q.id %}" style="display:inline;">
-                                        {% csrf_token %}
-                                        <button class="btn-small btn-submit">{% trans "Жіберу" %}</button>
-                                    </form>
-                                {% endif %}
-                                {% if q.status == 'draft' or q.status == 'pending' %}
-                                    <form method="post" action="{% url 'core:cancel_question' q.id %}" style="display:inline;">
-                                        {% csrf_token %}
-                                        <button class="btn-small btn-cancel"
-                                                onclick="return confirm('Сұрақты өшіруге сенімдісіз бе?')">
-                                            ❌ {% trans "Өшіру" %}
-                                        </button>
-                                    </form>
-                                {% endif %}
+                                <div class="actions-cell">
+                                    <a href="{% url 'core:question_detail' q.id %}" class="btn-small btn-view">
+                                        👁 {% trans "Көру" %}
+                                    </a>
+                                    {% if q.status == 'draft' %}
+                                        <form method="post" action="{% url 'core:submit_question_for_review' q.id %}" style="display:inline;">
+                                            {% csrf_token %}
+                                            <button class="btn-small btn-submit">📤 {% trans "Жіберу" %}</button>
+                                        </form>
+                                    {% endif %}
+                                    {% if q.status == 'draft' or q.status == 'pending' %}
+                                        <form method="post" action="{% url 'core:cancel_question' q.id %}" style="display:inline;">
+                                            {% csrf_token %}
+                                            <button class="btn-small btn-cancel"
+                                                    onclick="return confirm('Сұрақты өшіруге сенімдісіз бе?')">
+                                                ❌ {% trans "Өшіру" %}
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </div>
                             </td>
                         </tr>
                     {% endfor %}
