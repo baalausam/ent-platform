@@ -461,7 +461,6 @@ def student_dashboard(request):
 
     attempts = TestAttempt.objects.filter(student=request.user).order_by('-started_at')
 
-    # ✅ БАРЛЫҚ ашық сессиялар
     now = timezone.now()
     active_sessions_qs = ExamSession.objects.filter(
         school=profile.school,
@@ -470,15 +469,12 @@ def student_dashboard(request):
         closes_at__gte=now,
     ).order_by('-created_at')
 
-    # Әр сессия үшін: оқушы тапсырды ма?
     sessions_data = []
     for s in active_sessions_qs:
-        # Класс бойынша тексеру
         if s.classes.exists():
             if profile.school_class not in s.classes.all():
-                continue  # бұл класс үшін емес
+                continue
 
-        # Бұл сессияда тапсырды ма?
         finished = TestAttempt.objects.filter(
             student=request.user, session=s, status='finished'
         ).exists()
@@ -492,7 +488,6 @@ def student_dashboard(request):
             'in_progress': in_progress,
         })
 
-    # Жалпы in_progress (кез келген сессияда)
     in_progress = TestAttempt.objects.filter(
         student=request.user, status='in_progress'
     ).first()
@@ -504,10 +499,12 @@ def student_dashboard(request):
         'subj2': profile.profile_subject_2,
         'attempts': attempts,
         'has_attempts': attempts.exists(),
-        'active_sessions': sessions_data,  # ✅ ЖАҢА
+        'active_sessions': sessions_data,
         'in_progress': in_progress,
     }
     return render(request, 'core/student_dashboard.html', context)
+
+
 # ============================================================
 # СҰРАҚ ҚОСУ
 # ============================================================
@@ -576,7 +573,8 @@ def add_question(request):
                 question_type=qtype,
                 kind='context' if group else 'standard',
                 difficulty=data['difficulty'],
-                text=data['text'],
+                text=data.get('text', '') or '',
+                text_plain=data.get('text_plain', '') or '',
                 option_a=data.get('option_a', '') or '',
                 option_b=data.get('option_b', '') or '',
                 option_c=data.get('option_c', '') or '',
@@ -736,11 +734,17 @@ def add_question_group(request):
         })
 
     if request.method == 'POST':
-        form = QuestionGroupForm(request.POST)
+        form = QuestionGroupForm(request.POST, request.FILES)
         if form.is_valid():
             group = form.save(commit=False)
             group.school = profile.school
             group.author = request.user
+
+            # ✅ Қарапайым мәтін немесе формула
+            plain = request.POST.get('context_text_plain', '').strip()
+            formula = request.POST.get('context_text', '').strip()
+            # Қарапайым басым, егер бос болса — формула
+            group.context_text = plain if plain else formula
 
             block_choice = request.POST.get('block_choice', '')
 
@@ -958,7 +962,6 @@ def _pick_by_difficulty(school, block, subject, difficulty, count,
 
 
 def _pick_reading_group(school, difficulty):
-    """Оқу сауаттылығы үшін деңгейге сай толық контекст таңдау."""
     groups = QuestionGroup.objects.filter(
         school=school, block='reading', status='approved', difficulty=difficulty,
     )
@@ -970,12 +973,12 @@ def _pick_reading_group(school, difficulty):
 
 def _build_profile_questions(school, subject):
     """
-    Бейіндік пән: 40 сұрақ = 20A + 12B + 8C (ЖАЛПЫ)
-    Тәртіп: single → context → matching → multiple
+    Бейіндік пән: 40 сұрақ.
+    25 single + 5 ctx + 5 matching + 5 multiple = 40.
     """
     result = []
 
-    # ============ 1-25: SINGLE (25 сұрақ) ============
+    # 1-25: SINGLE (25 сұрақ)
     singles = list(Question.objects.filter(
         school=school, block='profile', subject=subject,
         status='approved', question_type='single', kind='standard',
@@ -986,7 +989,7 @@ def _build_profile_questions(school, subject):
     else:
         result += random.sample(singles, 25)
 
-    # ============ 26-30: CONTEXT (5 сұрақ) ============
+    # 26-30: CONTEXT (5 сұрақ)
     ctx_groups = QuestionGroup.objects.filter(
         school=school, block='profile', subject=subject, status='approved',
     )
@@ -997,7 +1000,7 @@ def _build_profile_questions(school, subject):
             status='approved', is_deleted_by_author=False
         ).order_by('id')[:5])
 
-    # ============ 31-35: MATCHING (5 сұрақ) ============
+    # 31-35: MATCHING (5 сұрақ)
     matchings = list(Question.objects.filter(
         school=school, block='profile', subject=subject,
         status='approved', question_type='matching',
@@ -1008,7 +1011,7 @@ def _build_profile_questions(school, subject):
     else:
         result += random.sample(matchings, 5)
 
-    # ============ 36-40: MULTIPLE (5 сұрақ) ============
+    # 36-40: MULTIPLE (5 сұрақ)
     multiples = list(Question.objects.filter(
         school=school, block='profile', subject=subject,
         status='approved', question_type='multiple',
@@ -1019,20 +1022,11 @@ def _build_profile_questions(school, subject):
     else:
         result += random.sample(multiples, 5)
 
-    return result  # 40 сұрақ
+    return result
 
 
 def _analyze_profile_questions(questions):
-    """
-    Профиль сұрақтарының құрылымын талдау.
-    25 single + 5 ctx + 5 matching + 5 multiple = 40.
-    """
-    details = {
-        'single': 0,
-        'context': 0,
-        'matching': 0,
-        'multiple': 0,
-    }
+    details = {'single': 0, 'context': 0, 'matching': 0, 'multiple': 0}
     for q in questions:
         if q.kind == 'context':
             details['context'] += 1
@@ -1068,36 +1062,28 @@ def start_test(request):
     if profile.role != 'student':
         return redirect('core:home')
 
-    # 1. Белсенді (in_progress) тест бар ма?
     active = TestAttempt.objects.filter(student=request.user, status='in_progress').first()
     if active:
         return redirect('core:take_test', attempt_id=active.id)
 
-    # 2. ✅ Сессияны анықтау
     session_id = request.GET.get('session')
     now = timezone.now()
 
     if session_id:
-        # Оқушы нақты сессия таңдады
         try:
             available = ExamSession.objects.get(
-                id=session_id,
-                school=profile.school,
-                is_active=True,
+                id=session_id, school=profile.school, is_active=True,
             )
         except ExamSession.DoesNotExist:
             return redirect('core:student_dashboard')
 
-        # Уақыт тексеру
         if not (available.opens_at <= now <= available.closes_at):
             return render(request, 'core/no_active_session.html', {'next_session': None})
 
-        # Класс бойынша тексеру
         if available.classes.exists():
             if profile.school_class not in available.classes.all():
                 return redirect('core:student_dashboard')
     else:
-        # Автоматты — ең соңғы ашық сессия
         available = _get_active_session(profile)
         if not available:
             next_session = ExamSession.objects.filter(
@@ -1105,21 +1091,15 @@ def start_test(request):
             ).order_by('opens_at').first()
             return render(request, 'core/no_active_session.html', {'next_session': next_session})
 
-    # 3. Бұл сессияда бұрын тапсырған ба?
     if TestAttempt.objects.filter(
         student=request.user, session=available, status='finished'
     ).exists():
         return render(request, 'core/test_already_done.html')
 
-    # 4. Профильдік пәндер
     subj1 = profile.profile_subject_1
     subj2 = profile.profile_subject_2
     if not subj1 or not subj2:
         return render(request, 'core/test_no_subjects.html')
-
-    # ============================================================
-    # 5 БЛОКТЫ ЖЕКЕ ЖИНАУ
-    # ============================================================
 
     # 1. ҚАЗАҚСТАН ТАРИХЫ — 20
     q_kaz = []
@@ -1129,7 +1109,7 @@ def start_test(request):
         kaz_details[diff] = len(picked)
         q_kaz += picked
 
-    # 2. ОҚУ САУАТТЫЛЫҒЫ — 10 (3 контекст)
+    # 2. ОҚУ САУАТТЫЛЫҒЫ — 10
     q_read = []
     reading_groups_used = []
     read_details = {'A': 0, 'B': 0, 'C': 0}
@@ -1161,55 +1141,25 @@ def start_test(request):
 
     all_questions = q_kaz + q_read + q_math + q_p1 + q_p2
 
-    # ============================================================
-    # ҚАТАҢ ТЕКСЕРУ
-    # ============================================================
     errors = []
-
     if len(q_kaz) < 20:
-        errors.append({
-            'block': 'Қазақстан тарихы',
-            'have': len(q_kaz), 'need': 20,
-            'details': kaz_details,
-        })
+        errors.append({'block': 'Қазақстан тарихы', 'have': len(q_kaz), 'need': 20, 'details': kaz_details})
     if len(q_read) < 10:
-        errors.append({
-            'block': 'Оқу сауаттылығы',
-            'have': len(q_read), 'need': 10,
-            'details': read_details,
-            'groups': len(reading_groups_used),
-        })
+        errors.append({'block': 'Оқу сауаттылығы', 'have': len(q_read), 'need': 10,
+                       'details': read_details, 'groups': len(reading_groups_used)})
     if len(q_math) < 10:
-        errors.append({
-            'block': 'Математикалық сауаттылық',
-            'have': len(q_math), 'need': 10,
-            'details': math_details,
-        })
+        errors.append({'block': 'Математикалық сауаттылық', 'have': len(q_math), 'need': 10, 'details': math_details})
     if len(q_p1) < 40:
-        errors.append({
-            'block': f'Профиль 1 — {subj1.name_ru}',
-            'have': len(q_p1), 'need': 40,
-            'details': p1_details,
-        })
+        errors.append({'block': f'Профиль 1 — {subj1.name_ru}', 'have': len(q_p1), 'need': 40, 'details': p1_details})
     if len(q_p2) < 40:
-        errors.append({
-            'block': f'Профиль 2 — {subj2.name_ru}',
-            'have': len(q_p2), 'need': 40,
-            'details': p2_details,
-        })
+        errors.append({'block': f'Профиль 2 — {subj2.name_ru}', 'have': len(q_p2), 'need': 40, 'details': p2_details})
 
     if errors:
         return render(request, 'core/test_not_enough.html', {
-            'have': len(all_questions),
-            'need': 120,
-            'errors': errors,
-            'subj1_name': subj1.name_ru,
-            'subj2_name': subj2.name_ru,
+            'have': len(all_questions), 'need': 120, 'errors': errors,
+            'subj1_name': subj1.name_ru, 'subj2_name': subj2.name_ru,
         })
 
-    # ============================================================
-    # БАРЛЫҒЫ ДАЙЫН — тестті бастау
-    # ============================================================
     attempt = TestAttempt.objects.create(
         student=request.user, status='in_progress',
         session=available,
@@ -1220,7 +1170,7 @@ def start_test(request):
     for q in all_questions:
         Answer.objects.create(
             attempt=attempt, question=q,
-            question_snapshot=q.text,
+            question_snapshot=q.get_display_text(),
             correct_answer_snapshot=q.correct_answer,
             question_type_snapshot=q.question_type,
             subject_snapshot=_subject_label(q),
@@ -1230,9 +1180,11 @@ def start_test(request):
             image_snapshot=q.image.url if q.image else '',
             group_context_snapshot=q.group.context_text if q.group else '',
             group_title_snapshot=q.group.title if q.group else '',
+            group_image_snapshot=q.group.image.url if (q.group and q.group.image) else '',
         )
 
     return redirect('core:take_test', attempt_id=attempt.id)
+
 
 # ============================================================
 # ТЕСТ ТАПСЫРУ
@@ -1260,7 +1212,6 @@ def take_test(request, attempt_id):
             subs = ans.matching_data_snapshot.get('sub_questions', [])
             student_ans = ans.matching_answers or {}
             options = ans.matching_data_snapshot.get('options', [])
-
             for sub_idx, sub in enumerate(subs):
                 key = str(sub_idx)
                 selected = student_ans.get(key, '')
@@ -1268,20 +1219,11 @@ def take_test(request, attempt_id):
                     {'value': opt, 'selected': (opt == selected)}
                     for opt in options
                 ]
-                matching_rows.append({
-                    'text': sub.get('text', ''),
-                    'options': opts_with_selected,
-                })
-
-        answers_data.append({
-            'ans': ans,
-            'matching_rows': matching_rows,
-        })
+                matching_rows.append({'text': sub.get('text', ''), 'options': opts_with_selected})
+        answers_data.append({'ans': ans, 'matching_rows': matching_rows})
 
     return render(request, 'core/take_test.html', {
-        'attempt': attempt,
-        'answers': answers,
-        'answers_data': answers_data,
+        'attempt': attempt, 'answers': answers, 'answers_data': answers_data,
         'seconds_left': int((timedelta(hours=4) - elapsed).total_seconds()),
     })
 
@@ -1387,14 +1329,12 @@ def _score_matching(answer):
     md = answer.matching_data_snapshot or {}
     subs = md.get('sub_questions', [])
     student_ans = answer.matching_answers or {}
-
     correct_count = 0
     for sub_idx, sub in enumerate(subs):
         key = str(sub_idx)
         student_choice = student_ans.get(key, '')
         if student_choice and student_choice == sub.get('correct'):
             correct_count += 1
-
     if correct_count == 2:
         return 2
     elif correct_count == 1:
@@ -1408,7 +1348,6 @@ def _finish_attempt(attempt):
     for ans in attempt.answers.all():
         qtype = ans.question_type_snapshot
         subj = ans.subject_snapshot
-
         if qtype == 'single':
             score = _score_single(ans)
         elif qtype == 'multiple':
@@ -1417,7 +1356,6 @@ def _finish_attempt(attempt):
             score = _score_matching(ans)
         else:
             score = 0
-
         ans.score = score
         ans.save()
 
@@ -1456,9 +1394,7 @@ def test_result(request, attempt_id):
     try:
         attempt = TestAttempt.objects.select_related(
             'student', 'student__profile', 'session'
-        ).prefetch_related(
-            'answers__question'
-        ).get(id=attempt_id)
+        ).prefetch_related('answers__question').get(id=attempt_id)
     except TestAttempt.DoesNotExist:
         return redirect('core:home')
 
@@ -1487,16 +1423,11 @@ def test_result(request, attempt_id):
                     'chosen': student_ans.get(key, '—'),
                     'correct': sub.get('correct', ''),
                 })
-        answers_with_matching.append({
-            'ans': ans,
-            'matching_detail': matching_detail,
-        })
+        answers_with_matching.append({'ans': ans, 'matching_detail': matching_detail})
 
     return render(request, 'core/test_result.html', {
-        'attempt': attempt,
-        'view_mode': view_mode,
-        'student': attempt.student,
-        'answers_with_matching': answers_with_matching,
+        'attempt': attempt, 'view_mode': view_mode,
+        'student': attempt.student, 'answers_with_matching': answers_with_matching,
     })
 
 
@@ -1509,7 +1440,6 @@ def school_results(request):
     profile = request.user.profile
     if profile.role not in ['director', 'zavuch']:
         return redirect('core:home')
-
     school = profile.school
     sessions = ExamSession.objects.filter(
         school=school, attempts__isnull=False,
@@ -1532,7 +1462,6 @@ def school_results_detail(request, session_id):
     profile = request.user.profile
     if profile.role not in ['director', 'zavuch']:
         return redirect('core:home')
-
     school = profile.school
     try:
         session = ExamSession.objects.get(id=session_id, school=school)
@@ -1565,9 +1494,7 @@ def class_results(request):
     if profile.role != 'teacher' or not profile.is_homeroom_teacher:
         return redirect('core:home')
     if not profile.homeroom_class:
-        return render(request, 'core/class_results.html', {
-            'no_class': True, 'profile': profile,
-        })
+        return render(request, 'core/class_results.html', {'no_class': True, 'profile': profile})
 
     school_class = profile.homeroom_class
     sessions = ExamSession.objects.filter(
@@ -1613,11 +1540,7 @@ def class_results_detail(request, session_id):
         if a.student_id not in attempts_by_student:
             attempts_by_student[a.student_id] = a
 
-    rows = [
-        {'student': s.user, 'profile': s, 'attempt': attempts_by_student.get(s.user_id)}
-        for s in students
-    ]
-
+    rows = [{'student': s.user, 'profile': s, 'attempt': attempts_by_student.get(s.user_id)} for s in students]
     students_finished = attempts.filter(status='finished').values('student').distinct().count()
 
     return render(request, 'core/class_results_detail.html', {
@@ -1775,7 +1698,6 @@ def class_students_list(request, class_id):
     profile = request.user.profile
     if profile.role not in ['director', 'zavuch']:
         return redirect('core:home')
-
     school = profile.school
     try:
         school_class = SchoolClass.objects.get(id=class_id, school=school)
@@ -1881,8 +1803,7 @@ def edit_profile(request):
                         try:
                             target_class = SchoolClass.objects.get(id=homeroom_id, school=school)
                             existing = UserProfile.objects.filter(
-                                homeroom_class=target_class,
-                                is_homeroom_teacher=True,
+                                homeroom_class=target_class, is_homeroom_teacher=True,
                             ).exclude(user=user).exists()
                             if existing:
                                 error = _("У класса %(cls)s уже есть классный руководитель.") % {'cls': target_class}
@@ -1916,7 +1837,6 @@ def edit_profile(request):
 
 @login_required
 def question_detail(request, question_id):
-    """Сұрақты толық көру. Рұқсат: автор, директор, завуч."""
     profile = request.user.profile
     try:
         q = Question.objects.select_related(
@@ -1981,9 +1901,6 @@ def question_detail(request, question_id):
 
 @login_required
 def group_detail(request, group_id):
-    """Контексті толық көру (мәтін + барлық сұрақтары).
-    Рұқсат: автор, директор, завуч.
-    """
     profile = request.user.profile
     try:
         g = QuestionGroup.objects.select_related(
@@ -2016,10 +1933,7 @@ def group_detail(request, group_id):
                     'correct': sub.get('correct', ''),
                     'options': options,
                 })
-        questions_data.append({
-            'q': q,
-            'matching_detail': matching_detail,
-        })
+        questions_data.append({'q': q, 'matching_detail': matching_detail})
 
     return render(request, 'core/group_detail.html', {
         'g': g,

@@ -122,11 +122,21 @@ class QuestionForm(forms.Form):
     question_type = forms.ChoiceField(
         choices=QUESTION_TYPE_CHOICES, label=_("Тип вопроса"),
     )
+
+    # ✅ MathLive формуласы
     text = forms.CharField(
         widget=forms.Textarea(attrs={'rows': 4}),
-        label=_("Текст вопроса"),
-        help_text=_("Формула үшін LaTeX: $x^2$, $\\frac{a}{b}$"),
+        label=_("Формула (LaTeX)"),
+        required=False,
     )
+
+    # ✅ Қарапайым мәтін
+    text_plain = forms.CharField(
+        widget=forms.Textarea(attrs={'rows': 4}),
+        label=_("Қарапайым мәтін"),
+        required=False,
+    )
+
     option_a = forms.CharField(max_length=500, required=False, label=_("Вариант A"))
     option_b = forms.CharField(max_length=500, required=False, label=_("Вариант B"))
     option_c = forms.CharField(max_length=500, required=False, label=_("Вариант C"))
@@ -151,6 +161,12 @@ class QuestionForm(forms.Form):
         subject = cleaned.get('subject')
         qtype = cleaned.get('question_type')
         correct = (cleaned.get('correct_answer') or '').strip().upper()
+        text = (cleaned.get('text') or '').strip()
+        text_plain = (cleaned.get('text_plain') or '').strip()
+
+        # ✅ Кем дегенде біреуі толтырылуы керек
+        if not text and not text_plain:
+            self.add_error('text_plain', _("Мәтін енгізіңіз (екі өрістің біреуі)"))
 
         if block == 'profile' and not subject:
             self.add_error('subject', _("Выберите профильный предмет."))
@@ -187,9 +203,15 @@ class QuestionGroupForm(forms.ModelForm):
         required=False,
     )
 
+    image = forms.ImageField(
+        required=False,
+        label=_("Контекст суреті (міндетті емес)"),
+        help_text=_("JPG, PNG, GIF. Максимум 5 МБ."),
+    )
+
     class Meta:
         model = QuestionGroup
-        fields = ['title', 'context_text', 'difficulty']
+        fields = ['title', 'context_text', 'difficulty', 'image']
         widgets = {
             'context_text': forms.Textarea(attrs={'rows': 12}),
         }

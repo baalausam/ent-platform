@@ -32,7 +32,6 @@
         }
         .back-link:hover { color: #2563eb; border-color: #cbd5e1; }
 
-        /* Header */
         h1 {
             font-size: 32px; font-weight: 900; letter-spacing: -0.02em;
             margin-bottom: 8px; color: #2c3e50;
@@ -41,7 +40,6 @@
             font-size: 14px; color: #64748b; margin-bottom: 24px;
         }
 
-        /* Badges */
         .badges {
             display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;
         }
@@ -60,22 +58,26 @@
         .badge-approved { background: #d1fae5; color: #065f46; }
         .badge-rejected { background: #fee2e2; color: #991b1b; }
 
-        /* Card */
         .card {
             background: #fff; border: 1px solid #e5e9ee; border-radius: 20px;
             padding: 24px; margin-bottom: 16px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
 
-        /* Context text */
         .context-text {
             background: #f0f7fd; border-left: 4px solid #2980b9;
             padding: 20px 24px; border-radius: 12px; margin-bottom: 20px;
             font-size: 15px; line-height: 1.8; color: #34495e;
             white-space: pre-wrap;
         }
+        .context-image {
+            max-width: 100%;
+            margin-top: 16px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            display: block;
+        }
 
-        /* Progress bar */
         .progress-info {
             display: flex; justify-content: space-between;
             font-size: 13px; font-weight: 700; color: #64748b;
@@ -95,7 +97,6 @@
             background: linear-gradient(90deg, #10b981, #059669);
         }
 
-        /* Question item */
         .question-item {
             background: #fafbfc; border: 1px solid #e2e8f0;
             border-radius: 14px; padding: 18px 20px; margin-bottom: 12px;
@@ -114,7 +115,8 @@
 
         .q-text {
             font-size: 15px; font-weight: 700; color: #2c3e50;
-            line-height: 1.6; margin-bottom: 12px;
+            line-height: 1.7; margin-bottom: 12px;
+            white-space: pre-wrap;
         }
         .q-image {
             max-width: 100%; max-height: 400px;
@@ -122,7 +124,6 @@
             margin: 10px 0; display: block;
         }
 
-        /* Options */
         .option-row {
             display: flex; align-items: flex-start; gap: 10px;
             padding: 10px 14px; margin: 5px 0;
@@ -141,7 +142,6 @@
             font-size: 16px; margin-left: auto;
         }
 
-        /* Matching */
         .matching-section {
             margin-top: 12px; padding: 14px;
             background: #fff; border-radius: 12px;
@@ -178,7 +178,6 @@
             font-size: 13px;
         }
 
-        /* Meta */
         .meta-grid {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 12px;
@@ -217,7 +216,6 @@
         {{ g.created_at|date:"d.m.Y H:i" }}
     </p>
 
-    <!-- Badges -->
     <div class="badges">
         <span class="badge badge-{{ g.difficulty }}">{{ g.get_difficulty_display }}</span>
         <span class="badge badge-block">{{ g.get_block_display }}</span>
@@ -227,11 +225,13 @@
         <span class="badge badge-{{ g.status }}">{{ g.get_status_display }}</span>
     </div>
 
-    <!-- Context -->
     <div class="card">
         <div class="context-text">{{ g.context_text }}</div>
 
-        <!-- Progress -->
+        {% if g.image %}
+            <img src="{{ g.image.url }}" alt="Context image" class="context-image">
+        {% endif %}
+
         <div class="progress-info">
             <span>{% trans "Сұрақтар" %}:</span>
             <span>
@@ -248,7 +248,6 @@
         </div>
     </div>
 
-    <!-- Барлық сұрақтар -->
     <div class="card">
         <h2 style="font-size: 18px; font-weight: 800; margin-bottom: 16px; color: #2c3e50;">
             📝 {% trans "Барлық сұрақтар" %} ({{ questions_data|length }})
@@ -262,19 +261,19 @@
                         <span class="badge badge-{{ item.q.difficulty }}" style="margin-left: 6px;">
                             {{ item.q.get_difficulty_display }}
                         </span>
-                        <span class="badge badge-type" style="margin-left: 4px; background: #e0e7ff; color: #3730a3;">
+                        <span class="badge" style="margin-left: 4px; background: #e0e7ff; color: #3730a3;">
                             {{ item.q.get_question_type_display }}
                         </span>
                     </span>
                 </div>
 
-                <div class="q-text">{{ item.q.text }}</div>
+                <!-- ✅ Екеуін біріктіріп көрсету -->
+                <div class="q-text">{{ item.q.get_display_text }}</div>
 
                 {% if item.q.image %}
                     <img src="{{ item.q.image.url }}" class="q-image" alt="img">
                 {% endif %}
 
-                {# SINGLE / MULTIPLE #}
                 {% if item.q.question_type == 'single' or item.q.question_type == 'multiple' %}
                     {% if item.q.option_a %}
                         <div class="option-row {% if 'A' in item.q.correct_answer %}correct{% endif %}">
@@ -313,7 +312,6 @@
                         </div>
                     {% endif %}
 
-                {# MATCHING #}
                 {% elif item.q.question_type == 'matching' %}
                     <div class="matching-section">
                         <h4>🔗 {% trans "Сәйкестендіру" %}</h4>
@@ -345,7 +343,6 @@
         {% endfor %}
     </div>
 
-    <!-- Meta -->
     <div class="card">
         <div class="meta-grid">
             <div class="meta-item">

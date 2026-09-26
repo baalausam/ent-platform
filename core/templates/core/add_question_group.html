@@ -126,6 +126,111 @@
             border-color: #3b82f6;
             box-shadow: 0 0 0 4px rgba(59,130,246,0.12);
         }
+
+        /* ✅ ТЕКСТ РЕЖИМІ ТАБТАРЫ */
+        .text-mode-tabs {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            margin-bottom: 12px;
+            background: #f1f5f9;
+            padding: 4px;
+            border-radius: 10px;
+        }
+        .text-mode-tab {
+            flex: 1;
+            padding: 10px 16px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 700;
+            color: #64748b;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .text-mode-tab:hover { background: #e2e8f0; }
+        .text-mode-tab.active {
+            background: #fff;
+            color: #2563eb;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .text-mode-content { display: none; }
+        .text-mode-content.active { display: block; }
+
+        textarea.plain-textarea {
+            width: 100%;
+            min-height: 250px;
+            padding: 18px 20px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 15px;
+            line-height: 1.7;
+            color: #2c3e50;
+            outline: none;
+            resize: vertical;
+        }
+        textarea.plain-textarea:focus {
+            border-color: #3b82f6;
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(59,130,246,0.12);
+        }
+
+        .help-text {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 6px;
+            line-height: 1.5;
+        }
+
+        /* ✅ СУРЕТ PREVIEW */
+        #image-preview-wrapper {
+            display: none;
+            margin-top: 12px;
+        }
+        .preview-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #64748b;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .preview-box {
+            position: relative;
+            display: inline-block;
+        }
+        #image-preview {
+            max-width: 300px;
+            max-height: 300px;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+            display: block;
+            background: #f8fafc;
+        }
+        .preview-close {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        #image-name {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 6px;
+        }
     </style>
 </head>
 <body>
@@ -133,11 +238,11 @@
     <h1>📖 {% trans "Создать контекст" %}</h1>
 
     <div class="info">
-        {% trans "Контекст — текст, к которому привязываются вопросы." %}
+        {% trans "Контекст — текст, к которому привязываются вопросы. Сурет қосу міндетті емес." %}
     </div>
 
     <div class="card">
-        <form method="post" id="group-form">
+        <form method="post" enctype="multipart/form-data" id="group-form">
             {% csrf_token %}
 
             {# БЛОК ТАҢДАУ #}
@@ -163,7 +268,7 @@
             {{ form.title }}
             {% if form.title.errors %}<div class="field-error">{{ form.title.errors.0 }}</div>{% endif %}
 
-            {# ДЕҢГЕЙ — тек оқу сауаттылығында #}
+            {# ДЕҢГЕЙ #}
             <div id="difficulty-section">
                 <label>{{ form.difficulty.label }}</label>
                 <div class="difficulty-radios">
@@ -173,45 +278,81 @@
                 </div>
             </div>
 
-            <!-- ✅ КОНТЕКСТ МӘТІНІ — MathLive -->
-            <label>{{ form.context_text.label }}</label>
-            <div class="mathlive-wrapper">
-                <div class="mathlive-toolbar">
-                    <button type="button" class="ml-btn" onclick="mlInsert('\\frac{#@}{#?}')" title="Бөлшек">
-                        <span class="ml-icon">½</span>
-                    </button>
-                    <button type="button" class="ml-btn" onclick="mlInsert('\\sqrt{#0}')" title="Түбір">
-                        <span class="ml-icon">√</span>
-                    </button>
-                    <button type="button" class="ml-btn" onclick="mlInsert('#@^{#?}')" title="Дәреже">
-                        <span class="ml-icon">x²</span>
-                    </button>
-                    <button type="button" class="ml-btn" onclick="mlInsert('#@_{#?}')" title="Индекс">
-                        <span class="ml-icon">xₙ</span>
-                    </button>
-                    <button type="button" class="ml-btn" onclick="mlInsert('\\sin(#0)')" title="sin">sin</button>
-                    <button type="button" class="ml-btn" onclick="mlInsert('\\cos(#0)')" title="cos">cos</button>
-                    <button type="button" class="ml-btn" onclick="mlInsert('\\tan(#0)')" title="tan">tan</button>
-                    <button type="button" class="ml-btn" onclick="mlInsert('\\log(#0)')" title="log">log</button>
-                    <button type="button" class="ml-btn" onclick="mlInsert('\\ln(#0)')" title="ln">ln</button>
-                    <button type="button" class="ml-btn" onclick="mlInsert('\\pi')" title="π">π</button>
-                    <button type="button" class="ml-btn" onclick="mlInsert('\\alpha')" title="α">α</button>
-                    <button type="button" class="ml-btn" onclick="mlInsert('\\beta')" title="β">β</button>
-                    <button type="button" class="ml-btn" onclick="mlInsert('\\theta')" title="θ">θ</button>
-                    <button type="button" class="ml-btn" onclick="mlInsert('\\lambda')" title="λ">λ</button>
-                    <button type="button" class="ml-btn" onclick="mlInsert('\\mu')" title="μ">μ</button>
-                    <button type="button" class="ml-btn" onclick="mlInsert('\\infty')" title="∞">∞</button>
-                    <button type="button" class="ml-btn" onclick="mlInsert('\\pm')" title="±">±</button>
-                    <button type="button" class="ml-btn" onclick="mlInsert('\\times')" title="×">×</button>
-                    <button type="button" class="ml-btn" onclick="mlInsert('\\div')" title="÷">÷</button>
-                    <button type="button" class="ml-btn" onclick="mlInsert('\\leq')" title="≤">≤</button>
-                    <button type="button" class="ml-btn" onclick="mlInsert('\\geq')" title="≥">≥</button>
-                </div>
+            <!-- ✅ КОНТЕКСТ МӘТІНІ — 2 РЕЖИМ -->
+            <label>{% trans "Контекст мәтіні" %}</label>
 
-                <math-field id="math-input-group" class="math-input"></math-field>
-                <textarea name="context_text" id="text-hidden-group" style="display:none;"></textarea>
+            <div class="text-mode-tabs">
+                <button type="button" class="text-mode-tab active" onclick="switchTextMode('plain')">
+                    📝 {% trans "Қарапайым мәтін" %}
+                </button>
+                <button type="button" class="text-mode-tab" onclick="switchTextMode('formula')">
+                    🧮 {% trans "Формула (LaTeX)" %}
+                </button>
             </div>
+
+            <!-- ✅ ҚАРАПАЙЫМ МӘТІН -->
+            <div id="text-mode-plain" class="text-mode-content active">
+                <textarea name="context_text_plain" id="id_context_text_plain"
+                          class="plain-textarea" rows="12"
+                          placeholder="Мұнда қарапайым мәтінді жазыңыз (пробелмен)..."></textarea>
+                <p class="help-text">
+                    💡 Пробел, тыныс белгілері, қазақ/орыс әріптері — барлығы қолданылады.
+                </p>
+            </div>
+
+            <!-- ✅ ФОРМУЛА (MathLive) -->
+            <div id="text-mode-formula" class="text-mode-content">
+                <div class="mathlive-wrapper">
+                    <div class="mathlive-toolbar">
+                        <button type="button" class="ml-btn" onclick="mlInsert('\\frac{#@}{#?}')" title="Бөлшек"><span class="ml-icon">½</span></button>
+                        <button type="button" class="ml-btn" onclick="mlInsert('\\sqrt{#0}')" title="Түбір"><span class="ml-icon">√</span></button>
+                        <button type="button" class="ml-btn" onclick="mlInsert('#@^{#?}')" title="Дәреже"><span class="ml-icon">x²</span></button>
+                        <button type="button" class="ml-btn" onclick="mlInsert('#@_{#?}')" title="Индекс"><span class="ml-icon">xₙ</span></button>
+                        <button type="button" class="ml-btn" onclick="mlInsert('\\sin(#0)')" title="sin">sin</button>
+                        <button type="button" class="ml-btn" onclick="mlInsert('\\cos(#0)')" title="cos">cos</button>
+                        <button type="button" class="ml-btn" onclick="mlInsert('\\tan(#0)')" title="tan">tan</button>
+                        <button type="button" class="ml-btn" onclick="mlInsert('\\log(#0)')" title="log">log</button>
+                        <button type="button" class="ml-btn" onclick="mlInsert('\\ln(#0)')" title="ln">ln</button>
+                        <button type="button" class="ml-btn" onclick="mlInsert('\\pi')" title="π">π</button>
+                        <button type="button" class="ml-btn" onclick="mlInsert('\\alpha')" title="α">α</button>
+                        <button type="button" class="ml-btn" onclick="mlInsert('\\beta')" title="β">β</button>
+                        <button type="button" class="ml-btn" onclick="mlInsert('\\theta')" title="θ">θ</button>
+                        <button type="button" class="ml-btn" onclick="mlInsert('\\lambda')" title="λ">λ</button>
+                        <button type="button" class="ml-btn" onclick="mlInsert('\\mu')" title="μ">μ</button>
+                        <button type="button" class="ml-btn" onclick="mlInsert('\\infty')" title="∞">∞</button>
+                        <button type="button" class="ml-btn" onclick="mlInsert('\\pm')" title="±">±</button>
+                        <button type="button" class="ml-btn" onclick="mlInsert('\\times')" title="×">×</button>
+                        <button type="button" class="ml-btn" onclick="mlInsert('\\div')" title="÷">÷</button>
+                        <button type="button" class="ml-btn" onclick="mlInsert('\\leq')" title="≤">≤</button>
+                        <button type="button" class="ml-btn" onclick="mlInsert('\\geq')" title="≥">≥</button>
+                    </div>
+
+                    <math-field id="math-input-group" class="math-input"></math-field>
+                    <textarea name="context_text" id="text-hidden-group" style="display:none;"></textarea>
+                </div>
+                <p class="help-text">
+                    💡 Формула үшін. Мәтін мен формуланы араластыру үшін <code>$x^2$</code> қолданыңыз.
+                </p>
+            </div>
+
             {% if form.context_text.errors %}<div class="field-error">{{ form.context_text.errors.0 }}</div>{% endif %}
+
+            <!-- ✅ СУРЕТ ЖҮКТЕУ -->
+            <label>{{ form.image.label }}</label>
+            {{ form.image }}
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">
+                {% trans "Міндетті емес. Егер сурет қосқыңыз келсе — таңдаңыз." %}
+            </p>
+            {% if form.image.errors %}<div class="field-error">{{ form.image.errors.0 }}</div>{% endif %}
+
+            <div id="image-preview-wrapper">
+                <p class="preview-label">📷 {% trans "Алдын ала көрініс" %}:</p>
+                <div class="preview-box">
+                    <img id="image-preview" src="" alt="Preview">
+                    <button type="button" class="preview-close" onclick="removeImagePreview()">✕</button>
+                </div>
+                <p id="image-name"></p>
+            </div>
 
             <button type="submit" class="btn-submit">💾 {% trans "Сохранить" %}</button>
         </form>
@@ -219,6 +360,22 @@
 </div>
 
 <script>
+// ============================================================
+// ✅ ТЕКСТ РЕЖИМІН АУЫСТЫРУ
+// ============================================================
+function switchTextMode(mode) {
+    document.querySelectorAll('.text-mode-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.text-mode-content').forEach(c => c.classList.remove('active'));
+
+    if (mode === 'plain') {
+        document.querySelectorAll('.text-mode-tab')[0].classList.add('active');
+        document.getElementById('text-mode-plain').classList.add('active');
+    } else {
+        document.querySelectorAll('.text-mode-tab')[1].classList.add('active');
+        document.getElementById('text-mode-formula').classList.add('active');
+    }
+}
+
 // ============================================================
 // ✅ MATHLIVE — КОНТЕКСТ МӘТІНІ
 // ============================================================
@@ -247,9 +404,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 100);
 });
 
-document.getElementById('group-form')?.addEventListener('submit', () => {
-    if (mathGroup && textHiddenGroup) {
-        textHiddenGroup.value = mathGroup.getValue('latex');
+// ✅ Форма жіберілгенде — дұрыс өрісті таңдау
+document.getElementById('group-form')?.addEventListener('submit', (e) => {
+    const plainMode = document.getElementById('text-mode-plain').classList.contains('active');
+    const plainTextarea = document.getElementById('id_context_text_plain');
+
+    if (plainMode) {
+        // Қарапайым режим — text_plain жіберу
+        if (mathGroup && textHiddenGroup) {
+            textHiddenGroup.value = '';  // MathLive-ты тазалау
+        }
+        // plainTextarea мәні context_text_plain ретінде жіберіледі
+    } else {
+        // Формула режимі — MathLive мәнін жазу
+        if (mathGroup && textHiddenGroup) {
+            textHiddenGroup.value = mathGroup.getValue('latex');
+        }
+        if (plainTextarea) {
+            plainTextarea.value = '';  // Қарапайым мәтінді тазалау
+        }
     }
 });
 
@@ -275,6 +448,50 @@ function updateDifficultyVisibility() {
 
 blockRadios.forEach(r => r.addEventListener('change', updateDifficultyVisibility));
 updateDifficultyVisibility();
+
+// ============================================================
+// ✅ СУРЕТ PREVIEW
+// ============================================================
+const imageInput = document.querySelector('input[type="file"][name="image"]');
+const previewWrapper = document.getElementById('image-preview-wrapper');
+const previewImg = document.getElementById('image-preview');
+const imageNameEl = document.getElementById('image-name');
+
+if (imageInput) {
+    imageInput.addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        if (!file) {
+            removeImagePreview();
+            return;
+        }
+        if (!file.type.startsWith('image/')) {
+            alert('Тек сурет файлдарын жүктеуге болады');
+            imageInput.value = '';
+            removeImagePreview();
+            return;
+        }
+        if (file.size > 5 * 1024 * 1024) {
+            alert('Файл өлшемі 5 МБ-тан аспауы керек');
+            imageInput.value = '';
+            removeImagePreview();
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = function (event) {
+            previewImg.src = event.target.result;
+            imageNameEl.textContent = `${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+            previewWrapper.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+function removeImagePreview() {
+    if (imageInput) imageInput.value = '';
+    if (previewImg) previewImg.src = '';
+    if (imageNameEl) imageNameEl.textContent = '';
+    if (previewWrapper) previewWrapper.style.display = 'none';
+}
 </script>
 </body>
 </html>

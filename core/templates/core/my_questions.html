@@ -8,18 +8,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-
-    <!-- ✅ MathJax — формулаларды көрсету -->
     <script>
-    MathJax = {
-        tex: {
-            inlineMath: [['$', '$'], ['\\(', '\\)']],
-            displayMath: [['$$', '$$']]
-        }
-    };
+    MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
     </script>
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
-
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -61,25 +53,20 @@
             font-size: 15px; font-weight: 700;
             box-shadow: 0 8px 25px -8px rgba(16,185,129,0.5); margin-top: 16px;
         }
-
-        /* ✅ КЕСТЕ КОНТЕЙНЕРІ — СКРОЛЛ */
         .card {
             background: #ffffff;
             border: 1px solid #e5e9ee;
             border-radius: 20px;
             padding: 8px;
             margin-top: 24px;
-            overflow-x: auto;        /* ✅ ГОРИЗОНТАЛДЫ СКРОЛЛ */
+            overflow-x: auto;
             -webkit-overflow-scrolling: touch;
         }
-
-        /* ✅ КЕСТЕ — МИНИМАЛДЫ ЕН */
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 1000px;       /* ✅ МИНИМАЛДЫ ЕН */
+            min-width: 1000px;
         }
-
         th, td {
             padding: 14px 12px;
             text-align: left;
@@ -87,21 +74,15 @@
             border-bottom: 1px solid #f1f5f9;
             vertical-align: top;
         }
-
         th {
             background: #f8fafc;
             color: #2563eb;
             font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 0.08em;
-            white-space: nowrap;     /* ✅ ТАҚЫРЫП СЫНБАЙДЫ */
-            position: sticky;
-            top: 0;
-            z-index: 1;
+            white-space: nowrap;
         }
-
         tbody tr:hover { background: #f8fafc; }
-
         .badge {
             display: inline-block; padding: 4px 10px; border-radius: 8px;
             font-size: 11px; font-weight: 800; letter-spacing: 0.05em;
@@ -110,22 +91,17 @@
         .diff-A { background: #d1fae5; color: #065f46; }
         .diff-B { background: #fef3c7; color: #92400e; }
         .diff-C { background: #fee2e2; color: #991b1b; }
-
         .type-badge {
             display: inline-block; padding: 3px 8px; border-radius: 6px;
             font-size: 10px; font-weight: 700; background: #e0e7ff;
             color: #3730a3; text-transform: uppercase;
             white-space: nowrap;
         }
-
         .status-draft { color: #94a3b8; font-weight: 600; }
         .status-pending { color: #b45309; font-weight: 700; }
         .status-approved { color: #059669; font-weight: 700; }
         .status-rejected { color: #c0392b; font-weight: 700; }
-
         .q-img { max-width: 80px; max-height: 60px; border-radius: 6px; margin-top: 6px; display: block; }
-
-        /* ✅ МӘТІН — 2 ЖОЛМЕН ШЕКТЕУ */
         .q-text-preview {
             color: #2c3e50;
             font-weight: 600;
@@ -137,7 +113,6 @@
             max-width: 250px;
             word-wrap: break-word;
         }
-
         .btn-small {
             padding: 8px 14px; border: none; cursor: pointer;
             border-radius: 8px; font-size: 12px; font-weight: 700;
@@ -149,24 +124,18 @@
         .btn-view { background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; }
         .btn-submit { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
         .btn-cancel { background: #fee2e2; color: #991b1b; }
-
         .actions-cell {
             display: flex;
             flex-direction: column;
             gap: 4px;
             min-width: 120px;
         }
-
         .empty {
             text-align: center; padding: 60px 40px; color: #94a3b8;
             background: #ffffff; border-radius: 14px;
             border: 1px dashed #cbd5e1; margin-top: 20px;
         }
-
-        /* ✅ СКРОЛЛ БАРЫ КӨРІНЕДІ */
-        .card::-webkit-scrollbar {
-            height: 8px;
-        }
+        .card::-webkit-scrollbar { height: 8px; }
         .card::-webkit-scrollbar-track {
             background: #f1f5f9;
             border-radius: 4px;
@@ -178,7 +147,6 @@
         .card::-webkit-scrollbar-thumb:hover {
             background: #94a3b8;
         }
-
         @media (max-width: 700px) {
             h1 { font-size: 28px; }
             .q-text-preview { max-width: 150px; }
@@ -238,7 +206,8 @@
                             <td>
                                 <a href="{% url 'core:question_detail' q.id %}"
                                    style="text-decoration: none; color: inherit;">
-                                    <div class="q-text-preview">{{ q.text|truncatechars:80 }}</div>
+                                    <!-- ✅ get_display_text қолдану -->
+                                    <div class="q-text-preview">{{ q.get_display_text|truncatechars:80 }}</div>
                                     {% if q.image %}
                                         <img src="{{ q.image.url }}" class="q-img" alt="img">
                                     {% endif %}
@@ -287,7 +256,6 @@
 </div>
 
 <script>
-// ✅ MathJax — формулаларды өңдеу
 if (window.MathJax && window.MathJax.typesetPromise) {
     window.MathJax.typesetPromise();
 }

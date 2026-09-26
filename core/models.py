@@ -187,6 +187,11 @@ class QuestionGroup(models.Model):
         max_length=1, choices=DIFFICULTY_CHOICES, default=DIFFICULTY_A,
     )
 
+    image = models.ImageField(
+        upload_to='groups/images/%Y/%m/', null=True, blank=True,
+        verbose_name="Контекст суреті",
+    )
+
     approved_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True,
                                     blank=True, related_name='approved_groups')
     approved_at = models.DateTimeField(null=True, blank=True)
@@ -197,7 +202,6 @@ class QuestionGroup(models.Model):
 
     @property
     def expected_question_count(self):
-        # Профильде ӘРҚАШАН 5 сұрақ
         if self.block == 'profile':
             return 5
         return CONTEXT_DIFFICULTY_COUNT.get(self.difficulty, 0)
@@ -251,7 +255,9 @@ class Question(models.Model):
         db_index=True,
     )
 
-    text = models.TextField()
+    text = models.TextField(blank=True, help_text="MathLive формуласы (LaTeX)")
+    text_plain = models.TextField(blank=True, help_text="Қарапайым мәтін (пробелмен)")
+
     option_a = models.CharField(max_length=500, blank=True)
     option_b = models.CharField(max_length=500, blank=True)
     option_c = models.CharField(max_length=500, blank=True)
@@ -260,8 +266,6 @@ class Question(models.Model):
     option_f = models.CharField(max_length=500, blank=True)
     correct_answer = models.CharField(max_length=6, blank=True)
 
-    # ✅ Бір matching сұрағының деректері:
-    # {"options": ["a","b","c","d"], "sub_questions": [{"text":"...","correct":"a"}, ...]}
     matching_data = models.JSONField(null=True, blank=True)
 
     image = models.ImageField(
@@ -293,14 +297,34 @@ class Question(models.Model):
 
     def __str__(self):
         subj = self.subject.name if self.subject else self.get_block_display()
-        return f"[{subj}/{self.get_difficulty_display()}] {self.text[:50]}"
+        return f"[{subj}/{self.get_difficulty_display()}] {self.get_display_text()[:50]}"
+
+    def get_display_text(self):
+        """
+        ✅ Екеуін біріктіру + формуланы $...$ ішіне алу.
+        - text_plain — қарапайым мәтін
+        - text — MathLive LaTeX формуласы → $...$ ішіне
+        """
+        parts = []
+
+        if self.text_plain:
+            parts.append(self.text_plain.strip())
+
+        if self.text:
+            text = self.text.strip()
+            # ✅ Егер $ белгісі жоқ болса — қосу
+            if text and not text.startswith('$'):
+                text = f'${text}$'
+            parts.append(text)
+
+        return '\n\n'.join(parts) if parts else ''
 
     @property
     def max_score(self):
         if self.question_type == 'multiple':
             return 2
         if self.question_type == 'matching':
-            return 2  # бір matching сұрағы = 2 балл макс
+            return 2
         return 1
 
 
@@ -382,12 +406,12 @@ class Answer(models.Model):
     image_snapshot = models.CharField(max_length=500, blank=True)
 
     chosen = models.CharField(max_length=6, blank=True)
-    # Matching үшін: {"0": "2", "1": "2"} — sub_question индексі → таңдаған нұсқа
     matching_answers = models.JSONField(null=True, blank=True)
 
     score = models.IntegerField(default=0)
     group_context_snapshot = models.TextField(blank=True)
     group_title_snapshot = models.CharField(max_length=200, blank=True)
+    group_image_snapshot = models.CharField(max_length=500, blank=True)
 
     class Meta:
         unique_together = ('attempt', 'question')

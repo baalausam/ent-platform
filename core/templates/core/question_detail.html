@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ q.text|truncatechars:50 }}</title>
+    <title>{{ q.get_display_text|truncatechars:50 }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -45,7 +45,6 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
 
-        /* Badges */
         .badges {
             display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;
         }
@@ -65,10 +64,10 @@
         .badge-approved { background: #d1fae5; color: #065f46; }
         .badge-rejected { background: #fee2e2; color: #991b1b; }
 
-        /* Question text */
         .question-text {
             font-size: 18px; font-weight: 700; color: #2c3e50;
-            line-height: 1.6; margin-bottom: 16px;
+            line-height: 1.7; margin-bottom: 16px;
+            white-space: pre-wrap;
         }
         .question-image {
             max-width: 100%; max-height: 500px;
@@ -76,7 +75,6 @@
             margin: 12px 0; display: block;
         }
 
-        /* Options */
         .options { margin-top: 16px; }
         .option-row {
             display: flex; align-items: flex-start; gap: 12px;
@@ -96,7 +94,6 @@
             font-size: 18px; margin-left: auto;
         }
 
-        /* Matching */
         .matching-section {
             margin-top: 16px; padding: 16px;
             background: #f8fafc; border-radius: 14px;
@@ -133,7 +130,6 @@
             font-size: 13px;
         }
 
-        /* Context */
         .context-box {
             background: #f0f7fd; border-left: 4px solid #2980b9;
             padding: 16px 20px; border-radius: 10px; margin-bottom: 16px;
@@ -148,7 +144,6 @@
             white-space: pre-wrap;
         }
 
-        /* Meta */
         .meta-grid {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 12px;
@@ -166,7 +161,6 @@
             font-size: 14px; font-weight: 700; color: #2c3e50;
         }
 
-        /* Siblings */
         .siblings-list { margin-top: 12px; }
         .sibling-item {
             display: flex; gap: 12px; align-items: flex-start;
@@ -205,7 +199,6 @@
         {{ q.created_at|date:"d.m.Y H:i" }}
     </p>
 
-    <!-- Badges -->
     <div class="badges">
         <span class="badge badge-{{ q.difficulty }}">{{ q.get_difficulty_display }}</span>
         <span class="badge badge-block">{{ q.get_block_display }}</span>
@@ -216,7 +209,6 @@
         <span class="badge badge-{{ q.status }}">{{ q.get_status_display }}</span>
     </div>
 
-    <!-- Контекст -->
     {% if group_info %}
         <div class="context-box">
             <h3>📖 {{ group_info.title }} ({{ group_info.difficulty }})</h3>
@@ -227,15 +219,14 @@
         </div>
     {% endif %}
 
-    <!-- Сұрақ -->
     <div class="card">
-        <div class="question-text">{{ q.text }}</div>
+        <!-- ✅ Екеуін біріктіріп көрсету -->
+        <div class="question-text">{{ q.get_display_text }}</div>
 
         {% if q.image %}
             <img src="{{ q.image.url }}" class="question-image" alt="img">
         {% endif %}
 
-        {# SINGLE / MULTIPLE #}
         {% if q.question_type == 'single' or q.question_type == 'multiple' %}
             <div class="options">
                 {% if q.option_a %}
@@ -279,11 +270,9 @@
                 ✓ {% trans "Дұрыс жауап" %}: {{ q.correct_answer }}
             </p>
 
-        {# MATCHING #}
         {% elif q.question_type == 'matching' and q.matching_data %}
             <div class="matching-section">
                 <h3>🔗 {% trans "Сәйкестендіру" %}</h3>
-
                 <p style="font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 8px; text-transform: uppercase;">
                     {% trans "4 ортақ нұсқа" %}:
                 </p>
@@ -292,7 +281,6 @@
                         <span class="option-chip">{{ opt }}</span>
                     {% endfor %}
                 </div>
-
                 <p style="font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 8px; text-transform: uppercase;">
                     {% trans "2 кіші сұрақ" %}:
                 </p>
@@ -307,14 +295,11 @@
         {% endif %}
     </div>
 
-    <!-- Meta -->
     <div class="card">
         <div class="meta-grid">
             <div class="meta-item">
                 <div class="label">{% trans "Автор" %}</div>
-                <div class="value">
-                    {{ q.author.last_name }} {{ q.author.first_name }}
-                </div>
+                <div class="value">{{ q.author.last_name }} {{ q.author.first_name }}</div>
             </div>
             <div class="meta-item">
                 <div class="label">{% trans "Мектеп" %}</div>
@@ -341,7 +326,6 @@
         </div>
     </div>
 
-    <!-- Басқа сұрақтар (сол контексте) -->
     {% if siblings %}
         <div class="card">
             <h3 style="font-size: 15px; font-weight: 800; margin-bottom: 12px; color: #2c3e50;">
@@ -351,7 +335,7 @@
                 {% for s in siblings %}
                     <a href="{% url 'core:question_detail' s.id %}" class="sibling-item">
                         <span class="sibling-num">{{ forloop.counter }}.</span>
-                        <span class="sibling-text">{{ s.text|truncatechars:100 }}</span>
+                        <span class="sibling-text">{{ s.get_display_text|truncatechars:100 }}</span>
                     </a>
                 {% endfor %}
             </div>
