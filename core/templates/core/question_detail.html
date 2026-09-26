@@ -43,6 +43,9 @@
             background: #fff; border: 1px solid #e5e9ee; border-radius: 20px;
             padding: 24px; margin-bottom: 16px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            /* ✅ Карточка ішіндегі элементтер шетке шығып кетпеуі үшін */
+            overflow: hidden; 
+            word-wrap: break-word;
         }
 
         .badges {
@@ -68,11 +71,19 @@
             font-size: 18px; font-weight: 700; color: #2c3e50;
             line-height: 1.7; margin-bottom: 16px;
             white-space: pre-wrap;
+            /* ✅ Мәтіннің шетке асып кетпеуі үшін */
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
+            word-break: break-word;
         }
         .question-image {
             max-width: 100%; max-height: 500px;
             border-radius: 12px; border: 1px solid #e2e8f0;
             margin: 12px 0; display: block;
+            /* ✅ Суреттің шетке асып кетпеуі үшін */
+            object-fit: contain;
+            width: auto;
+            height: auto;
         }
 
         .options { margin-top: 16px; }
@@ -81,6 +92,10 @@
             padding: 12px 16px; margin: 6px 0;
             background: #fafbfc; border: 1px solid #e2e8f0;
             border-radius: 12px; font-size: 15px; font-weight: 500;
+            /* ✅ Жауап мәтінінің шетке асып кетпеуі үшін */
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
+            word-break: break-word;
         }
         .option-row.correct {
             background: #f0fdf4; border-color: #86efac;
@@ -92,6 +107,12 @@
         .option-row.correct::after {
             content: '✓'; color: #059669; font-weight: 900;
             font-size: 18px; margin-left: auto;
+        }
+        /* ✅ Опция ішіндегі мәтіннің өзіне де қасиет қосу */
+        .option-row span:not(.option-letter) {
+            flex: 1;
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
         }
 
         .matching-section {
@@ -117,12 +138,17 @@
             padding: 12px 16px; margin: 6px 0;
             background: #fff; border: 1px solid #e2e8f0;
             border-radius: 10px;
+            /* ✅ Сәйкестендіру мәтінінің шетке асып кетпеуі үшін */
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
         }
         .matching-sub .num {
             font-weight: 800; color: #2563eb;
         }
         .matching-sub .text {
             flex: 1; font-weight: 600;
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
         }
         .matching-sub .correct {
             color: #059669; font-weight: 800;
@@ -133,6 +159,9 @@
         .context-box {
             background: #f0f7fd; border-left: 4px solid #2980b9;
             padding: 16px 20px; border-radius: 10px; margin-bottom: 16px;
+            /* ✅ Контекст мәтінінің шетке асып кетпеуі үшін */
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
         }
         .context-box h3 {
             color: #2980b9; font-weight: 800; font-size: 13px;
@@ -142,6 +171,8 @@
         .context-box p {
             font-size: 14px; line-height: 1.7; color: #34495e;
             white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
         }
 
         .meta-grid {
@@ -159,6 +190,8 @@
         }
         .meta-item .value {
             font-size: 14px; font-weight: 700; color: #2c3e50;
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
         }
 
         .siblings-list { margin-top: 12px; }
@@ -168,6 +201,9 @@
             background: #fafbfc; border: 1px solid #e2e8f0;
             border-radius: 10px; text-decoration: none; color: #2c3e50;
             transition: 0.2s;
+            /* ✅ Бауырлас сұрақтар мәтінінің шетке асып кетпеуі үшін */
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
         }
         .sibling-item:hover {
             background: #fff; border-color: #cbd5e1;
@@ -176,7 +212,19 @@
         .sibling-num {
             font-weight: 800; color: #2563eb; min-width: 30px;
         }
-        .sibling-text { font-size: 14px; font-weight: 500; }
+        .sibling-text { 
+            font-size: 14px; font-weight: 500; 
+            flex: 1;
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
+        }
+
+        /* ✅ MathJax формулалары шетке асып кетпеуі үшін */
+        mjx-container {
+            max-width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
 
         @media (max-width: 700px) {
             h1 { font-size: 22px; }
