@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <title>{% trans "Создать контекст" %}</title>
 
-    <!-- ✅ MathLive -->
     <script defer src="https://unpkg.com/mathlive"></script>
     <link rel="stylesheet" href="https://unpkg.com/mathlive/dist/mathlive-static.css">
 
@@ -68,7 +67,6 @@
         .btn-submit:hover { transform: translateY(-2px); }
         .hidden { display: none !important; }
 
-        /* ✅ MathLive стильдері */
         .mathlive-wrapper {
             background: #f8fafc;
             border: 1px solid #e2e8f0;
@@ -127,7 +125,6 @@
             box-shadow: 0 0 0 4px rgba(59,130,246,0.12);
         }
 
-        /* ✅ ТЕКСТ РЕЖИМІ ТАБТАРЫ */
         .text-mode-tabs {
             display: flex;
             gap: 8px;
@@ -187,7 +184,6 @@
             line-height: 1.5;
         }
 
-        /* ✅ СУРЕТ PREVIEW */
         #image-preview-wrapper {
             display: none;
             margin-top: 12px;
@@ -245,7 +241,6 @@
         <form method="post" enctype="multipart/form-data" id="group-form">
             {% csrf_token %}
 
-            {# БЛОК ТАҢДАУ #}
             {% if can_create_reading and can_create_profile %}
                 <label>{% trans "Қай блок үшін контекст?" %}</label>
                 <div class="block-radios">
@@ -268,7 +263,6 @@
             {{ form.title }}
             {% if form.title.errors %}<div class="field-error">{{ form.title.errors.0 }}</div>{% endif %}
 
-            {# ДЕҢГЕЙ #}
             <div id="difficulty-section">
                 <label>{{ form.difficulty.label }}</label>
                 <div class="difficulty-radios">
@@ -278,7 +272,6 @@
                 </div>
             </div>
 
-            <!-- ✅ КОНТЕКСТ МӘТІНІ — 2 РЕЖИМ -->
             <label>{% trans "Контекст мәтіні" %}</label>
 
             <div class="text-mode-tabs">
@@ -290,7 +283,6 @@
                 </button>
             </div>
 
-            <!-- ✅ ҚАРАПАЙЫМ МӘТІН -->
             <div id="text-mode-plain" class="text-mode-content active">
                 <textarea name="context_text_plain" id="id_context_text_plain"
                           class="plain-textarea" rows="12"
@@ -300,7 +292,6 @@
                 </p>
             </div>
 
-            <!-- ✅ ФОРМУЛА (MathLive) -->
             <div id="text-mode-formula" class="text-mode-content">
                 <div class="mathlive-wrapper">
                     <div class="mathlive-toolbar">
@@ -337,7 +328,6 @@
 
             {% if form.context_text.errors %}<div class="field-error">{{ form.context_text.errors.0 }}</div>{% endif %}
 
-            <!-- ✅ СУРЕТ ЖҮКТЕУ -->
             <label>{{ form.image.label }}</label>
             {{ form.image }}
             <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">
@@ -404,24 +394,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 100);
 });
 
-// ✅ Форма жіберілгенде — дұрыс өрісті таңдау
-document.getElementById('group-form')?.addEventListener('submit', (e) => {
+// ============================================================
+// ✅ ФОРМА ЖІБЕРІЛГЕНДЕ — ДҰРЫС ӨРІСТІ ТАҢДАУ
+// ============================================================
+document.getElementById('group-form')?.addEventListener('submit', () => {
     const plainMode = document.getElementById('text-mode-plain').classList.contains('active');
     const plainTextarea = document.getElementById('id_context_text_plain');
 
     if (plainMode) {
-        // Қарапайым режим — text_plain жіберу
         if (mathGroup && textHiddenGroup) {
-            textHiddenGroup.value = '';  // MathLive-ты тазалау
+            textHiddenGroup.value = '';
         }
-        // plainTextarea мәні context_text_plain ретінде жіберіледі
     } else {
-        // Формула режимі — MathLive мәнін жазу
         if (mathGroup && textHiddenGroup) {
             textHiddenGroup.value = mathGroup.getValue('latex');
         }
         if (plainTextarea) {
-            plainTextarea.value = '';  // Қарапайым мәтінді тазалау
+            plainTextarea.value = '';
         }
     }
 });
@@ -450,48 +439,41 @@ blockRadios.forEach(r => r.addEventListener('change', updateDifficultyVisibility
 updateDifficultyVisibility();
 
 // ============================================================
-// ✅ СУРЕТ PREVIEW
+// ✅ СУРЕТ PREVIEW (без ограничений)
 // ============================================================
-const imageInput = document.querySelector('input[type="file"][name="image"]');
-const previewWrapper = document.getElementById('image-preview-wrapper');
-const previewImg = document.getElementById('image-preview');
-const imageNameEl = document.getElementById('image-name');
+(function initImagePreview() {
+    const imageInput = document.querySelector('input[type="file"][name="image"]');
+    const previewWrapper = document.getElementById('image-preview-wrapper');
+    const previewImg = document.getElementById('image-preview');
+    const imageNameEl = document.getElementById('image-name');
 
-if (imageInput) {
+    if (!imageInput || !previewWrapper || !previewImg || !imageNameEl) return;
+
     imageInput.addEventListener('change', function (e) {
         const file = e.target.files[0];
+
         if (!file) {
             removeImagePreview();
             return;
         }
-        if (!file.type.startsWith('image/')) {
-            alert('Тек сурет файлдарын жүктеуге болады');
-            imageInput.value = '';
-            removeImagePreview();
-            return;
-        }
-        if (file.size > 5 * 1024 * 1024) {
-            alert('Файл өлшемі 5 МБ-тан аспауы керек');
-            imageInput.value = '';
-            removeImagePreview();
-            return;
-        }
+
         const reader = new FileReader();
         reader.onload = function (event) {
             previewImg.src = event.target.result;
-            imageNameEl.textContent = `${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+            imageNameEl.textContent =
+                `${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
             previewWrapper.style.display = 'block';
         };
         reader.readAsDataURL(file);
     });
-}
 
-function removeImagePreview() {
-    if (imageInput) imageInput.value = '';
-    if (previewImg) previewImg.src = '';
-    if (imageNameEl) imageNameEl.textContent = '';
-    if (previewWrapper) previewWrapper.style.display = 'none';
-}
+    window.removeImagePreview = function () {
+        imageInput.value = '';
+        previewImg.src = '';
+        imageNameEl.textContent = '';
+        previewWrapper.style.display = 'none';
+    };
+})();
 </script>
 </body>
 </html>

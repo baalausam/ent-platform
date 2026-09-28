@@ -168,6 +168,53 @@
             margin-top: 6px;
             line-height: 1.5;
         }
+
+        /* ============================================================
+           ✅ СУРЕТ PREVIEW СТИЛЬДЕРІ
+           ============================================================ */
+        #image-preview-wrapper {
+            display: none;
+            margin-top: 12px;
+        }
+        .preview-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #64748b;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .preview-box {
+            position: relative;
+            display: inline-block;
+        }
+        #image-preview {
+            max-width: 300px;
+            max-height: 300px;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+            display: block;
+            background: #f8fafc;
+        }
+        .preview-close {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        #image-name {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 6px;
+        }
     </style>
 </head>
 <body>
@@ -247,8 +294,24 @@
             <p class="help-text">💡 Формула үшін. Мәтін мен формуланы араластыру үшін <code>$x^2$</code> қолданыңыз.</p>
         </div>
 
+        {# ============================================================
+           ✅ СУРЕТ ЖҮКТЕУ + PREVIEW (без ограничений)
+           ============================================================ #}
         <label>{{ form.image.label }}</label>
         {{ form.image }}
+        <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">
+            {% trans "Міндетті емес. Егер сурет қосқыңыз келсе — таңдаңыз." %}
+        </p>
+        {% if form.image.errors %}<div class="field-error">{{ form.image.errors.0 }}</div>{% endif %}
+
+        <div id="image-preview-wrapper">
+            <p class="preview-label">📷 {% trans "Алдын ала көрініс" %}:</p>
+            <div class="preview-box">
+                <img id="image-preview" src="" alt="Preview">
+                <button type="button" class="preview-close" onclick="removeImagePreview()">✕</button>
+            </div>
+            <p id="image-name"></p>
+        </div>
 
         <div id="standard-fields">
             <label>{{ form.option_a.label }}</label>{{ form.option_a }}
@@ -313,6 +376,9 @@
 </div>
 
 <script>
+// ============================================================
+// ✅ ТЕКСТ РЕЖИМІН АУЫСТЫРУ
+// ============================================================
 function switchTextMode(mode) {
     document.querySelectorAll('.text-mode-tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.text-mode-content').forEach(c => c.classList.remove('active'));
@@ -326,6 +392,9 @@ function switchTextMode(mode) {
     }
 }
 
+// ============================================================
+// ✅ СҰРАҚ ТҮРІН АУЫСТЫРУ (single/multiple/matching)
+// ============================================================
 const typeSelect = document.querySelector('[name="question_type"]');
 const stdFields = document.getElementById('standard-fields');
 const mtcFields = document.getElementById('matching-fields');
@@ -346,6 +415,9 @@ if (typeSelect) {
     toggleFields();
 }
 
+// ============================================================
+// ✅ MATHLIVE — СҰРАҚ МӘТІНІ
+// ============================================================
 let mathMain = null;
 let textHiddenMain = null;
 
@@ -365,6 +437,9 @@ function mlInsertMain(latex) {
     textHiddenMain.value = mathMain.getValue('latex');
 }
 
+// ============================================================
+// ✅ MATHLIVE — СӘЙКЕСТЕНДІРУ ӨРІСТЕРІ
+// ============================================================
 const matchingFields = [
     { id: 'match-opt-0', hidden: 'match-opt-0-hidden' },
     { id: 'match-opt-1', hidden: 'match-opt-1-hidden' },
@@ -385,6 +460,9 @@ function initMatchingMathLive() {
     });
 }
 
+// ============================================================
+// ✅ MATHLIVE — INIT
+// ============================================================
 document.addEventListener('DOMContentLoaded', () => {
     const waitMathLive = setInterval(() => {
         if (window.customElements && customElements.get('math-field')) {
@@ -395,6 +473,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 100);
 });
 
+// ============================================================
+// ✅ ФОРМА ЖІБЕРІЛГЕНДЕ — MATHLIVE МӘНДЕРІН ЖАЗУ
+// ============================================================
 document.getElementById('question-form')?.addEventListener('submit', () => {
     if (mathMain && textHiddenMain) {
         textHiddenMain.value = mathMain.getValue('latex');
@@ -407,6 +488,43 @@ document.getElementById('question-form')?.addEventListener('submit', () => {
         }
     });
 });
+
+// ============================================================
+// ✅ СУРЕТ PREVIEW (без ограничений)
+// ============================================================
+(function initImagePreview() {
+    const imageInput = document.querySelector('input[type="file"][name="image"]');
+    const previewWrapper = document.getElementById('image-preview-wrapper');
+    const previewImg = document.getElementById('image-preview');
+    const imageNameEl = document.getElementById('image-name');
+
+    if (!imageInput || !previewWrapper || !previewImg || !imageNameEl) return;
+
+    imageInput.addEventListener('change', function (e) {
+        const file = e.target.files[0];
+
+        if (!file) {
+            removeImagePreview();
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function (event) {
+            previewImg.src = event.target.result;
+            imageNameEl.textContent =
+                `${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+            previewWrapper.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    });
+
+    window.removeImagePreview = function () {
+        imageInput.value = '';
+        previewImg.src = '';
+        imageNameEl.textContent = '';
+        previewWrapper.style.display = 'none';
+    };
+})();
 </script>
 </body>
 </html>
