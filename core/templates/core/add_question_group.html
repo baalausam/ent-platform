@@ -3,10 +3,15 @@
 <html lang="{{ LANGUAGE_CODE }}">
 <head>
     <meta charset="UTF-8">
-    <title>{% trans "Создать контекст" %}</title>
+    <title>{% if edit_mode %}{% trans "Редактировать контекст" %}{% else %}{% trans "Создать контекст" %}{% endif %}</title>
 
     <script defer src="https://unpkg.com/mathlive"></script>
     <link rel="stylesheet" href="https://unpkg.com/mathlive/dist/mathlive-static.css">
+
+    <script>
+    MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
 
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
@@ -231,25 +236,31 @@
 </head>
 <body>
 <div class="container">
-    <h1>📖 {% trans "Создать контекст" %}</h1>
+    <h1>
+        {% if edit_mode %}✏️ {% trans "Редактировать контекст" %}
+        {% else %}📖 {% trans "Создать контекст" %}{% endif %}
+    </h1>
 
     <div class="info">
         {% trans "Контекст — текст, к которому привязываются вопросы. Сурет қосу міндетті емес." %}
     </div>
 
     <div class="card">
-        <form method="post" enctype="multipart/form-data" id="group-form">
+        <form method="post" enctype="multipart/form-data" id="group-form"
+              {% if edit_mode %}action="{% url 'core:edit_question_group' group.id %}"{% endif %}>
             {% csrf_token %}
 
             {% if can_create_reading and can_create_profile %}
                 <label>{% trans "Қай блок үшін контекст?" %}</label>
                 <div class="block-radios">
                     <label>
-                        <input type="radio" name="block_choice" value="reading" checked>
+                        <input type="radio" name="block_choice" value="reading"
+                               {% if not edit_mode or group.block == 'reading' %}checked{% endif %}>
                         📖 {% trans "Оқу сауаттылығы" %}
                     </label>
                     <label>
-                        <input type="radio" name="block_choice" value="profile">
+                        <input type="radio" name="block_choice" value="profile"
+                               {% if edit_mode and group.block == 'profile' %}checked{% endif %}>
                         📚 {% trans "Бейіндік пән" %}
                     </label>
                 </div>
@@ -286,7 +297,7 @@
             <div id="text-mode-plain" class="text-mode-content active">
                 <textarea name="context_text_plain" id="id_context_text_plain"
                           class="plain-textarea" rows="12"
-                          placeholder="Мұнда қарапайым мәтінді жазыңыз (пробелмен)..."></textarea>
+                          placeholder="Мұнда қарапайым мәтінді жазыңыз (пробелмен)...">{% if edit_mode %}{{ form.context_text.value|default:'' }}{% endif %}</textarea>
                 <p class="help-text">
                     💡 Пробел, тыныс белгілері, қазақ/орыс әріптері — барлығы қолданылады.
                 </p>
@@ -335,24 +346,27 @@
             </p>
             {% if form.image.errors %}<div class="field-error">{{ form.image.errors.0 }}</div>{% endif %}
 
-            <div id="image-preview-wrapper">
+            <div id="image-preview-wrapper"
+                 {% if edit_mode and group.image %}style="display:block;"{% endif %}>
                 <p class="preview-label">📷 {% trans "Алдын ала көрініс" %}:</p>
                 <div class="preview-box">
-                    <img id="image-preview" src="" alt="Preview">
+                    <img id="image-preview"
+                         src="{% if edit_mode and group.image %}{{ group.image.url }}{% endif %}"
+                         alt="Preview">
                     <button type="button" class="preview-close" onclick="removeImagePreview()">✕</button>
                 </div>
-                <p id="image-name"></p>
+                <p id="image-name">{% if edit_mode and group.image %}{{ group.image.name }}{% endif %}</p>
             </div>
 
-            <button type="submit" class="btn-submit">💾 {% trans "Сохранить" %}</button>
+            <button type="submit" class="btn-submit">
+                {% if edit_mode %}💾 {% trans "Обновить" %}
+                {% else %}💾 {% trans "Сохранить" %}{% endif %}
+            </button>
         </form>
     </div>
 </div>
 
 <script>
-// ============================================================
-// ✅ ТЕКСТ РЕЖИМІН АУЫСТЫРУ
-// ============================================================
 function switchTextMode(mode) {
     document.querySelectorAll('.text-mode-tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.text-mode-content').forEach(c => c.classList.remove('active'));
@@ -366,9 +380,6 @@ function switchTextMode(mode) {
     }
 }
 
-// ============================================================
-// ✅ MATHLIVE — КОНТЕКСТ МӘТІНІ
-// ============================================================
 let mathGroup = null;
 let textHiddenGroup = null;
 
@@ -386,6 +397,13 @@ document.addEventListener('DOMContentLoaded', () => {
             mathGroup = document.getElementById('math-input-group');
             textHiddenGroup = document.getElementById('text-hidden-group');
             if (mathGroup && textHiddenGroup) {
+
+                {% if edit_mode and group.context_text %}
+                try {
+                    mathGroup.value = "{{ group.context_text|escapejs }}";
+                } catch (e) {}
+                {% endif %}
+
                 mathGroup.addEventListener('input', () => {
                     textHiddenGroup.value = mathGroup.getValue('latex');
                 });
@@ -394,30 +412,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 100);
 });
 
-// ============================================================
-// ✅ ФОРМА ЖІБЕРІЛГЕНДЕ — ДҰРЫС ӨРІСТІ ТАҢДАУ
-// ============================================================
 document.getElementById('group-form')?.addEventListener('submit', () => {
-    const plainMode = document.getElementById('text-mode-plain').classList.contains('active');
-    const plainTextarea = document.getElementById('id_context_text_plain');
-
-    if (plainMode) {
-        if (mathGroup && textHiddenGroup) {
-            textHiddenGroup.value = '';
-        }
-    } else {
-        if (mathGroup && textHiddenGroup) {
-            textHiddenGroup.value = mathGroup.getValue('latex');
-        }
-        if (plainTextarea) {
-            plainTextarea.value = '';
-        }
+    if (mathGroup && textHiddenGroup) {
+        textHiddenGroup.value = mathGroup.getValue('latex');
     }
 });
 
-// ============================================================
-// ✅ ДЕҢГЕЙ КӨРІНУІ (профильде жасыру)
-// ============================================================
 const difficultySection = document.getElementById('difficulty-section');
 const blockRadios = document.querySelectorAll('input[name="block_choice"]');
 
@@ -438,9 +438,6 @@ function updateDifficultyVisibility() {
 blockRadios.forEach(r => r.addEventListener('change', updateDifficultyVisibility));
 updateDifficultyVisibility();
 
-// ============================================================
-// ✅ СУРЕТ PREVIEW (без ограничений)
-// ============================================================
 (function initImagePreview() {
     const imageInput = document.querySelector('input[type="file"][name="image"]');
     const previewWrapper = document.getElementById('image-preview-wrapper');
@@ -453,7 +450,6 @@ updateDifficultyVisibility();
         const file = e.target.files[0];
 
         if (!file) {
-            removeImagePreview();
             return;
         }
 

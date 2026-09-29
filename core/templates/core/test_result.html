@@ -116,7 +116,7 @@
         .threshold-ok { color: #059669; }
         .threshold-fail { color: #c0392b; }
 
-        /* ✅ ЖАҢА: Сұрақтар тізімі */
+        /* Сұрақтар тізімі */
         .answers-section { margin-top: 24px; }
         .answer-row {
             padding: 14px 16px; border-radius: 12px; margin-bottom: 8px;
@@ -227,9 +227,11 @@
         <button class="btn btn-green" onclick="toggleDetails()">
             📊 {% trans "Показать баллы по предметам" %}
         </button>
-        <button class="btn btn-blue" onclick="toggleAnswers()">
-            📝 {% trans "Показать все ответы" %}
-        </button>
+        {% if can_see_details %}
+            <button class="btn btn-blue" onclick="toggleAnswers()">
+                📝 {% trans "Показать все ответы" %}
+            </button>
+        {% endif %}
     </div>
 
     <!-- Баллы по предметам -->
@@ -273,15 +275,17 @@
         </div>
     </div>
 
-    <!-- ✅ Все ответы -->
+    <!-- ✅ Все ответы (только для учителей/админов) -->
+    {% if can_see_details %}
     <div id="answers-block" style="display:none;" class="card">
         <h2>📝 {% trans "Все ответы" %}</h2>
 
         <div class="answers-section">
-            {% for ans in attempt.answers.all %}
+            {% for item in answers_with_matching %}
+                {% with ans=item.ans max_score=item.max_score %}
                 <div class="answer-row
                     {% if ans.score == 0 and not ans.chosen and not ans.matching_answers %}skipped
-                    {% elif ans.score == ans.question.max_score %}correct
+                    {% elif ans.score == max_score %}correct
                     {% elif ans.score > 0 %}correct
                     {% else %}wrong{% endif %}">
                     <div class="answer-header">
@@ -295,25 +299,21 @@
                             <span class="type-badge">{{ ans.question_type_snapshot }}</span>
                         </div>
                         <span class="answer-score
-                            {% if ans.score == ans.question.max_score %}full
+                            {% if ans.score == max_score %}full
                             {% elif ans.score > 0 %}partial
                             {% else %}zero{% endif %}">
-                            {{ ans.score }} / {{ ans.question.max_score }}
+                            {{ ans.score }} / {{ max_score }}
                         </span>
                     </div>
                     <div class="answer-text">{{ ans.question_snapshot|truncatechars:200 }}</div>
                     <div class="answer-details">
                         {% if ans.question_type_snapshot == 'matching' %}
-                            <strong>Жауаптар:</strong>
-                            {% for sub in ans.matching_data_snapshot.sub_questions %}
+                            <strong>{% trans "Жауаптар" %}:</strong>
+                            {% for row in item.matching_detail %}
                                 <div style="margin-top: 4px;">
-                                    {{ sub.text }} →
-                                    <span class="chosen">
-                                        {% with key=forloop.counter0|stringformat:"s" %}
-                                            {{ ans.matching_answers|default_if_none:"" }}
-                                        {% endwith %}
-                                    </span>
-                                    (дұрыс: <span class="correct-answer">{{ sub.correct }}</span>)
+                                    {{ row.text }} →
+                                    <span class="chosen">{{ row.chosen }}</span>
+                                    ({% trans "дұрыс" %}: <span class="correct-answer">{{ row.correct }}</span>)
                                 </div>
                             {% endfor %}
                         {% else %}
@@ -325,9 +325,11 @@
                         {% endif %}
                     </div>
                 </div>
+                {% endwith %}
             {% endfor %}
         </div>
     </div>
+    {% endif %}
     {% endif %}
 
     <div class="center" style="margin-top: 30px;">

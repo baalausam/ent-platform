@@ -123,14 +123,12 @@ class QuestionForm(forms.Form):
         choices=QUESTION_TYPE_CHOICES, label=_("Тип вопроса"),
     )
 
-    # ✅ MathLive формуласы
     text = forms.CharField(
         widget=forms.Textarea(attrs={'rows': 4}),
         label=_("Формула (LaTeX)"),
         required=False,
     )
 
-    # ✅ Қарапайым мәтін
     text_plain = forms.CharField(
         widget=forms.Textarea(attrs={'rows': 4}),
         label=_("Қарапайым мәтін"),
@@ -164,7 +162,6 @@ class QuestionForm(forms.Form):
         text = (cleaned.get('text') or '').strip()
         text_plain = (cleaned.get('text_plain') or '').strip()
 
-        # ✅ Кем дегенде біреуі толтырылуы керек
         if not text and not text_plain:
             self.add_error('text_plain', _("Мәтін енгізіңіз (екі өрістің біреуі)"))
 
@@ -181,8 +178,11 @@ class QuestionForm(forms.Form):
             self.add_error('correct_answer', _("Допустимы только A-F."))
         elif qtype == 'single' and len(correct) != 1:
             self.add_error('correct_answer', _("Для одного ответа — одна буква."))
-        elif qtype == 'multiple' and len(correct) < 2:
-            self.add_error('correct_answer', _("Минимум две буквы."))
+        elif qtype == 'multiple':
+            if len(correct) < 1:
+                self.add_error('correct_answer', _("Укажите хотя бы одну букву."))
+            elif len(correct) > 3:
+                self.add_error('correct_answer', _("Максимум три буквы."))
 
         return cleaned
 
@@ -215,6 +215,10 @@ class QuestionGroupForm(forms.ModelForm):
         widgets = {
             'context_text': forms.Textarea(attrs={'rows': 12}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['context_text'].required = False
 
 
 # ============================================================

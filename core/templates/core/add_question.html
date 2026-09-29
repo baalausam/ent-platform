@@ -3,7 +3,7 @@
 <html lang="{{ LANGUAGE_CODE }}">
 <head>
     <meta charset="UTF-8">
-    <title>{% trans "Добавить вопрос" %}</title>
+    <title>{% if edit_mode %}{% trans "Редактировать вопрос" %}{% else %}{% trans "Добавить вопрос" %}{% endif %}</title>
 
     <script defer src="https://unpkg.com/mathlive"></script>
     <link rel="stylesheet" href="https://unpkg.com/mathlive/dist/mathlive-static.css">
@@ -59,7 +59,8 @@
             border-radius: 12px; margin-bottom: 16px;
             border: 1px solid #e2e8f0; }
         .matching-question h4 { margin-bottom: 12px; color: #2563eb; }
-        .matching-question input { margin-bottom: 8px; }
+        .matching-question input,
+        .matching-question select { margin-bottom: 8px; }
 
         .context-info { background: rgba(59,130,246,0.08);
             border: 1px solid rgba(59,130,246,0.22);
@@ -118,19 +119,6 @@
             box-shadow: 0 0 0 4px rgba(16,185,129,0.12);
         }
 
-        math-field.math-input-sm {
-            width: 100%;
-            min-height: 60px;
-            padding: 10px 14px;
-            background: #fff;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            font-size: 16px;
-            font-family: 'Montserrat', sans-serif;
-            display: block;
-            margin-bottom: 8px;
-        }
-
         .text-mode-tabs {
             display: flex;
             gap: 8px;
@@ -169,9 +157,6 @@
             line-height: 1.5;
         }
 
-        /* ============================================================
-           ✅ СУРЕТ PREVIEW СТИЛЬДЕРІ
-           ============================================================ */
         #image-preview-wrapper {
             display: none;
             margin-top: 12px;
@@ -219,7 +204,10 @@
 </head>
 <body>
 <div class="container">
-    <h1>➕ {% trans "Добавить вопрос" %}</h1>
+    <h1>
+        {% if edit_mode %}✏️ {% trans "Редактировать вопрос" %}
+        {% else %}➕ {% trans "Добавить вопрос" %}{% endif %}
+    </h1>
 
     {% if group %}
         <div class="context-info">
@@ -235,7 +223,8 @@
         </div>
     {% endif %}
 
-    <form method="post" enctype="multipart/form-data" id="question-form">
+    <form method="post" enctype="multipart/form-data" id="question-form"
+          {% if edit_mode %}action="{% url 'core:edit_question' question.id %}"{% endif %}>
         {% csrf_token %}
         {% if group %}<input type="hidden" name="group_id" value="{{ group.id }}">{% endif %}
 
@@ -268,7 +257,7 @@
 
         <div id="text-mode-plain" class="text-mode-content active">
             <textarea name="text_plain" id="id_text_plain" rows="5"
-                      placeholder="Мұнда қарапайым мәтінді жазыңыз (пробелмен)..."></textarea>
+                      placeholder="Мұнда қарапайым мәтінді жазыңыз (пробелмен)...">{% if edit_mode %}{{ question.text_plain|default:'' }}{% endif %}</textarea>
             <p class="help-text">💡 Пробел, тыныс белгілері, қазақ/орыс әріптері — барлығы қолданылады.</p>
         </div>
 
@@ -289,14 +278,11 @@
                     <button type="button" class="ml-btn" onclick="mlInsertMain('\\pm')">±</button>
                 </div>
                 <math-field id="math-input-main" class="math-input"></math-field>
-                <textarea name="text" id="text-hidden-main" style="display:none;"></textarea>
+                <textarea name="text" id="text-hidden-main" style="display:none;">{% if edit_mode %}{{ question.text|default:'' }}{% endif %}</textarea>
             </div>
             <p class="help-text">💡 Формула үшін. Мәтін мен формуланы араластыру үшін <code>$x^2$</code> қолданыңыз.</p>
         </div>
 
-        {# ============================================================
-           ✅ СУРЕТ ЖҮКТЕУ + PREVIEW (без ограничений)
-           ============================================================ #}
         <label>{{ form.image.label }}</label>
         {{ form.image }}
         <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">
@@ -304,13 +290,18 @@
         </p>
         {% if form.image.errors %}<div class="field-error">{{ form.image.errors.0 }}</div>{% endif %}
 
-        <div id="image-preview-wrapper">
+        <div id="image-preview-wrapper"
+             {% if edit_mode and question.image %}style="display:block;"{% endif %}>
             <p class="preview-label">📷 {% trans "Алдын ала көрініс" %}:</p>
             <div class="preview-box">
-                <img id="image-preview" src="" alt="Preview">
+                <img id="image-preview"
+                     src="{% if edit_mode and question.image %}{{ question.image.url }}{% endif %}"
+                     alt="Preview">
                 <button type="button" class="preview-close" onclick="removeImagePreview()">✕</button>
             </div>
-            <p id="image-name"></p>
+            <p id="image-name">
+                {% if edit_mode and question.image %}{{ question.image.name }}{% endif %}
+            </p>
         </div>
 
         <div id="standard-fields">
@@ -326,59 +317,66 @@
         <div id="matching-fields" style="display:none;">
             <h3 style="margin-top: 20px;">Сәйкестендіру сұрағы</h3>
             <p style="font-size: 13px; color: #64748b; margin-bottom: 12px;">
-                Бір сұрақ = 4 ортақ нұсқа + 2 кіші сұрақ.
+                Бір сұрақ = 4 ортақ нұсқа + 2 кіші сұрақ. Барлығы қарапайым мәтін түрінде.
             </p>
 
             <div class="matching-question">
                 <h4>4 ортақ нұсқа</h4>
+
                 <label style="margin-top: 0;">1-нұсқа</label>
-                <math-field id="match-opt-0" class="math-input-sm"></math-field>
-                <input type="hidden" name="match_opt_0" id="match-opt-0-hidden">
+                <input type="text" name="match_opt_0"
+                       value="{% if edit_mode and question.matching_data %}{{ question.matching_data.options.0|default:'' }}{% endif %}"
+                       placeholder="Мысалы: Байкал">
 
                 <label>2-нұсқа</label>
-                <math-field id="match-opt-1" class="math-input-sm"></math-field>
-                <input type="hidden" name="match_opt_1" id="match-opt-1-hidden">
+                <input type="text" name="match_opt_1"
+                       value="{% if edit_mode and question.matching_data %}{{ question.matching_data.options.1|default:'' }}{% endif %}"
+                       placeholder="Мысалы: Каспий">
 
                 <label>3-нұсқа</label>
-                <math-field id="match-opt-2" class="math-input-sm"></math-field>
-                <input type="hidden" name="match_opt_2" id="match-opt-2-hidden">
+                <input type="text" name="match_opt_2"
+                       value="{% if edit_mode and question.matching_data %}{{ question.matching_data.options.2|default:'' }}{% endif %}"
+                       placeholder="Мысалы: Арал">
 
                 <label>4-нұсқа</label>
-                <math-field id="match-opt-3" class="math-input-sm"></math-field>
-                <input type="hidden" name="match_opt_3" id="match-opt-3-hidden">
+                <input type="text" name="match_opt_3"
+                       value="{% if edit_mode and question.matching_data %}{{ question.matching_data.options.3|default:'' }}{% endif %}"
+                       placeholder="Мысалы: Балхаш">
 
                 <h4 style="margin-top: 16px;">Кіші сұрақ 1</h4>
-                <math-field id="match-sub-0" class="math-input-sm"></math-field>
-                <input type="hidden" name="match_sub_0_text" id="match-sub-0-hidden">
+                <input type="text" name="match_sub_0_text"
+                       value="{% if edit_mode and question.matching_data %}{{ question.matching_data.sub_questions.0.text|default:'' }}{% endif %}"
+                       placeholder="Мысалы: Әлемдегі ең терең көл?">
                 <select name="match_sub_0_correct">
                     <option value="">— дұрыс жауап —</option>
-                    <option value="0">1-нұсқа</option>
-                    <option value="1">2-нұсқа</option>
-                    <option value="2">3-нұсқа</option>
-                    <option value="3">4-нұсқа</option>
+                    <option value="0" {% if edit_mode and question.matching_data and question.matching_data.sub_questions.0.correct == question.matching_data.options.0 %}selected{% endif %}>1-нұсқа</option>
+                    <option value="1" {% if edit_mode and question.matching_data and question.matching_data.sub_questions.0.correct == question.matching_data.options.1 %}selected{% endif %}>2-нұсқа</option>
+                    <option value="2" {% if edit_mode and question.matching_data and question.matching_data.sub_questions.0.correct == question.matching_data.options.2 %}selected{% endif %}>3-нұсқа</option>
+                    <option value="3" {% if edit_mode and question.matching_data and question.matching_data.sub_questions.0.correct == question.matching_data.options.3 %}selected{% endif %}>4-нұсқа</option>
                 </select>
 
                 <h4 style="margin-top: 16px;">Кіші сұрақ 2</h4>
-                <math-field id="match-sub-1" class="math-input-sm"></math-field>
-                <input type="hidden" name="match_sub_1_text" id="match-sub-1-hidden">
+                <input type="text" name="match_sub_1_text"
+                       value="{% if edit_mode and question.matching_data %}{{ question.matching_data.sub_questions.1.text|default:'' }}{% endif %}"
+                       placeholder="Мысалы: Әлемдегі ең үлкен көл?">
                 <select name="match_sub_1_correct">
                     <option value="">— дұрыс жауап —</option>
-                    <option value="0">1-нұсқа</option>
-                    <option value="1">2-нұсқа</option>
-                    <option value="2">3-нұсқа</option>
-                    <option value="3">4-нұсқа</option>
+                    <option value="0" {% if edit_mode and question.matching_data and question.matching_data.sub_questions.1.correct == question.matching_data.options.0 %}selected{% endif %}>1-нұсқа</option>
+                    <option value="1" {% if edit_mode and question.matching_data and question.matching_data.sub_questions.1.correct == question.matching_data.options.1 %}selected{% endif %}>2-нұсқа</option>
+                    <option value="2" {% if edit_mode and question.matching_data and question.matching_data.sub_questions.1.correct == question.matching_data.options.2 %}selected{% endif %}>3-нұсқа</option>
+                    <option value="3" {% if edit_mode and question.matching_data and question.matching_data.sub_questions.1.correct == question.matching_data.options.3 %}selected{% endif %}>4-нұсқа</option>
                 </select>
             </div>
         </div>
 
-        <button type="submit">💾 {% trans "Сохранить" %}</button>
+        <button type="submit">
+            {% if edit_mode %}💾 {% trans "Обновить" %}
+            {% else %}💾 {% trans "Сохранить" %}{% endif %}
+        </button>
     </form>
 </div>
 
 <script>
-// ============================================================
-// ✅ ТЕКСТ РЕЖИМІН АУЫСТЫРУ
-// ============================================================
 function switchTextMode(mode) {
     document.querySelectorAll('.text-mode-tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.text-mode-content').forEach(c => c.classList.remove('active'));
@@ -392,9 +390,6 @@ function switchTextMode(mode) {
     }
 }
 
-// ============================================================
-// ✅ СҰРАҚ ТҮРІН АУЫСТЫРУ (single/multiple/matching)
-// ============================================================
 const typeSelect = document.querySelector('[name="question_type"]');
 const stdFields = document.getElementById('standard-fields');
 const mtcFields = document.getElementById('matching-fields');
@@ -415,9 +410,6 @@ if (typeSelect) {
     toggleFields();
 }
 
-// ============================================================
-// ✅ MATHLIVE — СҰРАҚ МӘТІНІ
-// ============================================================
 let mathMain = null;
 let textHiddenMain = null;
 
@@ -425,6 +417,13 @@ function initMainMathLive() {
     mathMain = document.getElementById('math-input-main');
     textHiddenMain = document.getElementById('text-hidden-main');
     if (!mathMain || !textHiddenMain) return;
+
+    {% if edit_mode and question.text %}
+    try {
+        mathMain.value = "{{ question.text|escapejs }}";
+    } catch (e) {}
+    {% endif %}
+
     mathMain.addEventListener('input', () => {
         textHiddenMain.value = mathMain.getValue('latex');
     });
@@ -437,61 +436,21 @@ function mlInsertMain(latex) {
     textHiddenMain.value = mathMain.getValue('latex');
 }
 
-// ============================================================
-// ✅ MATHLIVE — СӘЙКЕСТЕНДІРУ ӨРІСТЕРІ
-// ============================================================
-const matchingFields = [
-    { id: 'match-opt-0', hidden: 'match-opt-0-hidden' },
-    { id: 'match-opt-1', hidden: 'match-opt-1-hidden' },
-    { id: 'match-opt-2', hidden: 'match-opt-2-hidden' },
-    { id: 'match-opt-3', hidden: 'match-opt-3-hidden' },
-    { id: 'match-sub-0', hidden: 'match-sub-0-hidden' },
-    { id: 'match-sub-1', hidden: 'match-sub-1-hidden' },
-];
-
-function initMatchingMathLive() {
-    matchingFields.forEach(field => {
-        const mf = document.getElementById(field.id);
-        const hidden = document.getElementById(field.hidden);
-        if (!mf || !hidden) return;
-        mf.addEventListener('input', () => {
-            hidden.value = mf.getValue('latex');
-        });
-    });
-}
-
-// ============================================================
-// ✅ MATHLIVE — INIT
-// ============================================================
 document.addEventListener('DOMContentLoaded', () => {
     const waitMathLive = setInterval(() => {
         if (window.customElements && customElements.get('math-field')) {
             clearInterval(waitMathLive);
             initMainMathLive();
-            initMatchingMathLive();
         }
     }, 100);
 });
 
-// ============================================================
-// ✅ ФОРМА ЖІБЕРІЛГЕНДЕ — MATHLIVE МӘНДЕРІН ЖАЗУ
-// ============================================================
 document.getElementById('question-form')?.addEventListener('submit', () => {
     if (mathMain && textHiddenMain) {
         textHiddenMain.value = mathMain.getValue('latex');
     }
-    matchingFields.forEach(field => {
-        const mf = document.getElementById(field.id);
-        const hidden = document.getElementById(field.hidden);
-        if (mf && hidden) {
-            hidden.value = mf.getValue('latex');
-        }
-    });
 });
 
-// ============================================================
-// ✅ СУРЕТ PREVIEW (без ограничений)
-// ============================================================
 (function initImagePreview() {
     const imageInput = document.querySelector('input[type="file"][name="image"]');
     const previewWrapper = document.getElementById('image-preview-wrapper');
@@ -504,7 +463,6 @@ document.getElementById('question-form')?.addEventListener('submit', () => {
         const file = e.target.files[0];
 
         if (!file) {
-            removeImagePreview();
             return;
         }
 

@@ -58,12 +58,97 @@
             font-size: 15px; font-weight: 700;
             box-shadow: 0 8px 25px -8px rgba(16,185,129,0.5); margin-top: 16px;
         }
+
+        /* Табы блоков */
+        .block-tabs {
+            display: flex;
+            gap: 8px;
+            margin: 24px 0 16px;
+            flex-wrap: wrap;
+            background: #f1f5f9;
+            padding: 6px;
+            border-radius: 14px;
+        }
+        .block-tab {
+            flex: 1;
+            min-width: 130px;
+            padding: 12px 18px;
+            background: transparent;
+            border: none;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 700;
+            color: #64748b;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: 0.15s;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        .block-tab:hover {
+            background: #e2e8f0;
+            color: #334155;
+        }
+        .block-tab.active {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            box-shadow: 0 4px 12px -4px rgba(59,130,246,0.5);
+        }
+        .block-tab .count {
+            background: rgba(255,255,255,0.25);
+            border-radius: 10px;
+            padding: 2px 8px;
+            font-size: 11px;
+            font-weight: 800;
+        }
+        .block-tab:not(.active) .count {
+            background: rgba(59,130,246,0.15);
+            color: #2563eb;
+        }
+
+        /* Подтабы профиля */
+        .subject-tabs {
+            display: flex;
+            gap: 6px;
+            margin: -8px 0 16px;
+            flex-wrap: wrap;
+            padding: 0 6px;
+        }
+        .subject-tab {
+            padding: 8px 16px;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 700;
+            color: #64748b;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.15s;
+        }
+        .subject-tab:hover {
+            border-color: #cbd5e1;
+            color: #334155;
+        }
+        .subject-tab.active {
+            background: linear-gradient(135deg, #06b6d4, #0891b2);
+            color: white;
+            border-color: transparent;
+        }
+
         .card {
             background: #ffffff;
             border: 1px solid #e5e9ee;
             border-radius: 20px;
             padding: 8px;
-            margin-top: 24px;
+            margin-top: 8px;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
         }
@@ -79,7 +164,6 @@
             font-size: 13px;
             border-bottom: 1px solid #f1f5f9;
             vertical-align: top;
-            /* ✅ Кесте ұяшықтарының ішіндегі мәтін шетке шықпауы үшін */
             word-wrap: break-word;
             overflow-wrap: anywhere;
             word-break: break-word;
@@ -121,7 +205,6 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
             max-width: 250px;
-            /* ✅ Мәтіннің шетке асып кетпеуі үшін */
             word-wrap: break-word;
             overflow-wrap: anywhere;
             word-break: break-word;
@@ -135,8 +218,10 @@
             white-space: nowrap;
         }
         .btn-view { background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; }
+        .btn-edit { background: linear-gradient(135deg, #06b6d4, #0891b2); color: white; }
         .btn-submit { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
-        .btn-cancel { background: #fee2e2; color: #991b1b; }
+        .btn-delete { background: #7f1d1d; color: white; }
+        .btn-delete:hover { background: #991b1b; }
         .actions-cell {
             display: flex;
             flex-direction: column;
@@ -161,14 +246,11 @@
             background: #94a3b8;
         }
 
-        /* ✅ MathJax формулалары шетке асып кетпеуі үшін */
         mjx-container {
             max-width: 100%;
             overflow-x: auto;
             overflow-y: hidden;
         }
-
-        /* ✅ Блоктық формулалар ($$...$$) үшін */
         mjx-container[display="true"] {
             max-width: 100%;
             overflow-x: auto;
@@ -176,14 +258,10 @@
             display: block;
             padding: 4px 0;
         }
-
-        /* ✅ Инлайн формулалар ($...$) үшін */
         mjx-container:not([display="true"]) {
             max-width: 100%;
             overflow-wrap: anywhere;
         }
-
-        /* ✅ Формуланың SVG элементтері де асып кетпеуі үшін */
         mjx-container svg {
             max-width: 100%;
             height: auto;
@@ -192,6 +270,7 @@
         @media (max-width: 700px) {
             h1 { font-size: 28px; }
             .q-text-preview { max-width: 150px; }
+            .block-tab { min-width: 100px; font-size: 12px; padding: 10px 12px; }
         }
     </style>
 </head>
@@ -221,13 +300,66 @@
         + {% trans "Добавить вопрос" %}
     </a>
 
+    <!-- ТАБЫ ПО БЛОКАМ -->
+    <div class="block-tabs">
+        <a class="block-tab {% if block_filter == 'all' %}active{% endif %}" href="?block=all">
+            📋 {% trans "Все" %}
+            <span class="count">{{ block_counts.all }}</span>
+        </a>
+
+        {% if 'kaz_history' in allowed_blocks %}
+        <a class="block-tab {% if block_filter == 'kaz_history' %}active{% endif %}" href="?block=kaz_history">
+            📜 {% trans "Ист. КЗ" %}
+            <span class="count">{{ block_counts.kaz_history }}</span>
+        </a>
+        {% endif %}
+
+        {% if 'reading' in allowed_blocks %}
+        <a class="block-tab {% if block_filter == 'reading' %}active{% endif %}" href="?block=reading">
+            📖 {% trans "Чтение" %}
+            <span class="count">{{ block_counts.reading }}</span>
+        </a>
+        {% endif %}
+
+        {% if 'math_literacy' in allowed_blocks %}
+        <a class="block-tab {% if block_filter == 'math_literacy' %}active{% endif %}" href="?block=math_literacy">
+            🔢 {% trans "Матем." %}
+            <span class="count">{{ block_counts.math_literacy }}</span>
+        </a>
+        {% endif %}
+
+        {% if 'profile' in allowed_blocks %}
+        <a class="block-tab {% if block_filter == 'profile' %}active{% endif %}" href="?block=profile">
+            📚 {% trans "Профиль" %}
+            <span class="count">{{ block_counts.profile }}</span>
+        </a>
+        {% endif %}
+    </div>
+
+    <!-- ПОДТАБЫ ПРОФИЛЯ -->
+    {% if block_filter == 'profile' and profile_subjects|length > 1 %}
+    <div class="subject-tabs">
+        <a class="subject-tab {% if not subject_filter %}active{% endif %}" href="?block=profile">
+            📋 {% trans "Все профильные" %}
+        </a>
+        {% for s in profile_subjects %}
+        <a class="subject-tab {% if subject_filter == s.id|stringformat:'s' %}active{% endif %}"
+           href="?block=profile&subject={{ s.id }}">
+            📚 {{ s.name }}
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
     {% if questions %}
         <div class="card">
             <table>
                 <thead>
                     <tr>
                         <th>{% trans "Деңгей" %}</th>
-                        <th>{% trans "Блок" %}</th>
+                        {% if block_filter == 'all' %}
+                            <th>{% trans "Блок" %}</th>
+                        {% endif %}
                         <th>{% trans "Предмет" %}</th>
                         <th>{% trans "Тип" %}</th>
                         <th>{% trans "Текст" %}</th>
@@ -242,13 +374,14 @@
                             <td>
                                 <span class="badge diff-{{ q.difficulty }}">{{ q.get_difficulty_display }}</span>
                             </td>
-                            <td style="white-space: nowrap;">{{ q.get_block_display }}</td>
+                            {% if block_filter == 'all' %}
+                                <td style="white-space: nowrap;">{{ q.get_block_display }}</td>
+                            {% endif %}
                             <td style="white-space: nowrap;">{{ q.subject.name|default:"—" }}</td>
                             <td><span class="type-badge">{{ q.get_question_type_display }}</span></td>
                             <td>
                                 <a href="{% url 'core:question_detail' q.id %}"
                                    style="text-decoration: none; color: inherit;">
-                                    <!-- ✅ get_display_text қолдану -->
                                     <div class="q-text-preview">{{ q.get_display_text|truncatechars:80 }}</div>
                                     {% if q.image %}
                                         <img src="{{ q.image.url }}" class="q-img" alt="img">
@@ -270,18 +403,29 @@
                                     <a href="{% url 'core:question_detail' q.id %}" class="btn-small btn-view">
                                         👁 {% trans "Көру" %}
                                     </a>
-                                    {% if q.status == 'draft' %}
+
+                                    {# Редактировать: draft, approved, rejected #}
+                                    {% if q.status == 'draft' or q.status == 'approved' or q.status == 'rejected' %}
+                                        <a href="{% url 'core:edit_question' q.id %}" class="btn-small btn-edit">
+                                            ✏️ {% trans "Редактировать" %}
+                                        </a>
+                                    {% endif %}
+
+                                    {# Жіберу: draft, rejected #}
+                                    {% if q.status == 'draft' or q.status == 'rejected' %}
                                         <form method="post" action="{% url 'core:submit_question_for_review' q.id %}" style="display:inline;">
                                             {% csrf_token %}
                                             <button class="btn-small btn-submit">📤 {% trans "Жіберу" %}</button>
                                         </form>
                                     {% endif %}
-                                    {% if q.status == 'draft' or q.status == 'pending' %}
-                                        <form method="post" action="{% url 'core:cancel_question' q.id %}" style="display:inline;">
+
+                                    {# Өшіру: draft, approved, rejected #}
+                                    {% if q.status == 'draft' or q.status == 'approved' or q.status == 'rejected' %}
+                                        <form method="post" action="{% url 'core:delete_question' q.id %}" style="display:inline;">
                                             {% csrf_token %}
-                                            <button class="btn-small btn-cancel"
+                                            <button class="btn-small btn-delete"
                                                     onclick="return confirm('Сұрақты өшіруге сенімдісіз бе?')">
-                                                ❌ {% trans "Өшіру" %}
+                                                🗑 {% trans "Өшіру" %}
                                             </button>
                                         </form>
                                     {% endif %}

@@ -637,18 +637,50 @@ def my_questions(request):
     profile = request.user.profile
     if profile.role != 'teacher' or not profile.is_subject_teacher:
         return redirect('core:home')
-    questions = Question.objects.filter(
+
+    allowed = _get_allowed_blocks(profile)
+
+    block_filter = request.GET.get('block', 'all')
+    subject_filter = request.GET.get('subject', '')
+
+    base_qs = Question.objects.filter(
         author=request.user, is_deleted_by_author=False
-    ).order_by('-created_at')
+    )
+
+    if block_filter in allowed:
+        base_qs = base_qs.filter(block=block_filter)
+
+        if block_filter == 'profile' and subject_filter:
+            base_qs = base_qs.filter(subject_id=subject_filter)
+
+    questions = base_qs.order_by('-updated_at')   # ← изменено
+
+    all_qs = Question.objects.filter(
+        author=request.user, is_deleted_by_author=False
+    )
     stats = {
-        'total': questions.count(),
-        'draft': questions.filter(status='draft').count(),
-        'pending': questions.filter(status='pending').count(),
-        'approved': questions.filter(status='approved').count(),
-        'rejected': questions.filter(status='rejected').count(),
+        'total': all_qs.count(),
+        'draft': all_qs.filter(status='draft').count(),
+        'pending': all_qs.filter(status='pending').count(),
+        'approved': all_qs.filter(status='approved').count(),
+        'rejected': all_qs.filter(status='rejected').count(),
     }
+
+    block_counts = {'all': all_qs.count()}
+    for b in ['kaz_history', 'reading', 'math_literacy', 'profile']:
+        block_counts[b] = all_qs.filter(block=b).count()
+
+    profile_subjects = list(profile.subjects.filter(category='profile'))
+
     return render(request, 'core/my_questions.html', {
-        'questions': questions, 'stats': stats, 'profile': profile,
+        'questions': questions,
+        'stats': stats,
+        'profile': profile,
+        'block_filter': block_filter,
+        'subject_filter': subject_filter,
+        'block_counts': block_counts,
+        'allowed_blocks': allowed,
+        'profile_subjects': profile_subjects,
     })
 
 
@@ -658,8 +690,11 @@ def submit_question_for_review(request, question_id):
     if profile.role != 'teacher':
         return redirect('core:home')
     try:
-        q = Question.objects.get(id=question_id, author=request.user, status='draft',
-                                 is_deleted_by_author=False)
+        q = Question.objects.get(
+            id=question_id, author=request.user,
+            status__in=['draft', 'rejected'],
+            is_deleted_by_author=False,
+        )
         q.status = 'pending'
         q.save()
     except Question.DoesNotExist:
@@ -698,6 +733,35 @@ def cancel_question(request, question_id):
 
 @login_required
 @require_POST
+def delete_question(request, question_id):
+    profile = request.user.profile
+    if profile.role not in ['teacher', 'director', 'zavuch']:
+        return redirect('core:home')
+
+    try:
+        q = Question.objects.get(id=question_id, school=profile.school)
+    except Question.DoesNotExist:
+        return redirect('core:home')
+
+    if profile.role == 'teacher':
+        if q.author != request.user or q.status not in ['draft', 'rejected', 'approved']:
+            return render(request, 'core/access_denied.html', {
+                'message': _("Сіз тек өз сұрақтарыңызды өшіре аласыз.")
+            })
+
+    q.is_deleted_by_author = True
+    q.save()
+
+    if q.group and not q.group.is_complete:
+        g = q.group
+        if g.status == 'draft':
+            g.questions.filter(is_deleted_by_author=False).update(status='draft')
+
+    return redirect(request.META.get('HTTP_REFERER', reverse('core:home')))
+
+
+@login_required
+@require_POST
 def cancel_group(request, group_id):
     profile = request.user.profile
     if profile.role != 'teacher':
@@ -711,6 +775,30 @@ def cancel_group(request, group_id):
         g.delete()
     except QuestionGroup.DoesNotExist:
         pass
+    return redirect('core:my_question_groups')
+
+
+@login_required
+@require_POST
+def delete_group(request, group_id):
+    profile = request.user.profile
+    if profile.role not in ['teacher', 'director', 'zavuch']:
+        return redirect('core:home')
+
+    try:
+        g = QuestionGroup.objects.get(id=group_id, school=profile.school)
+    except QuestionGroup.DoesNotExist:
+        return redirect('core:home')
+
+    if profile.role == 'teacher':
+        if g.author != request.user or g.status not in ['draft', 'rejected']:
+            return render(request, 'core/access_denied.html', {
+                'message': _("Сіз тек өз черновиктеріңізді өшіре аласыз.")
+            })
+
+    g.questions.update(is_deleted_by_author=True)
+    g.delete()
+
     return redirect('core:my_question_groups')
 
 
@@ -740,10 +828,8 @@ def add_question_group(request):
             group.school = profile.school
             group.author = request.user
 
-            # ✅ Қарапайым мәтін немесе формула
             plain = request.POST.get('context_text_plain', '').strip()
             formula = request.POST.get('context_text', '').strip()
-            # Қарапайым басым, егер бос болса — формула
             group.context_text = plain if plain else formula
 
             block_choice = request.POST.get('block_choice', '')
@@ -826,6 +912,190 @@ def submit_group_for_review(request, group_id):
     return redirect('core:my_question_groups')
 
 
+@login_required
+def edit_question_group(request, group_id):
+    profile = request.user.profile
+    if profile.role != 'teacher' or not profile.is_subject_teacher:
+        return redirect('core:home')
+
+    try:
+        g = QuestionGroup.objects.get(
+            id=group_id, author=request.user, status='draft',
+        )
+    except QuestionGroup.DoesNotExist:
+        return render(request, 'core/access_denied.html', {
+            'message': _("Бұл контексті өңдеуге құқығыңыз жоқ (тек черновиктерді өңдеуге болады).")
+        })
+
+    allowed_blocks = _get_allowed_blocks(profile)
+    can_create_reading = 'reading' in allowed_blocks
+    can_create_profile = 'profile' in allowed_blocks
+
+    if not can_create_reading and not can_create_profile:
+        return render(request, 'core/access_denied.html', {
+            'message': _("Контексті тек оқу сауаттылығы немесе бейіндік пән мұғалімі қоса алады.")
+        })
+
+    if request.method == 'POST':
+        form = QuestionGroupForm(request.POST, request.FILES, instance=g)
+        if form.is_valid():
+            group = form.save(commit=False)
+
+            plain = request.POST.get('context_text_plain', '').strip()
+            formula = request.POST.get('context_text', '').strip()
+            group.context_text = plain if plain else formula
+
+            block_choice = request.POST.get('block_choice', '')
+
+            if block_choice == 'profile' and can_create_profile:
+                group.block = 'profile'
+                if not group.subject:
+                    group.subject = profile.subjects.filter(category='profile').first()
+                group.difficulty = 'A'
+            elif block_choice == 'reading' and can_create_reading:
+                group.block = 'reading'
+                group.subject = None
+            else:
+                if can_create_profile and not can_create_reading:
+                    group.block = 'profile'
+                    if not group.subject:
+                        group.subject = profile.subjects.filter(category='profile').first()
+                    group.difficulty = 'A'
+                else:
+                    group.block = 'reading'
+                    group.subject = None
+
+            group.save()
+            return redirect('core:my_question_groups')
+    else:
+        form = QuestionGroupForm(instance=g)
+
+    return render(request, 'core/add_question_group.html', {
+        'form': form, 'profile': profile,
+        'can_create_reading': can_create_reading,
+        'can_create_profile': can_create_profile,
+        'edit_mode': True, 'group': g,
+    })
+
+
+@login_required
+def edit_question(request, question_id):
+    profile = request.user.profile
+    if profile.role != 'teacher' or not profile.is_subject_teacher:
+        return redirect('core:home')
+
+    try:
+        q = Question.objects.get(
+            id=question_id,
+            author=request.user,
+            status__in=['draft', 'approved', 'rejected'],
+            is_deleted_by_author=False,
+        )
+    except Question.DoesNotExist:
+        return render(request, 'core/access_denied.html', {
+            'message': _("Бұл сұрақты өңдеуге құқығыңыз жоқ.")
+        })
+
+    allowed = _get_allowed_blocks(profile)
+    group = q.group
+
+    if request.method == 'POST':
+        form = QuestionForm(request.POST, request.FILES, user=request.user)
+        form.fields['block'].choices = [
+            (code, label) for code, label in QuestionForm.BLOCK_CHOICES
+            if code in allowed
+        ]
+
+        if form.is_valid():
+            data = form.cleaned_data
+            block = data['block']
+            qtype = data['question_type']
+
+            if block not in allowed:
+                form.add_error('block', _("Вы не можете добавлять вопросы в этот блок."))
+                return render(request, 'core/add_question.html', {
+                    'form': form, 'profile': profile, 'group': group,
+                    'edit_mode': True, 'question': q,
+                })
+
+            subject = data['subject'] if block == 'profile' else None
+
+            if block == 'profile':
+                if not subject or not profile.subjects.filter(id=subject.id).exists():
+                    form.add_error('subject', _("Только по своему предмету."))
+                    return render(request, 'core/add_question.html', {
+                        'form': form, 'profile': profile, 'group': group,
+                        'edit_mode': True, 'question': q,
+                    })
+
+            matching_data = None
+            if qtype == 'matching':
+                matching_data = _collect_matching_data(request.POST)
+                if not matching_data:
+                    form.add_error(None, _("Сәйкестендіру: 4 нұсқа + 2 кіші сұрақ қажет."))
+                    return render(request, 'core/add_question.html', {
+                        'form': form, 'profile': profile, 'group': group,
+                        'edit_mode': True, 'question': q,
+                    })
+
+            q.block = block
+            q.subject = subject
+            q.question_type = qtype
+            q.difficulty = data['difficulty']
+            q.text = data.get('text', '') or ''
+            q.text_plain = data.get('text_plain', '') or ''
+            q.option_a = data.get('option_a', '') or ''
+            q.option_b = data.get('option_b', '') or ''
+            q.option_c = data.get('option_c', '') or ''
+            q.option_d = data.get('option_d', '') or ''
+            q.option_e = data.get('option_e', '') or ''
+            q.option_f = data.get('option_f', '') or ''
+            q.correct_answer = (data.get('correct_answer') or '').strip().upper()
+            q.matching_data = matching_data
+            if data.get('image'):
+                q.image = data['image']
+
+            if q.status in ['approved', 'rejected']:
+                q.status = 'draft'
+                q.approved_by = None
+                q.approved_at = None
+
+            q.save()
+
+            if group:
+                return redirect('core:group_detail', group_id=group.id)
+            return redirect('core:my_questions')
+    else:
+        initial = {
+            'block': q.block,
+            'subject': q.subject,
+            'difficulty': q.difficulty,
+            'question_type': q.question_type,
+            'text': q.text,
+            'text_plain': q.text_plain,
+            'option_a': q.option_a,
+            'option_b': q.option_b,
+            'option_c': q.option_c,
+            'option_d': q.option_d,
+            'option_e': q.option_e,
+            'option_f': q.option_f,
+            'correct_answer': q.correct_answer,
+        }
+        form = QuestionForm(initial=initial, user=request.user)
+        form.fields['block'].choices = [
+            (code, label) for code, label in QuestionForm.BLOCK_CHOICES
+            if code in allowed
+        ]
+        if len(allowed) == 1:
+            form.fields['block'].initial = allowed[0]
+            form.fields['block'].widget = dj_forms.HiddenInput()
+
+    return render(request, 'core/add_question.html', {
+        'form': form, 'profile': profile, 'group': group,
+        'edit_mode': True, 'question': q,
+    })
+
+
 # ============================================================
 # ТЕКСЕРУ
 # ============================================================
@@ -840,11 +1110,14 @@ def review_questions(request):
     if not _is_admin_role(profile):
         return redirect('core:home')
     school = profile.school
+
     status_filter = request.GET.get('status', 'pending')
+    block_filter = request.GET.get('block', 'all')
+    subject_filter = request.GET.get('subject', '')
 
     all_qs = Question.objects.filter(
         school=school, is_deleted_by_author=False
-    ).order_by('-created_at')
+    ).order_by('-updated_at')   # ← изменено
 
     groups_pending_all = QuestionGroup.objects.filter(
         school=school, status='pending'
@@ -853,11 +1126,19 @@ def review_questions(request):
     groups_pending = [g for g in groups_pending_all if g.is_complete]
 
     if status_filter == 'all':
-        questions = all_qs
+        filtered_qs = all_qs
     elif status_filter in ['draft', 'pending', 'approved', 'rejected']:
-        questions = all_qs.filter(status=status_filter)
+        filtered_qs = all_qs.filter(status=status_filter)
     else:
-        questions = all_qs.filter(status='pending')
+        filtered_qs = all_qs.filter(status='pending')
+
+    if block_filter in ['kaz_history', 'reading', 'math_literacy', 'profile']:
+        filtered_qs = filtered_qs.filter(block=block_filter)
+
+        if block_filter == 'profile' and subject_filter:
+            filtered_qs = filtered_qs.filter(subject_id=subject_filter)
+
+    questions = filtered_qs
 
     stats = {
         'draft': all_qs.filter(status='draft').count(),
@@ -866,9 +1147,35 @@ def review_questions(request):
         'rejected': all_qs.filter(status='rejected').count(),
         'all': all_qs.count(),
     }
+
+    def _count(block_code):
+        if status_filter == 'all':
+            return all_qs.filter(block=block_code).count()
+        return all_qs.filter(status=status_filter, block=block_code).count()
+
+    block_counts = {
+        'all': stats[status_filter] if status_filter in stats else stats['all'],
+        'kaz_history': _count('kaz_history'),
+        'reading': _count('reading'),
+        'math_literacy': _count('math_literacy'),
+        'profile': _count('profile'),
+    }
+
+    profile_subjects = Subject.objects.filter(
+        category='profile',
+        questions__school=school,
+        questions__is_deleted_by_author=False,
+    ).distinct()
+
     return render(request, 'core/review_questions.html', {
-        'questions': questions, 'stats': stats,
-        'status_filter': status_filter, 'profile': profile,
+        'questions': questions,
+        'stats': stats,
+        'status_filter': status_filter,
+        'block_filter': block_filter,
+        'subject_filter': subject_filter,
+        'block_counts': block_counts,
+        'profile_subjects': profile_subjects,
+        'profile': profile,
         'groups_pending': groups_pending,
     })
 
@@ -972,13 +1279,8 @@ def _pick_reading_group(school, difficulty):
 
 
 def _build_profile_questions(school, subject):
-    """
-    Бейіндік пән: 40 сұрақ.
-    25 single + 5 ctx + 5 matching + 5 multiple = 40.
-    """
     result = []
 
-    # 1-25: SINGLE (25 сұрақ)
     singles = list(Question.objects.filter(
         school=school, block='profile', subject=subject,
         status='approved', question_type='single', kind='standard',
@@ -989,7 +1291,6 @@ def _build_profile_questions(school, subject):
     else:
         result += random.sample(singles, 25)
 
-    # 26-30: CONTEXT (5 сұрақ)
     ctx_groups = QuestionGroup.objects.filter(
         school=school, block='profile', subject=subject, status='approved',
     )
@@ -1000,7 +1301,6 @@ def _build_profile_questions(school, subject):
             status='approved', is_deleted_by_author=False
         ).order_by('id')[:5])
 
-    # 31-35: MATCHING (5 сұрақ)
     matchings = list(Question.objects.filter(
         school=school, block='profile', subject=subject,
         status='approved', question_type='matching',
@@ -1011,7 +1311,6 @@ def _build_profile_questions(school, subject):
     else:
         result += random.sample(matchings, 5)
 
-    # 36-40: MULTIPLE (5 сұрақ)
     multiples = list(Question.objects.filter(
         school=school, block='profile', subject=subject,
         status='approved', question_type='multiple',
@@ -1101,7 +1400,6 @@ def start_test(request):
     if not subj1 or not subj2:
         return render(request, 'core/test_no_subjects.html')
 
-    # 1. ҚАЗАҚСТАН ТАРИХЫ — 20
     q_kaz = []
     kaz_details = {'A': 0, 'B': 0, 'C': 0}
     for diff, need in [('A', 10), ('B', 6), ('C', 4)]:
@@ -1109,7 +1407,6 @@ def start_test(request):
         kaz_details[diff] = len(picked)
         q_kaz += picked
 
-    # 2. ОҚУ САУАТТЫЛЫҒЫ — 10
     q_read = []
     reading_groups_used = []
     read_details = {'A': 0, 'B': 0, 'C': 0}
@@ -1123,7 +1420,6 @@ def start_test(request):
             q_read += questions
             reading_groups_used.append(g)
 
-    # 3. МАТЕМАТИКАЛЫҚ САУАТТЫЛЫҚ — 10
     q_math = []
     math_details = {'A': 0, 'B': 0, 'C': 0}
     for diff, need in [('A', 5), ('B', 3), ('C', 2)]:
@@ -1131,11 +1427,9 @@ def start_test(request):
         math_details[diff] = len(picked)
         q_math += picked
 
-    # 4. ПРОФИЛЬ 1 — 40
     q_p1 = _build_profile_questions(profile.school, subj1)
     p1_details = _analyze_profile_questions(q_p1)
 
-    # 5. ПРОФИЛЬ 2 — 40
     q_p2 = _build_profile_questions(profile.school, subj2)
     p2_details = _analyze_profile_questions(q_p2)
 
@@ -1256,6 +1550,8 @@ def save_answer(request, attempt_id, answer_id):
     else:
         chosen = request.POST.get('chosen', '').strip().upper()
         chosen = ''.join(sorted(set(c for c in chosen if c in 'ABCDEF')))
+        if answer.question_type_snapshot == 'multiple':
+            chosen = chosen[:3]
         answer.chosen = chosen
         answer.save()
 
@@ -1312,16 +1608,29 @@ def _score_multiple(answer):
     chosen = (answer.chosen or '').upper()
     if not chosen or not correct:
         return 0
+
     chosen_set = set(chosen)
     correct_set = set(correct)
+
+    if len(chosen_set) > 3:
+        return 0
+
+    n_correct = len(correct_set)
+
     if chosen_set == correct_set:
         return 2
+
+    if n_correct == 1:
+        return 0
+
     wrong = len(chosen_set - correct_set)
     right = len(chosen_set & correct_set)
-    if wrong == 0 and right > 0:
+
+    need = (n_correct + 1) // 2
+
+    if right >= need and wrong <= 1:
         return 1
-    if wrong == 1 and right >= 2:
-        return 1
+
     return 0
 
 
@@ -1388,6 +1697,17 @@ def _finish_attempt(attempt):
 # НӘТИЖЕ
 # ============================================================
 
+def _max_score_for(ans):
+    t = ans.question_type_snapshot
+    if t == 'single':
+        return 1
+    if t == 'multiple':
+        return 2
+    if t == 'matching':
+        return 2
+    return 0
+
+
 @login_required
 def test_result(request, attempt_id):
     profile = request.user.profile
@@ -1411,6 +1731,8 @@ def test_result(request, attempt_id):
     if not view_mode:
         return redirect('core:home')
 
+    can_see_details = view_mode in ['admin', 'homeroom']
+
     answers_with_matching = []
     for ans in attempt.answers.all().order_by('id'):
         matching_detail = []
@@ -1423,11 +1745,18 @@ def test_result(request, attempt_id):
                     'chosen': student_ans.get(key, '—'),
                     'correct': sub.get('correct', ''),
                 })
-        answers_with_matching.append({'ans': ans, 'matching_detail': matching_detail})
+        answers_with_matching.append({
+            'ans': ans,
+            'matching_detail': matching_detail,
+            'max_score': _max_score_for(ans),
+        })
 
     return render(request, 'core/test_result.html', {
-        'attempt': attempt, 'view_mode': view_mode,
-        'student': attempt.student, 'answers_with_matching': answers_with_matching,
+        'attempt': attempt,
+        'view_mode': view_mode,
+        'student': attempt.student,
+        'answers_with_matching': answers_with_matching,
+        'can_see_details': can_see_details,
     })
 
 
@@ -1923,7 +2252,7 @@ def group_detail(request, group_id):
         })
 
     questions_data = []
-    for q in g.questions.filter(is_deleted_by_author=False).order_by('id'):
+    for q in g.questions.filter(is_deleted_by_author=False).order_by('-updated_at'):   # ← изменено
         matching_detail = []
         if q.question_type == 'matching' and q.matching_data:
             options = q.matching_data.get('options', [])

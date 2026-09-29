@@ -65,7 +65,6 @@
             background: white; padding: 20px 22px; margin-bottom: 14px;
             border-radius: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             border: 1px solid #e5e9ee;
-            /* ✅ overflow: hidden; АЛЫП ТАСТАЛДЫ — мәтін кесілмейді */
             word-wrap: break-word;
         }
         .q-header {
@@ -75,7 +74,6 @@
         .q-text {
             font-size: 16px; margin-bottom: 14px; font-weight: 600;
             line-height: 1.7; color: #2c3e50;
-            /* ✅ Мәтіннің шетке асып кетпеуі үшін */
             word-wrap: break-word;
             overflow-wrap: anywhere;
             word-break: break-word;
@@ -99,7 +97,6 @@
         .context-block {
             background: #f0f7fd; border-left: 4px solid #2980b9;
             padding: 15px 18px; margin-bottom: 16px; border-radius: 8px;
-            /* ✅ Контекст мәтінінің шетке асып кетпеуі үшін */
             word-wrap: break-word;
             overflow-wrap: anywhere;
         }
@@ -118,7 +115,6 @@
             background: #fafbfc; border: 1px solid #e2e8f0;
             border-radius: 10px; cursor: pointer;
             font-size: 15px; font-weight: 500;
-            /* ✅ Жауап мәтінінің шетке асып кетпеуі үшін */
             word-wrap: break-word;
             overflow-wrap: anywhere;
             word-break: break-word;
@@ -142,7 +138,6 @@
             display: flex; align-items: center; justify-content: space-between;
             gap: 12px; padding: 10px 0;
             border-bottom: 1px dashed #e2e8f0;
-            /* ✅ Сәйкестендіру мәтінінің шетке асып кетпеуі үшін */
             word-wrap: break-word;
             overflow-wrap: anywhere;
         }
@@ -259,8 +254,6 @@
             overflow-x: auto;
             overflow-y: hidden;
         }
-
-        /* ✅ Блоктық формулалар ($$...$$) үшін */
         mjx-container[display="true"] {
             max-width: 100%;
             overflow-x: auto;
@@ -268,14 +261,10 @@
             display: block;
             padding: 8px 0;
         }
-
-        /* ✅ Инлайн формулалар ($...$) үшін */
         mjx-container:not([display="true"]) {
             max-width: 100%;
             overflow-wrap: anywhere;
         }
-
-        /* ✅ Формуланың SVG элементтері де асып кетпеуі үшін */
         mjx-container svg {
             max-width: 100%;
             height: auto;
@@ -354,7 +343,7 @@
                                 <input type="{% if ans.question_type_snapshot == 'single' %}radio{% else %}checkbox{% endif %}"
                                        name="q-{{ ans.id }}" value="A"
                                        {% if 'A' in ans.chosen %}checked{% endif %}
-                                       onchange="saveAnswer({{ ans.id }})">
+                                       onchange="saveAnswer({{ ans.id }}, event)">
                                 A. {{ ans.question.option_a }}
                             </label>
                         {% endif %}
@@ -363,7 +352,7 @@
                                 <input type="{% if ans.question_type_snapshot == 'single' %}radio{% else %}checkbox{% endif %}"
                                        name="q-{{ ans.id }}" value="B"
                                        {% if 'B' in ans.chosen %}checked{% endif %}
-                                       onchange="saveAnswer({{ ans.id }})">
+                                       onchange="saveAnswer({{ ans.id }}, event)">
                                 B. {{ ans.question.option_b }}
                             </label>
                         {% endif %}
@@ -372,7 +361,7 @@
                                 <input type="{% if ans.question_type_snapshot == 'single' %}radio{% else %}checkbox{% endif %}"
                                        name="q-{{ ans.id }}" value="C"
                                        {% if 'C' in ans.chosen %}checked{% endif %}
-                                       onchange="saveAnswer({{ ans.id }})">
+                                       onchange="saveAnswer({{ ans.id }}, event)">
                                 C. {{ ans.question.option_c }}
                             </label>
                         {% endif %}
@@ -381,7 +370,7 @@
                                 <input type="{% if ans.question_type_snapshot == 'single' %}radio{% else %}checkbox{% endif %}"
                                        name="q-{{ ans.id }}" value="D"
                                        {% if 'D' in ans.chosen %}checked{% endif %}
-                                       onchange="saveAnswer({{ ans.id }})">
+                                       onchange="saveAnswer({{ ans.id }}, event)">
                                 D. {{ ans.question.option_d }}
                             </label>
                         {% endif %}
@@ -390,7 +379,7 @@
                                 <input type="{% if ans.question_type_snapshot == 'single' %}radio{% else %}checkbox{% endif %}"
                                        name="q-{{ ans.id }}" value="E"
                                        {% if 'E' in ans.chosen %}checked{% endif %}
-                                       onchange="saveAnswer({{ ans.id }})">
+                                       onchange="saveAnswer({{ ans.id }}, event)">
                                 E. {{ ans.question.option_e }}
                             </label>
                         {% endif %}
@@ -399,7 +388,7 @@
                                 <input type="{% if ans.question_type_snapshot == 'single' %}radio{% else %}checkbox{% endif %}"
                                        name="q-{{ ans.id }}" value="F"
                                        {% if 'F' in ans.chosen %}checked{% endif %}
-                                       onchange="saveAnswer({{ ans.id }})">
+                                       onchange="saveAnswer({{ ans.id }}, event)">
                                 F. {{ ans.question.option_f }}
                             </label>
                         {% endif %}
@@ -514,6 +503,7 @@ const ATTEMPT_ID = {{ attempt.id }};
 const SECONDS_LEFT = {{ seconds_left }};
 const MAX_VIOLATIONS = 3;
 const LANG = '{{ LANGUAGE_CODE }}';
+const MAX_MULTIPLE_CHOICES = 3;   // ✅ Максимум вариантов для multiple
 let violations = 0;
 let testActive = true;
 let secondsLeft = SECONDS_LEFT;
@@ -546,9 +536,23 @@ function nextTab(currentIndex) {
     if (currentIndex < tabs.length) tabs[currentIndex].click();
 }
 
-function saveAnswer(answerId) {
+function saveAnswer(answerId, evt) {
     const q = document.querySelector(`[data-answer-id="${answerId}"]`);
     const type = q.dataset.qtype;
+
+    // ✅ Для multiple: не больше 3 выбранных вариантов
+    if (type === 'multiple') {
+        const checked = q.querySelectorAll('input[type=checkbox]:checked');
+        if (checked.length > MAX_MULTIPLE_CHOICES) {
+            // Откатываем последний клик
+            if (evt && evt.target && evt.target.type === 'checkbox') {
+                evt.target.checked = false;
+            }
+            alert('{% trans "Можно выбрать не более 3 вариантов" %}');
+            return;
+        }
+    }
+
     let chosen = '';
     if (type === 'single') {
         const checked = q.querySelector('input:checked');

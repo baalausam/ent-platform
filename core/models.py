@@ -170,7 +170,7 @@ class QuestionGroup(models.Model):
 
     school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='question_groups')
     title = models.CharField(max_length=200)
-    context_text = models.TextField()
+    context_text = models.TextField(blank=True, default='')
     block = models.CharField(max_length=20, choices=BLOCK_CHOICES)
     subject = models.ForeignKey(Subject, on_delete=models.SET_NULL, null=True,
                                 blank=True, related_name='question_groups')
@@ -287,6 +287,7 @@ class Question(models.Model):
     times_used = models.IntegerField(default=0)
     is_locked = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)   # ← новое поле
 
     class Meta:
         ordering = ['-created_at']
@@ -300,11 +301,6 @@ class Question(models.Model):
         return f"[{subj}/{self.get_difficulty_display()}] {self.get_display_text()[:50]}"
 
     def get_display_text(self):
-        """
-        ✅ Екеуін біріктіру + формуланы $...$ ішіне алу.
-        - text_plain — қарапайым мәтін
-        - text — MathLive LaTeX формуласы → $...$ ішіне
-        """
         parts = []
 
         if self.text_plain:
@@ -312,7 +308,6 @@ class Question(models.Model):
 
         if self.text:
             text = self.text.strip()
-            # ✅ Егер $ белгісі жоқ болса — қосу
             if text and not text.startswith('$'):
                 text = f'${text}$'
             parts.append(text)

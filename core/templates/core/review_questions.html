@@ -9,7 +9,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-    <!-- ✅ MathJax — формулаларды көрсету -->
     <script>
     MathJax = {
         tex: {
@@ -62,6 +61,100 @@
         .stat strong { display: block; font-size: 28px; font-weight: 900; margin-top: 4px; }
         .stat.active strong { color: white; }
 
+        /* ✅ Табы блоков */
+        .block-tabs {
+            display: flex;
+            gap: 8px;
+            margin: 20px 0 16px;
+            flex-wrap: wrap;
+            background: #f1f5f9;
+            padding: 6px;
+            border-radius: 14px;
+        }
+        .block-tab {
+            flex: 1;
+            min-width: 130px;
+            padding: 12px 18px;
+            background: transparent;
+            border: none;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 700;
+            color: #64748b;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: 0.15s;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        .block-tab:hover {
+            background: #e2e8f0;
+            color: #334155;
+        }
+        .block-tab.active {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            box-shadow: 0 4px 12px -4px rgba(59,130,246,0.5);
+        }
+        .block-tab .count {
+            background: rgba(255,255,255,0.25);
+            border-radius: 10px;
+            padding: 2px 8px;
+            font-size: 11px;
+            font-weight: 800;
+        }
+        .block-tab:not(.active) .count {
+            background: rgba(59,130,246,0.15);
+            color: #2563eb;
+        }
+
+        /* ✅ Подтабы профиля */
+        .subject-tabs {
+            display: flex;
+            gap: 6px;
+            margin: -8px 0 16px;
+            flex-wrap: wrap;
+            padding: 0 6px;
+        }
+        .subject-tab {
+            padding: 8px 16px;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 700;
+            color: #64748b;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.15s;
+        }
+        .subject-tab:hover {
+            border-color: #cbd5e1;
+            color: #334155;
+        }
+        .subject-tab.active {
+            background: linear-gradient(135deg, #06b6d4, #0891b2);
+            color: white;
+            border-color: transparent;
+        }
+        .subject-tab .count {
+            background: rgba(0,0,0,0.08);
+            border-radius: 8px;
+            padding: 1px 7px;
+            font-size: 10px;
+            font-weight: 800;
+        }
+        .subject-tab.active .count {
+            background: rgba(255,255,255,0.25);
+        }
+
         .card {
             background: #fff; border: 1px solid #e5e9ee; border-radius: 20px;
             padding: 24px; margin-bottom: 20px;
@@ -109,7 +202,6 @@
         .options .correct { color: #059669; font-weight: 800; }
         .options .option-line { margin: 2px 0; }
 
-        /* Matching preview */
         .matching-preview {
             background: #f8fafc; padding: 14px 16px; border-radius: 10px;
             margin-bottom: 10px;
@@ -158,6 +250,11 @@
         .btn-view {
             background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white;
         }
+        .btn-delete {
+            background: #7f1d1d; color: white;
+        }
+        .btn-delete:hover { background: #991b1b; }
+
         .status-draft { color: #94a3b8; font-weight: 700; }
         .status-pending { color: #b45309; font-weight: 700; }
         .status-approved { color: #059669; font-weight: 700; }
@@ -172,6 +269,7 @@
         @media (max-width: 700px) {
             h1 { font-size: 26px; }
             .question-item { padding: 14px 0; }
+            .block-tab { min-width: 100px; font-size: 12px; padding: 10px 12px; }
         }
     </style>
 </head>
@@ -196,25 +294,24 @@
     <p class="subtitle">{{ profile.school.name }}</p>
 
     <div class="stats">
-        <a class="stat {% if status_filter == 'pending' %}active{% endif %}" href="?status=pending">
+        <a class="stat {% if status_filter == 'pending' %}active{% endif %}" href="?status=pending&block={{ block_filter }}{% if subject_filter %}&subject={{ subject_filter }}{% endif %}">
             {% trans "На проверке" %}<strong>{{ stats.pending }}</strong>
         </a>
-        <a class="stat {% if status_filter == 'approved' %}active{% endif %}" href="?status=approved">
+        <a class="stat {% if status_filter == 'approved' %}active{% endif %}" href="?status=approved&block={{ block_filter }}{% if subject_filter %}&subject={{ subject_filter }}{% endif %}">
             {% trans "Одобрено" %}<strong>{{ stats.approved }}</strong>
         </a>
-        <a class="stat {% if status_filter == 'rejected' %}active{% endif %}" href="?status=rejected">
+        <a class="stat {% if status_filter == 'rejected' %}active{% endif %}" href="?status=rejected&block={{ block_filter }}{% if subject_filter %}&subject={{ subject_filter }}{% endif %}">
             {% trans "Отклонено" %}<strong>{{ stats.rejected }}</strong>
         </a>
-        <a class="stat {% if status_filter == 'draft' %}active{% endif %}" href="?status=draft">
+        <a class="stat {% if status_filter == 'draft' %}active{% endif %}" href="?status=draft&block={{ block_filter }}{% if subject_filter %}&subject={{ subject_filter }}{% endif %}">
             {% trans "Черновики" %}<strong>{{ stats.draft }}</strong>
         </a>
-        <a class="stat {% if status_filter == 'all' %}active{% endif %}" href="?status=all">
+        <a class="stat {% if status_filter == 'all' %}active{% endif %}" href="?status=all&block={{ block_filter }}{% if subject_filter %}&subject={{ subject_filter }}{% endif %}">
             {% trans "Все" %}<strong>{{ stats.all }}</strong>
         </a>
     </div>
 
-    <!-- ✅ КОНТЕКСТЫ НА ПРОВЕРКЕ -->
-    {% if groups_pending %}
+    {% if groups_pending and block_filter == 'all' %}
         <div class="card">
             <h2>📖 {% trans "Контексты на проверке" %} ({{ groups_pending|length }})</h2>
             {% for g in groups_pending %}
@@ -252,7 +349,51 @@
         </div>
     {% endif %}
 
-    <!-- ВОПРОСЫ -->
+    <!-- ✅ ТАБЫ ПО БЛОКАМ -->
+    <div class="block-tabs">
+        <a class="block-tab {% if block_filter == 'all' %}active{% endif %}"
+           href="?status={{ status_filter }}&block=all">
+            📋 {% trans "Все" %}
+            <span class="count">{{ block_counts.all }}</span>
+        </a>
+        <a class="block-tab {% if block_filter == 'kaz_history' %}active{% endif %}"
+           href="?status={{ status_filter }}&block=kaz_history">
+            📜 {% trans "Ист. КЗ" %}
+            <span class="count">{{ block_counts.kaz_history }}</span>
+        </a>
+        <a class="block-tab {% if block_filter == 'reading' %}active{% endif %}"
+           href="?status={{ status_filter }}&block=reading">
+            📖 {% trans "Чтение" %}
+            <span class="count">{{ block_counts.reading }}</span>
+        </a>
+        <a class="block-tab {% if block_filter == 'math_literacy' %}active{% endif %}"
+           href="?status={{ status_filter }}&block=math_literacy">
+            🔢 {% trans "Матем." %}
+            <span class="count">{{ block_counts.math_literacy }}</span>
+        </a>
+        <a class="block-tab {% if block_filter == 'profile' %}active{% endif %}"
+           href="?status={{ status_filter }}&block=profile">
+            📚 {% trans "Профиль" %}
+            <span class="count">{{ block_counts.profile }}</span>
+        </a>
+    </div>
+
+    <!-- ✅ ПОДТАБЫ ПРОФИЛЯ -->
+    {% if block_filter == 'profile' and profile_subjects|length > 1 %}
+    <div class="subject-tabs">
+        <a class="subject-tab {% if not subject_filter %}active{% endif %}"
+           href="?status={{ status_filter }}&block=profile">
+            📋 {% trans "Все профильные" %}
+        </a>
+        {% for s in profile_subjects %}
+        <a class="subject-tab {% if subject_filter == s.id|stringformat:'s' %}active{% endif %}"
+           href="?status={{ status_filter }}&block=profile&subject={{ s.id }}">
+            📚 {{ s.name }}
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
     <div class="card">
         <h2>{% trans "Вопросы" %}</h2>
         {% if questions %}
@@ -260,7 +401,9 @@
                 <div class="question-item">
                     <div class="question-header">
                         <span class="badge badge-{{ q.difficulty }}">{{ q.get_difficulty_display }}</span>
-                        <span class="badge badge-block">{{ q.get_block_display }}</span>
+                        {% if block_filter == 'all' %}
+                            <span class="badge badge-block">{{ q.get_block_display }}</span>
+                        {% endif %}
                         {% if q.subject %}
                             <span class="badge badge-subject">{{ q.subject.name }}</span>
                         {% endif %}
@@ -274,7 +417,6 @@
                         <img src="{{ q.image.url }}" class="question-image" alt="img">
                     {% endif %}
 
-                    {# SINGLE / MULTIPLE #}
                     {% if q.question_type == 'single' or q.question_type == 'multiple' %}
                         <div class="options">
                             {% if q.option_a %}<div class="option-line">A. {{ q.option_a }}</div>{% endif %}
@@ -286,7 +428,6 @@
                             <div class="option-line correct">✓ {% trans "Дұрыс" %}: {{ q.correct_answer }}</div>
                         </div>
 
-                    {# MATCHING #}
                     {% elif q.question_type == 'matching' and q.matching_data %}
                         <div class="matching-preview">
                             <h4>🔗 {% trans "Сәйкестендіру" %}</h4>
@@ -326,6 +467,13 @@
                                 <button class="btn btn-reject">✗ {% trans "Қабылдамау" %}</button>
                             </form>
                         {% endif %}
+                        <form method="post" action="{% url 'core:delete_question' q.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button class="btn btn-delete"
+                                    onclick="return confirm('Удалить вопрос? Это действие нельзя отменить.')">
+                                🗑 {% trans "Удалить" %}
+                            </button>
+                        </form>
                     </div>
                 </div>
             {% endfor %}
@@ -336,7 +484,6 @@
 </div>
 
 <script>
-// ✅ MathJax — формулаларды өңдеу
 if (window.MathJax && window.MathJax.typesetPromise) {
     window.MathJax.typesetPromise();
 }
