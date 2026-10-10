@@ -69,10 +69,6 @@ msgid "Пароли не совпадают."
 msgstr "Құпия сөздер сәйкес келмейді."
 
 #: .\core\forms.py:41
-#, fuzzy
-#| msgid ""
-#| "Школа с таким названием уже зарегистрирована. Если вы её директор — "
-#| "обратитесь к администратору."
 msgid "Школа с таким названием уже зарегистрирована."
 msgstr ""
 "Бұл атаумен мектеп тіркелген. Егер сіз оның директоры болсаңыз — әкімшіге "
@@ -189,22 +185,16 @@ msgid "Укажите правильный ответ."
 msgstr "Дұрыс жауапты көрсетіңіз."
 
 #: .\core\forms.py:178
-#, fuzzy
-#| msgid "Допустимы только A, B, C, D, E, F."
 msgid "Допустимы только A-F."
 msgstr "Тек A, B, C, D, E, F рұқсат етіледі."
 
 #: .\core\forms.py:180
-#, fuzzy
-#| msgid "Для одного ответа укажите одну букву."
 msgid "Для одного ответа — одна буква."
 msgstr "Бір жауап үшін бір әріп көрсетіңіз."
 
 #: .\core\forms.py:183
-#, fuzzy
-#| msgid "Выберите хотя бы один предмет."
 msgid "Укажите хотя бы одну букву."
-msgstr "Кемінде бір пәнді таңдаңыз."
+msgstr "Кемінде бір әріп көрсетіңіз."
 
 #: .\core\forms.py:185
 msgid "Максимум три буквы."
@@ -269,10 +259,8 @@ msgstr "Мұғалім панеліне"
 
 #: .\core\templates\core\add_question.html:6
 #: .\core\templates\core\add_question.html:208
-#, fuzzy
-#| msgid "Редактирование профиля"
 msgid "Редактировать вопрос"
-msgstr "Профильді өңдеу"
+msgstr "Сұрақты өңдеу"
 
 #: .\core\templates\core\add_question.html:6
 #: .\core\templates\core\add_question.html:209
@@ -309,10 +297,8 @@ msgstr "Сақтау"
 
 #: .\core\templates\core\add_question_group.html:6
 #: .\core\templates\core\add_question_group.html:240
-#, fuzzy
-#| msgid "Сохранить контекст"
 msgid "Редактировать контекст"
-msgstr "Контексті сақтау"
+msgstr "Контексті өңдеу"
 
 #: .\core\templates\core\add_question_group.html:6
 #: .\core\templates\core\add_question_group.html:241
@@ -327,10 +313,8 @@ msgstr ""
 "Контекст — сұрақтар байланыстырылатын мәтін. Сурет қосу міндетті емес."
 
 #: .\core\templates\core\add_question_group.html:254
-#, fuzzy
-#| msgid "Создать контекст"
 msgid "Қай блок үшін контекст?"
-msgstr "Контекст жасау"
+msgstr "Қай блок үшін контекст?"
 
 #: .\core\templates\core\add_question_group.html:259
 msgid "Оқу сауаттылығы"
@@ -342,10 +326,8 @@ msgstr "Бейіндік пән"
 
 #: .\core\templates\core\add_question_group.html:286
 #: .\core\templates\core\group_detail.html:179
-#, fuzzy
-#| msgid "Контекст"
 msgid "Контекст мәтіні"
-msgstr "Контекст"
+msgstr "Контекст мәтіні"
 
 #: .\core\templates\core\class_results.html:7
 #: .\core\templates\core\class_results.html:153
@@ -678,10 +660,8 @@ msgid "Выберите предметы"
 msgstr "Пәндерді таңдаңыз"
 
 #: .\core\templates\core\edit_profile.html:305
-#, fuzzy
-#| msgid "Предметы ещё не добавлены."
 msgid "Предметы не найдены."
-msgstr "Пәндер әлі қосылмаған."
+msgstr "Пәндер табылмады."
 
 #: .\core\templates\core\edit_profile.html:316
 #: .\core\templates\core\register_teacher.html:379
@@ -713,30 +693,22 @@ msgid "Вы уверены, что хотите перестать быть кл
 msgstr "Сынып жетекшісі болудан қалуға сенімдісіз бе?"
 
 #: .\core\templates\core\group_detail.html:6
-#, fuzzy
-#| msgid "Создать контекст"
 msgid "Просмотр контекста"
-msgstr "Контекст жасау"
+msgstr "Контексті қарау"
 
 #: .\core\templates\core\group_detail.html:194
-#, fuzzy
-#| msgid "Создать контекст"
 msgid "Вопросы контекста"
-msgstr "Контекст жасау"
+msgstr "Контекст сұрақтары"
 
 #: .\core\templates\core\group_detail.html:281
 #: .\core\templates\core\my_question_groups.html:104
 #: .\core\templates\core\my_questions.html:410
-#, fuzzy
-#| msgid "Редактирование профиля"
 msgid "Редактировать"
-msgstr "Профильді өңдеу"
+msgstr "Өңдеу"
 
 #: .\core\templates\core\group_detail.html:292
-#, fuzzy
-#| msgid "Создать контекст для вопросов"
 msgid "В этом контексте пока нет вопросов."
-msgstr "Сұрақтарға контекст жасау"
+msgstr "Бұл контексте әзірге сұрақтар жоқ."
 
 #: .\core\templates\core\home.html:7 .\core\templates\core\home.html:260
 #: .\core\templates\core\home.html:303 .\core\templates\core\login.html:229
@@ -967,10 +939,8 @@ msgstr "Матем."
 
 #: .\core\templates\core\my_questions.html:343
 #: .\core\templates\core\review_questions.html:386
-#, fuzzy
-#| msgid "Профильные"
 msgid "Все профильные"
-msgstr "Бейіндік"
+msgstr "Барлық бейіндік"
 
 #: .\core\templates\core\my_questions.html:359
 msgid "Деңгей"
@@ -1042,10 +1012,8 @@ msgid "ID"
 msgstr "ID"
 
 #: .\core\templates\core\question_detail.html:292
-#, fuzzy
-#| msgid "Контексты на проверке"
 msgid "Контекстегі сұрақтар"
-msgstr "Тексерудегі контексттер"
+msgstr "Контекстегі сұрақтар"
 
 #: .\core\templates\core\question_detail.html:345
 msgid "Дұрыс жауап"
@@ -1079,10 +1047,8 @@ msgid "Жасалған"
 msgstr "Жасалған"
 
 #: .\core\templates\core\question_detail.html:389
-#, fuzzy
-#| msgid "Текст"
 msgid "Тексерген"
-msgstr "Мәтін"
+msgstr "Тексерген"
 
 #: .\core\templates\core\question_detail.html:393
 msgid "Тексерілген"
@@ -1093,16 +1059,12 @@ msgid "Қолданылған"
 msgstr "Қолданылған"
 
 #: .\core\templates\core\question_detail.html:399
-#, fuzzy
-#| msgid "Ответ"
 msgid "рет"
-msgstr "Жауап"
+msgstr "рет"
 
 #: .\core\templates\core\question_detail.html:407
-#, fuzzy
-#| msgid "Создать контекст для вопросов"
 msgid "Сол контекстегі басқа сұрақтар"
-msgstr "Сұрақтарға контекст жасау"
+msgstr "Сол контекстегі басқа сұрақтар"
 
 #: .\core\templates\core\register_director.html:7
 msgid "Регистрация директора"
@@ -1219,10 +1181,8 @@ msgid "Дұрыс"
 msgstr "Дұрыс"
 
 #: .\core\templates\core\review_questions.html:474
-#, fuzzy
-#| msgid "Сдали тест"
 msgid "Удалить"
-msgstr "Тест тапсырды"
+msgstr "Жою"
 
 #: .\core\templates\core\review_questions.html:481
 msgid "Вопросов с таким статусом нет."
@@ -1339,10 +1299,8 @@ msgid "История пробных ЕНТ"
 msgstr "Сынақ ҰБТ тарихы"
 
 #: .\core\templates\core\student_dashboard.html:327
-#, fuzzy
-#| msgid "Сессии ЕНТ"
 msgid "Сессия"
-msgstr "ҰБТ сессиялары"
+msgstr "Сессия"
 
 #: .\core\templates\core\student_dashboard.html:373
 msgid "Вы пока не проходили пробное ЕНТ."
@@ -1386,10 +1344,8 @@ msgid "Калькулятор"
 msgstr "Калькулятор"
 
 #: .\core\templates\core\take_test.html:469
-#, fuzzy
-#| msgid "Периодическая таблица Менделеева"
 msgid "Периодическая таблица"
-msgstr "Менделеевтің периодтық кестесі"
+msgstr "Периодтық кесте"
 
 #: .\core\templates\core\take_test.html:477
 msgid "Таблица растворимости"
@@ -1416,10 +1372,8 @@ msgid "Завершить тест?"
 msgstr "Тестті аяқтау керек пе?"
 
 #: .\core\templates\core\take_test.html:496
-#, fuzzy
-#| msgid "До"
 msgid "Да"
-msgstr "Дейін"
+msgstr "Иә"
 
 #: .\core\templates\core\take_test.html:497
 msgid "Отмена"
@@ -1450,16 +1404,12 @@ msgid "Вы не ответили на"
 msgstr "Сіз жауап бермедіңіз"
 
 #: .\core\templates\core\take_test.html:680
-#, fuzzy
-#| msgid "Вопросов"
 msgid "вопросов."
-msgstr "Сұрақтар"
+msgstr "сұрақ."
 
 #: .\core\templates\core\take_test.html:680
-#, fuzzy
-#| msgid "Вы ответили на все вопросы. Завершить?"
 msgid "Вы ответили на все вопросы."
-msgstr "Сіз барлық сұрақтарға жауап бердіңіз. Аяқтау керек пе?"
+msgstr "Сіз барлық сұрақтарға жауап бердіңіз."
 
 #: .\core\templates\core\teacher_dashboard.html:7
 #: .\core\templates\core\teacher_dashboard.html:257
@@ -1517,8 +1467,6 @@ msgid "Учителей пока нет."
 msgstr "Мұғалімдер әзірге жоқ."
 
 #: .\core\templates\core\test_already_done.html:7
-#, fuzzy
-#| msgid "Тест уже пройден"
 msgid "Тест тапсырылды"
 msgstr "Тест тапсырылды"
 
@@ -1544,10 +1492,8 @@ msgid "Профильные предметы не выбраны"
 msgstr "Бейіндік пәндер таңдалмаған"
 
 #: .\core\templates\core\test_not_enough.html:7
-#, fuzzy
-#| msgid "Тест уже пройден"
 msgid "Тест дайын емес"
-msgstr "Тест тапсырылды"
+msgstr "Тест дайын емес"
 
 #: .\core\templates\core\test_not_enough.html:105
 msgid "Тест басталмайды"
@@ -1614,10 +1560,8 @@ msgid "Показать баллы по предметам"
 msgstr "Пәндер бойынша баллдарды көрсету"
 
 #: .\core\templates\core\test_result.html:232
-#, fuzzy
-#| msgid "Правильный ответ"
 msgid "Показать все ответы"
-msgstr "Дұрыс жауап"
+msgstr "Барлық жауаптарды көрсету"
 
 #: .\core\templates\core\test_result.html:239
 msgid "Баллы по предметам"
@@ -1635,10 +1579,8 @@ msgid "порог 3"
 msgstr "шек 3"
 
 #: .\core\templates\core\test_result.html:281
-#, fuzzy
-#| msgid "Вы не ответили на"
 msgid "Все ответы"
-msgstr "Сіз жауап бермедіңіз"
+msgstr "Барлық жауаптар"
 
 #: .\core\templates\core\test_result.html:311
 msgid "Жауаптар"
@@ -1719,10 +1661,8 @@ msgid "Выберите класс."
 msgstr "Сыныпты таңдаңыз."
 
 #: .\core\views.py:404
-#, fuzzy
-#| msgid "Такого класса нет в школе."
 msgid "Такого класса нет."
-msgstr "Мұндай сынып мектепте жоқ."
+msgstr "Мұндай сынып жоқ."
 
 #: .\core\views.py:410 .\core\views.py:2101
 msgid "Выберите два профильных предмета."
@@ -1746,10 +1686,8 @@ msgid "Вы не можете добавлять вопросы в этот бл
 msgstr "Сіз бұл блокқа сұрақ қоса алмайсыз."
 
 #: .\core\views.py:557 .\core\views.py:1025
-#, fuzzy
-#| msgid "Мой класс и предметы"
 msgid "Только по своему предмету."
-msgstr "Менің сыныбым және пәндерім"
+msgstr "Тек өз пәніңіз бойынша."
 
 #: .\core\views.py:566 .\core\views.py:1035
 msgid "Сәйкестендіру: 4 нұсқа + 2 кіші сұрақ қажет."
@@ -1768,12 +1706,11 @@ msgid "Контексті тек оқу сауаттылығы немесе бе
 msgstr "Контексті тек оқу сауаттылығы немесе бейіндік пән мұғалімі қоса алады."
 
 #: .\core\views.py:872
-#, fuzzy
-#| msgid "Контексты доступны только учителю грамотности чтения."
 msgid ""
 "Контексты доступны только учителю грамотности чтения или профильного "
 "предмета."
-msgstr "Контексттер тек оқу сауаттылығы мұғаліміне қолжетімді."
+msgstr ""
+"Контексттер тек оқу сауаттылығы немесе бейіндік пән мұғаліміне қолжетімді."
 
 #: .\core\views.py:892
 #, python-format
@@ -1809,22 +1746,16 @@ msgid "Новые пароли не совпадают."
 msgstr "Жаңа құпия сөздер сәйкес келмейді."
 
 #: .\core\views.py:2090
-#, fuzzy
-#| msgid "Пароль должен быть минимум 6 символов."
 msgid "Пароль минимум 6 символов."
 msgstr "Құпия сөз кемінде 6 таңбадан тұруы керек."
 
 #: .\core\views.py:2113
-#, fuzzy
-#| msgid "Ошибка при сохранении класса или предметов."
 msgid "Ошибка при сохранении."
-msgstr "Сыныпты немесе пәндерді сақтау кезінде қате орын алды."
+msgstr "Сақтау кезінде қате орын алды."
 
 #: .\core\views.py:2119
-#, fuzzy
-#| msgid "Выберите хотя бы один предмет."
 msgid "Выберите хотя бы одно."
-msgstr "Кемінде бір пәнді таңдаңыз."
+msgstr "Кемінде біреуін таңдаңыз."
 
 #: .\core\views.py:2124
 msgid "Выберите хотя бы один предмет."
