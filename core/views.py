@@ -1117,7 +1117,7 @@ def review_questions(request):
 
     all_qs = Question.objects.filter(
         school=school, is_deleted_by_author=False
-    ).order_by('-updated_at')   # ← изменено
+    ).order_by('-updated_at')
 
     groups_pending_all = QuestionGroup.objects.filter(
         school=school, status='pending'
@@ -1161,11 +1161,35 @@ def review_questions(request):
         'profile': _count('profile'),
     }
 
+    # ✅ ӘР ПӘН БОЙЫНША СҰРАҚ САНЫН ЕСЕПТЕУ
     profile_subjects = Subject.objects.filter(
         category='profile',
         questions__school=school,
         questions__is_deleted_by_author=False,
-    ).distinct()
+    )
+
+    # Тексеру статусына қарай фильтрлеу
+    if status_filter != 'all' and status_filter in ['draft', 'pending', 'approved', 'rejected']:
+        profile_subjects = profile_subjects.filter(questions__status=status_filter)
+
+    # Бір пән бірнеше рет шықпауы үшін, және әр пәннің санын қосу
+    from django.db.models import Count, Q
+
+    if status_filter == 'all':
+        profile_subjects = profile_subjects.annotate(
+            q_count=Count('questions', filter=Q(
+                questions__school=school,
+                questions__is_deleted_by_author=False,
+            ))
+        ).distinct()
+    else:
+        profile_subjects = profile_subjects.annotate(
+            q_count=Count('questions', filter=Q(
+                questions__school=school,
+                questions__is_deleted_by_author=False,
+                questions__status=status_filter,
+            ))
+        ).distinct()
 
     return render(request, 'core/review_questions.html', {
         'questions': questions,
@@ -1178,7 +1202,6 @@ def review_questions(request):
         'profile': profile,
         'groups_pending': groups_pending,
     })
-
 
 @login_required
 def approve_question(request, question_id):

@@ -387,9 +387,10 @@
         </a>
         {% for s in profile_subjects %}
         <a class="subject-tab {% if subject_filter == s.id|stringformat:'s' %}active{% endif %}"
-           href="?status={{ status_filter }}&block=profile&subject={{ s.id }}">
-            📚 {{ s.name }}
-        </a>
+        href="?status={{ status_filter }}&block=profile&subject={{ s.id }}">
+        📚 {{ s.name }}
+        <span class="count">{{ s.q_count }}</span>
+</a>
         {% endfor %}
     </div>
     {% endif %}
