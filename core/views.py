@@ -1161,35 +1161,35 @@ def review_questions(request):
         'profile': _count('profile'),
     }
 
-    # ✅ ӘР ПӘН БОЙЫНША СҰРАҚ САНЫН ЕСЕПТЕУ
-    profile_subjects = Subject.objects.filter(
-        category='profile',
-        questions__school=school,
-        questions__is_deleted_by_author=False,
-    )
-
-    # Тексеру статусына қарай фильтрлеу
-    if status_filter != 'all' and status_filter in ['draft', 'pending', 'approved', 'rejected']:
-        profile_subjects = profile_subjects.filter(questions__status=status_filter)
-
-    # Бір пән бірнеше рет шықпауы үшін, және әр пәннің санын қосу
+    # ✅ ӘР ПӘН БОЙЫНША СҰРАҚ САНЫН ЕСЕПТЕУ (дұрыс нұсқа — JOIN көбеймейді)
     from django.db.models import Count, Q
+
+    profile_subjects = Subject.objects.filter(category='profile')
 
     if status_filter == 'all':
         profile_subjects = profile_subjects.annotate(
-            q_count=Count('questions', filter=Q(
-                questions__school=school,
-                questions__is_deleted_by_author=False,
-            ))
-        ).distinct()
+            q_count=Count(
+                'questions',
+                filter=Q(
+                    questions__school=school,
+                    questions__is_deleted_by_author=False,
+                )
+            )
+        ).order_by('name_ru')
     else:
         profile_subjects = profile_subjects.annotate(
-            q_count=Count('questions', filter=Q(
-                questions__school=school,
-                questions__is_deleted_by_author=False,
-                questions__status=status_filter,
-            ))
-        ).distinct()
+            q_count=Count(
+                'questions',
+                filter=Q(
+                    questions__school=school,
+                    questions__is_deleted_by_author=False,
+                    questions__status=status_filter,
+                )
+            )
+        ).order_by('name_ru')
+
+    # Тек саны > 0 пәндерді көрсету
+    profile_subjects = [s for s in profile_subjects if s.q_count > 0]
 
     return render(request, 'core/review_questions.html', {
         'questions': questions,
