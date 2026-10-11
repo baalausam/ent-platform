@@ -194,11 +194,11 @@ class QuestionForm(forms.Form):
 class QuestionGroupForm(forms.ModelForm):
     difficulty = forms.ChoiceField(
         choices=[
-            ('A', _('Оңай — 5 сұрақ')),
-            ('B', _('Орташа — 3 сұрақ')),
-            ('C', _('Қиын — 2 сұрақ')),
+            ('A', _('Оңай')),
+            ('B', _('Орташа')),
+            ('C', _('Қиын')),
         ],
-        label=_("Контекст деңгейі (тек оқу сауаттылығы үшін)"),
+        label=_("Контекст деңгейі"),
         widget=forms.RadioSelect,
         required=False,
     )

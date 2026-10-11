@@ -205,6 +205,8 @@ class QuestionGroup(models.Model):
     def expected_question_count(self):
         if self.block == 'profile':
             return 5
+        if self.block == 'kaz_history':
+             return 5
         return CONTEXT_DIFFICULTY_COUNT.get(self.difficulty, 0)
 
     @property
