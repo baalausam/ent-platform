@@ -81,7 +81,7 @@
                     <div class="context-preview">{{ g.context_text|truncatechars:150 }}</div>
 
                     <div class="progress-info">
-                        <span>{% trans "Сұрақтар" %}:</span>
+                        <span>{% trans "Вопросы" %}:</span>
                         <span>
                             <span class="{% if g.is_complete %}count-full{% else %}count-current{% endif %}">
                                 {{ g.current_question_count }}
@@ -97,7 +97,7 @@
 
                     <div class="card-actions">
                         <a class="btn-sm btn-view" href="{% url 'core:group_detail' g.id %}">
-                            👁 {% trans "Толық көру" %}
+                            👁 {% trans "Подробный просмотр" %}
                         </a>
                         {% if g.status == 'draft' %}
                             <a class="btn-sm btn-edit" href="{% url 'core:edit_question_group' g.id %}">
@@ -105,19 +105,19 @@
                             </a>
                             {% if not g.is_complete %}
                                 <a class="btn-sm btn-blue" href="{% url 'core:add_question' %}?group={{ g.id }}">
-                                    ➕ {% trans "Сұрақ қосу" %}
+                                    ➕ {% trans "Добавить вопрос" %}
                                 </a>
                             {% endif %}
                             {% if g.is_complete %}
                                 <form method="post" action="{% url 'core:submit_group_for_review' g.id %}" style="display:inline;">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn-sm btn-green">📤 {% trans "Жіберу" %}</button>
+                                    <button type="submit" class="btn-sm btn-green">📤 {% trans "Отправить" %}</button>
                                 </form>
                             {% endif %}
                             <form method="post" action="{% url 'core:delete_group' g.id %}" style="display:inline;">
                                 {% csrf_token %}
                                 <button type="submit" class="btn-sm btn-delete" onclick="return confirm('Контексті және ондағы барлық сұрақтарды өшіруге сенімдісіз бе?')">
-                                    🗑 {% trans "Өшіру" %}
+                                    🗑 {% trans "Удалить" %}
                                 </button>
                             </form>
                         {% endif %}

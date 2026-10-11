@@ -356,16 +356,16 @@
             <table>
                 <thead>
                     <tr>
-                        <th>{% trans "Деңгей" %}</th>
+                        <th>{% trans "Уровень" %}</th>
                         {% if block_filter == 'all' %}
                             <th>{% trans "Блок" %}</th>
                         {% endif %}
                         <th>{% trans "Предмет" %}</th>
                         <th>{% trans "Тип" %}</th>
                         <th>{% trans "Текст" %}</th>
-                        <th>{% trans "Жауап" %}</th>
+                        <th>{% trans "Ответ" %}</th>
                         <th>{% trans "Статус" %}</th>
-                        <th>{% trans "Әрекет" %}</th>
+                        <th>{% trans "Действие" %}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -401,7 +401,7 @@
                             <td>
                                 <div class="actions-cell">
                                     <a href="{% url 'core:question_detail' q.id %}" class="btn-small btn-view">
-                                        👁 {% trans "Көру" %}
+                                        👁 {% trans "Просмотр" %}
                                     </a>
 
                                     {# Редактировать: draft, approved, rejected #}
@@ -415,7 +415,7 @@
                                     {% if q.status == 'draft' or q.status == 'rejected' %}
                                         <form method="post" action="{% url 'core:submit_question_for_review' q.id %}" style="display:inline;">
                                             {% csrf_token %}
-                                            <button class="btn-small btn-submit">📤 {% trans "Жіберу" %}</button>
+                                            <button class="btn-small btn-submit">📤 {% trans "Отправить" %}</button>
                                         </form>
                                     {% endif %}
 
@@ -425,7 +425,7 @@
                                             {% csrf_token %}
                                             <button class="btn-small btn-delete"
                                                     onclick="return confirm('Сұрақты өшіруге сенімдісіз бе?')">
-                                                🗑 {% trans "Өшіру" %}
+                                                🗑 {% trans "Удалить" %}
                                             </button>
                                         </form>
                                     {% endif %}

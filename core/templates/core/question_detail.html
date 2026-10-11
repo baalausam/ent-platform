@@ -289,7 +289,7 @@
             <h3>📖 {{ group_info.title }} ({{ group_info.difficulty }})</h3>
             <p>{{ group_info.context_text }}</p>
             <p style="font-size: 12px; color: #64748b; margin-top: 10px;">
-                {% trans "Контекстегі сұрақтар" %}: {{ group_info.current }} / {{ group_info.expected }}
+                {% trans "Вопросы контекста" %}: {{ group_info.current }} / {{ group_info.expected }}
             </p>
         </div>
     {% endif %}
@@ -342,12 +342,12 @@
                 {% endif %}
             </div>
             <p style="margin-top: 12px; font-size: 14px; color: #059669; font-weight: 700;">
-                ✓ {% trans "Дұрыс жауап" %}: {{ q.correct_answer }}
+                ✓ {% trans "Правильный ответ" %}: {{ q.correct_answer }}
             </p>
 
         {% elif q.question_type == 'matching' and q.matching_data %}
             <div class="matching-section">
-                <h3>🔗 {% trans "Сәйкестендіру" %}</h3>
+                <h3>🔗 {% trans "Сопоставление" %}</h3>
                 <p style="font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 8px; text-transform: uppercase;">
                     {% trans "4 ортақ нұсқа" %}:
                 </p>
@@ -381,22 +381,22 @@
                 <div class="value">{{ q.school.name|default:"—" }}</div>
             </div>
             <div class="meta-item">
-                <div class="label">{% trans "Жасалған" %}</div>
+                <div class="label">{% trans "Создан" %}</div>
                 <div class="value">{{ q.created_at|date:"d.m.Y H:i" }}</div>
             </div>
             {% if q.approved_by %}
                 <div class="meta-item">
-                    <div class="label">{% trans "Тексерген" %}</div>
+                    <div class="label">{% trans "Проверил" %}</div>
                     <div class="value">{{ q.approved_by.last_name }} {{ q.approved_by.first_name }}</div>
                 </div>
                 <div class="meta-item">
-                    <div class="label">{% trans "Тексерілген" %}</div>
+                    <div class="label">{% trans "Проверен" %}</div>
                     <div class="value">{{ q.approved_at|date:"d.m.Y H:i" }}</div>
                 </div>
             {% endif %}
             <div class="meta-item">
-                <div class="label">{% trans "Қолданылған" %}</div>
-                <div class="value">{{ q.times_used }} {% trans "рет" %}</div>
+                <div class="label">{% trans "Использован" %}</div>
+                <div class="value">{{ q.times_used }} {% trans "раз" %}</div>
             </div>
         </div>
     </div>
@@ -404,7 +404,7 @@
     {% if siblings %}
         <div class="card">
             <h3 style="font-size: 15px; font-weight: 800; margin-bottom: 12px; color: #2c3e50;">
-                📚 {% trans "Сол контекстегі басқа сұрақтар" %}
+                📚 {% trans "Другие вопросы контекста" %}
             </h3>
             <div class="siblings-list">
                 {% for s in siblings %}

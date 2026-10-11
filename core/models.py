@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.utils.translation import gettext_lazy as _
 import secrets
 
 
@@ -13,9 +14,9 @@ DIFFICULTY_B = 'B'
 DIFFICULTY_C = 'C'
 
 DIFFICULTY_CHOICES = [
-    (DIFFICULTY_A, 'Оңай'),
-    (DIFFICULTY_B, 'Орташа'),
-    (DIFFICULTY_C, 'Қиын'),
+    (DIFFICULTY_A, _('Оңай')),
+    (DIFFICULTY_B, _('Орташа')),
+    (DIFFICULTY_C, _('Қиын')),
 ]
 
 CONTEXT_DIFFICULTY_COUNT = {
@@ -38,14 +39,14 @@ TEST_DISTRIBUTION = {
 
 class Subject(models.Model):
     CATEGORY_CHOICES = [
-        ('mandatory', 'Обязательный'),
-        ('profile', 'Профильный'),
+        ('mandatory', _('Обязательный')),
+        ('profile', _('Профильный')),
     ]
     CODE_CHOICES = [
-        ('kaz_history', 'История Казахстана'),
-        ('reading', 'Грамотность чтения'),
-        ('math_literacy', 'Математическая грамотность'),
-        ('profile', 'Профильный предмет'),
+        ('kaz_history', _('История Казахстана')),
+        ('reading', _('Грамотность чтения')),
+        ('math_literacy', _('Математическая грамотность')),
+        ('profile', _('Профильный предмет')),
     ]
 
     code = models.CharField(max_length=20, choices=CODE_CHOICES)
@@ -119,10 +120,10 @@ class SchoolClass(models.Model):
 
 class UserProfile(models.Model):
     ROLE_CHOICES = [
-        ('student', 'Ученик'),
-        ('teacher', 'Учитель'),
-        ('director', 'Директор'),
-        ('zavuch', 'Завуч'),
+        ('student', _('Ученик')),
+        ('teacher', _('Учитель')),
+        ('director', _('Директор')),
+        ('zavuch', _('Завуч')),
     ]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
@@ -162,10 +163,10 @@ class UserProfile(models.Model):
 
 class QuestionGroup(models.Model):
     BLOCK_CHOICES = [
-        ('reading', 'Грамотность чтения'),
-        ('kaz_history', 'История Казахстана'),
-        ('math_literacy', 'Математическая грамотность'),
-        ('profile', 'Профильный предмет'),
+        ('reading', _('Грамотность чтения')),
+        ('kaz_history', _('История Казахстана')),
+        ('math_literacy', _('Математическая грамотность')),
+        ('profile', _('Профильный предмет')),
     ]
 
     school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='question_groups')
@@ -177,10 +178,10 @@ class QuestionGroup(models.Model):
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True,
                                blank=True, related_name='authored_groups')
     status = models.CharField(max_length=20, choices=[
-        ('draft', 'Черновик'),
-        ('pending', 'На проверке'),
-        ('approved', 'Одобрен'),
-        ('rejected', 'Отклонён'),
+        ('draft', _('Черновик')),
+        ('pending', _('На проверке')),
+        ('approved', _('Одобрен')),
+        ('rejected', _('Отклонён')),
     ], default='draft')
 
     difficulty = models.CharField(
@@ -221,25 +222,25 @@ class QuestionGroup(models.Model):
 
 class Question(models.Model):
     QUESTION_TYPE = [
-        ('single', 'Один правильный ответ'),
-        ('multiple', 'Несколько правильных'),
-        ('matching', 'Сопоставление'),
+        ('single', _('Один правильный ответ')),
+        ('multiple', _('Несколько правильных')),
+        ('matching', _('Сопоставление')),
     ]
     KIND_CHOICES = [
-        ('standard', 'Стандартный'),
-        ('context', 'Контекстный'),
+        ('standard', _('Стандартный')),
+        ('context', _('Контекстный')),
     ]
     STATUS_CHOICES = [
-        ('draft', 'Черновик'),
-        ('pending', 'На проверке'),
-        ('approved', 'Одобрен'),
-        ('rejected', 'Отклонён'),
+        ('draft', _('Черновик')),
+        ('pending', _('На проверке')),
+        ('approved', _('Одобрен')),
+        ('rejected', _('Отклонён')),
     ]
     BLOCK_CHOICES = [
-        ('kaz_history', 'История Казахстана'),
-        ('reading', 'Грамотность чтения'),
-        ('math_literacy', 'Математическая грамотность'),
-        ('profile', 'Профильный предмет'),
+        ('kaz_history', _('История Казахстана')),
+        ('reading', _('Грамотность чтения')),
+        ('math_literacy', _('Математическая грамотность')),
+        ('profile', _('Профильный предмет')),
     ]
 
     block = models.CharField(max_length=20, choices=BLOCK_CHOICES)
@@ -287,7 +288,7 @@ class Question(models.Model):
     times_used = models.IntegerField(default=0)
     is_locked = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)   # ← новое поле
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['-created_at']
@@ -354,9 +355,9 @@ class ExamSession(models.Model):
 
 class TestAttempt(models.Model):
     STATUS_CHOICES = [
-        ('in_progress', 'В процессе'),
-        ('finished', 'Завершён'),
-        ('annulled', 'Аннулирован'),
+        ('in_progress', _('В процессе')),
+        ('finished', _('Завершён')),
+        ('annulled', _('Аннулирован')),
     ]
 
     student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='test_attempts')

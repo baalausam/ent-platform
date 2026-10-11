@@ -308,19 +308,19 @@
                     <div class="answer-text">{{ ans.question_snapshot|truncatechars:200 }}</div>
                     <div class="answer-details">
                         {% if ans.question_type_snapshot == 'matching' %}
-                            <strong>{% trans "Жауаптар" %}:</strong>
+                            <strong>{% trans "Ответы" %}:</strong>
                             {% for row in item.matching_detail %}
                                 <div style="margin-top: 4px;">
                                     {{ row.text }} →
                                     <span class="chosen">{{ row.chosen }}</span>
-                                    ({% trans "дұрыс" %}: <span class="correct-answer">{{ row.correct }}</span>)
+                                    ({% trans "верно" %}: <span class="correct-answer">{{ row.correct }}</span>)
                                 </div>
                             {% endfor %}
                         {% else %}
-                            {% trans "Сіздің жауабыңыз" %}:
+                            {% trans "Ваш ответ" %}:
                             <span class="chosen">{{ ans.chosen|default:"—" }}</span>
                             &nbsp;|&nbsp;
-                            {% trans "Дұрыс" %}:
+                            {% trans "Верно" %}:
                             <span class="correct-answer">{{ ans.correct_answer_snapshot }}</span>
                         {% endif %}
                     </div>

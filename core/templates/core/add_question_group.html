@@ -251,7 +251,7 @@
             {% csrf_token %}
 
             {% if can_create_reading and can_create_profile %}
-                <label>{% trans "Қай блок үшін контекст?" %}</label>
+                <label>{% trans "Для какого блока контекст?" %}</label>
                 <div class="block-radios">
                     <label>
                         <input type="radio" name="block_choice" value="reading"
@@ -283,11 +283,11 @@
                 </div>
             </div>
 
-            <label>{% trans "Контекст мәтіні" %}</label>
+            <label>{% trans "Текст контекста" %}</label>
 
             <div class="text-mode-tabs">
                 <button type="button" class="text-mode-tab active" onclick="switchTextMode('plain')">
-                    📝 {% trans "Қарапайым мәтін" %}
+                    📝 {% trans "Обычный текст" %}
                 </button>
                 <button type="button" class="text-mode-tab" onclick="switchTextMode('formula')">
                     🧮 {% trans "Формула (LaTeX)" %}
@@ -348,7 +348,7 @@
 
             <div id="image-preview-wrapper"
                  {% if edit_mode and group.image %}style="display:block;"{% endif %}>
-                <p class="preview-label">📷 {% trans "Алдын ала көрініс" %}:</p>
+                <p class="preview-label">📷 {% trans "Предпросмотр" %}:</p>
                 <div class="preview-box">
                     <img id="image-preview"
                          src="{% if edit_mode and group.image %}{{ group.image.url }}{% endif %}"

@@ -273,7 +273,7 @@
     <!-- ✅ БАРЛЫҚ АШЫҚ СЕССИЯЛАР -->
     <!-- ============================================================ -->
     {% if active_sessions %}
-        <h2>🟢 {% trans "Ашық сессиялар" %} ({{ active_sessions|length }})</h2>
+        <h2>🟢 {% trans "Открытые сессии" %} ({{ active_sessions|length }})</h2>
 
         {% for item in active_sessions %}
             <div class="card-session {% if item.finished %}done{% endif %}">
@@ -285,29 +285,29 @@
                     {% endif %}
                 </h3>
                 <p class="meta">
-                    <strong>{% trans "Ашық" %}:</strong> {{ item.session.opens_at|date:"d.m.Y H:i" }}
+                    <strong>{% trans "Открыто" %}:</strong> {{ item.session.opens_at|date:"d.m.Y H:i" }}
                     &nbsp;—&nbsp;
-                    <strong>{% trans "Жабылады" %}:</strong> {{ item.session.closes_at|date:"d.m.Y H:i" }}
+                    <strong>{% trans "Закрывается" %}:</strong> {{ item.session.closes_at|date:"d.m.Y H:i" }}
                 </p>
 
                 {% if item.finished %}
                     <p style="color: #2563eb; font-weight: 700; font-size: 14px;">
-                        ✅ {% trans "Сіз бұл сессияны тапсырдыңыз" %}
+                        ✅ {% trans "Вы сдали эту сессию" %}
                     </p>
                 {% elif item.in_progress %}
                     <a class="btn btn-blue" href="{% url 'core:take_test' item.in_progress.id %}">
-                        ▶ {% trans "Жалғастыру" %}
+                        ▶ {% trans "Продолжить" %}
                     </a>
                 {% else %}
                     <a class="btn btn-green" href="{% url 'core:start_test' %}?session={{ item.session.id }}">
-                        ▶ {% trans "Тест бастау" %}
+                        ▶ {% trans "Начать тест" %}
                     </a>
                 {% endif %}
             </div>
         {% endfor %}
     {% else %}
         <div class="card-closed">
-            <h3>🔒 {% trans "Ашық сессия жоқ" %}</h3>
+            <h3>🔒 {% trans "Нет открытых сессий" %}</h3>
             <p style="font-size: 14px; color: #64748b;">
                 {% trans "Директор пока не открыл новую сессию. Дождитесь сигнала." %}
             </p>

@@ -327,21 +327,21 @@
                     <div class="question-text">{{ g.title }}</div>
                     <div class="options">{{ g.context_text|truncatechars:300 }}</div>
                     <p style="font-size: 12px; color: #94a3b8; margin-bottom: 8px;">
-                        {% trans "Сұрақтар" %}: {{ g.current_question_count }} / {{ g.expected_question_count }}
+                        {% trans "Вопросы" %}: {{ g.current_question_count }} / {{ g.expected_question_count }}
                         &nbsp;|&nbsp;
                         {% trans "Автор" %}: {{ g.author.last_name }} {{ g.author.first_name }}
                     </p>
                     <div class="actions">
                         <a href="{% url 'core:group_detail' g.id %}" class="btn btn-view">
-                            👁 {% trans "Толық көру" %}
+                            👁 {% trans "Подробный просмотр" %}
                         </a>
                         <form method="post" action="{% url 'core:approve_group' g.id %}" style="display:inline;">
                             {% csrf_token %}
-                            <button class="btn btn-approve">✓ {% trans "Мақұлдау" %}</button>
+                            <button class="btn btn-approve">✓ {% trans "Одобрить" %}</button>
                         </form>
                         <form method="post" action="{% url 'core:reject_group' g.id %}" style="display:inline;">
                             {% csrf_token %}
-                            <button class="btn btn-reject">✗ {% trans "Қабылдамау" %}</button>
+                            <button class="btn btn-reject">✗ {% trans "Отклонить" %}</button>
                         </form>
                     </div>
                 </div>
@@ -425,12 +425,12 @@
                             {% if q.option_d %}<div class="option-line">D. {{ q.option_d }}</div>{% endif %}
                             {% if q.option_e %}<div class="option-line">E. {{ q.option_e }}</div>{% endif %}
                             {% if q.option_f %}<div class="option-line">F. {{ q.option_f }}</div>{% endif %}
-                            <div class="option-line correct">✓ {% trans "Дұрыс" %}: {{ q.correct_answer }}</div>
+                            <div class="option-line correct">✓ {% trans "Верно" %}: {{ q.correct_answer }}</div>
                         </div>
 
                     {% elif q.question_type == 'matching' and q.matching_data %}
                         <div class="matching-preview">
-                            <h4>🔗 {% trans "Сәйкестендіру" %}</h4>
+                            <h4>🔗 {% trans "Сопоставление" %}</h4>
                             <div class="matching-options">
                                 {% for opt in q.matching_data.options %}
                                     <span class="matching-option-chip">{{ opt }}</span>
@@ -455,16 +455,16 @@
 
                     <div class="actions">
                         <a href="{% url 'core:question_detail' q.id %}" class="btn btn-view">
-                            👁 {% trans "Толық көру" %}
+                            👁 {% trans "Подробный просмотр" %}
                         </a>
                         {% if q.status == 'pending' %}
                             <form method="post" action="{% url 'core:approve_question' q.id %}" style="display:inline;">
                                 {% csrf_token %}
-                                <button class="btn btn-approve">✓ {% trans "Мақұлдау" %}</button>
+                                <button class="btn btn-approve">✓ {% trans "Одобрить" %}</button>
                             </form>
                             <form method="post" action="{% url 'core:reject_question' q.id %}" style="display:inline;">
                                 {% csrf_token %}
-                                <button class="btn btn-reject">✗ {% trans "Қабылдамау" %}</button>
+                                <button class="btn btn-reject">✗ {% trans "Отклонить" %}</button>
                             </form>
                         {% endif %}
                         <form method="post" action="{% url 'core:delete_question' q.id %}" style="display:inline;">
