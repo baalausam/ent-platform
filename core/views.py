@@ -865,7 +865,6 @@ def add_question_group(request):
             elif subject.code == 'reading':
                 group.block = 'reading'
                 group.subject = None
-                group.difficulty = 'A'
             else:
                 group.block = 'profile'
                 group.subject = subject
@@ -986,7 +985,6 @@ def edit_question_group(request, group_id):
             elif subject.code == 'reading':
                 group.block = 'reading'
                 group.subject = None
-                group.difficulty = 'A'
             else:
                 group.block = 'profile'
                 group.subject = subject
