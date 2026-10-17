@@ -148,9 +148,11 @@
         }
         .btn-view { background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; }
         .btn-edit { background: linear-gradient(135deg, #06b6d4, #0891b2); color: white; }
-        .btn-add {
-            background: linear-gradient(135deg, #10b981, #059669); color: white;
-        }
+        .btn-add { background: linear-gradient(135deg, #10b981, #059669); color: white; }
+        
+        /* ✅ НОВОЕ: Стиль для кнопки удаления */
+        .btn-delete { background: #7f1d1d; color: white; }
+        .btn-delete:hover { background: #991b1b; }
 
         .empty {
             text-align: center; padding: 40px 20px; color: #94a3b8;
@@ -281,6 +283,15 @@
                             ✏️ {% trans "Редактировать" %}
                         </a>
                     {% endif %}
+                    
+                    <!-- ✅ НОВОЕ: Кнопка удаления прямо из контекста -->
+                    <form method="post" action="{% url 'core:delete_question' item.q.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button class="btn-small btn-delete" onclick="return confirm('Сұрақты өшіруге сенімдісіз бе?')">
+                            🗑 {% trans "Удалить" %}
+                        </button>
+                    </form>
+                    
                     <a href="{% url 'core:question_detail' item.q.id %}" class="btn-small btn-view">
                         👁 {% trans "Подробнее" %}
                     </a>

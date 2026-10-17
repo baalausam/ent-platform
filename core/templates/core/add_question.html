@@ -200,6 +200,12 @@
             color: #64748b;
             margin-top: 6px;
         }
+        
+        /* Стиль для заблокированного поля */
+        .locked-field {
+            padding: 14px 18px; background: #f1f5f9; border: 1px dashed #cbd5e1; 
+            border-radius: 12px; font-weight: 700; color: #475569; margin-bottom: 18px;
+        }
     </style>
 </head>
 <body>
@@ -228,11 +234,31 @@
         {% csrf_token %}
         {% if group %}<input type="hidden" name="group_id" value="{{ group.id }}">{% endif %}
 
-        <label>{{ form.block.label }}</label>
-        {{ form.block }}
+        {# ✅ БЛОК: если внутри контекста — фиксируем, иначе показываем выбор #}
+        {% if group %}
+            <input type="hidden" name="block" value="{{ group_block }}">
+            <label style="margin-bottom: 0;">{% trans "Блок ЕНТ" %}</label>
+            <div class="locked-field">
+                {{ group.get_block_display }} <span style="font-weight: 500; font-size: 13px; margin-left: 8px;">(🔒 {% trans "Блокировка: вопрос принадлежит контексту" %})</span>
+            </div>
+        {% else %}
+            <label>{{ form.block.label }}</label>
+            {{ form.block }}
+        {% endif %}
 
-        <label>{{ form.subject.label }}</label>
-        {{ form.subject }}
+        {# ✅ ПРЕДМЕТ: если профиль — фиксируем, иначе показываем выбор #}
+        {% if group %}
+            {% if group.block == 'profile' %}
+                <input type="hidden" name="subject" value="{{ group.subject.id }}">
+                <label>{% trans "Профильный предмет" %}</label>
+                <div class="locked-field">
+                    {{ group.subject.name }} <span style="font-weight: 500; font-size: 13px; margin-left: 8px;">(🔒 {% trans "Блокировка: вопрос принадлежит контексту" %})</span>
+                </div>
+            {% endif %}
+        {% else %}
+            <label>{{ form.subject.label }}</label>
+            {{ form.subject }}
+        {% endif %}
 
         <label>{{ form.difficulty.label }}</label>
         <div class="difficulty-radios">
@@ -279,22 +305,11 @@
                     <button type="button" class="ml-btn" onclick="mlInsertMain('\\pm')">±</button>
                     <button type="button" class="ml-btn" onclick="mlInsertMain('_{#?}')" title="Астыңғы индекс">xₙ</button>
                     <button type="button" class="ml-btn" onclick="mlInsertMain('#@_{#?}^{#!}')" title="Индекстер">xₙᵏ</button>
-                    <!-- n-ші дәрежелі түбір -->
                     <button type="button" class="ml-btn" onclick="mlInsertMain('\\sqrt[#?]{#0}')" title="n-ші түбір">ⁿ√</button>
-
-<!-- Шек (lim) -->
                     <button type="button" class="ml-btn" onclick="mlInsertMain('\\lim_{#?\\to #!} #@')" title="Шек">lim</button>
-
-<!-- Интеграл -->
                     <button type="button" class="ml-btn" onclick="mlInsertMain('\\int_{#?}^{#!} #@ \\, d#0')" title="Интеграл">∫</button>
-
-<!-- Қосынды (sum) -->
                     <button type="button" class="ml-btn" onclick="mlInsertMain('\\sum_{#?}^{#!} #@')" title="Қосынды">Σ</button>
-
-<!-- Вектор -->
                     <button type="button" class="ml-btn" onclick="mlInsertMain('\\vec{#0}')" title="Вектор">a⃗</button>
-
-<!-- Жоғарғы сызық (сызықша) -->
                     <button type="button" class="ml-btn" onclick="mlInsertMain('\\overline{#0}')" title="Сызықша">ā</button>
                 </div>
                 <math-field id="math-input-main" class="math-input"></math-field>

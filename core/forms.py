@@ -95,6 +95,7 @@ class StudentRegistrationForm(forms.Form):
 class QuestionForm(forms.Form):
     BLOCK_CHOICES = [
         ('kaz_history', _('История Казахстана')),
+        ('world_history', _('Всемирная история')),  # <--- ДОБАВЛЕНО
         ('reading', _('Грамотность чтения')),
         ('math_literacy', _('Математическая грамотность')),
         ('profile', _('Профильный предмет')),

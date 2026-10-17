@@ -30,12 +30,14 @@ urlpatterns = [
     path('teacher/questions/add/', views.add_question, name='add_question'),
     path('teacher/questions/<int:question_id>/edit/', views.edit_question, name='edit_question'),
     path('teacher/questions/<int:question_id>/submit/', views.submit_question_for_review, name='submit_question_for_review'),
-    path('teacher/questions/<int:question_id>/cancel/', views.cancel_question, name='cancel_question'),
+    # path('teacher/questions/<int:question_id>/cancel/', views.cancel_question, name='cancel_question'), # УДАЛЕНО
+    
     path('teacher/groups/', views.my_question_groups, name='my_question_groups'),
     path('teacher/groups/add/', views.add_question_group, name='add_question_group'),
     path('teacher/groups/<int:group_id>/edit/', views.edit_question_group, name='edit_question_group'),
     path('teacher/groups/<int:group_id>/submit/', views.submit_group_for_review, name='submit_group_for_review'),
-    path('teacher/groups/<int:group_id>/cancel/', views.cancel_group, name='cancel_group'),
+    # path('teacher/groups/<int:group_id>/cancel/', views.cancel_group, name='cancel_group'), # УДАЛЕНО
+
     path('teacher/class-results/', views.class_results, name='class_results'),
     path('teacher/class-results/<int:session_id>/', views.class_results_detail, name='class_results_detail'),
 
@@ -58,6 +60,8 @@ urlpatterns = [
     path('profile/edit/', views.edit_profile, name='edit_profile'),
     path('question/<int:question_id>/', views.question_detail, name='question_detail'),
     path('group/<int:group_id>/', views.group_detail, name='group_detail'),
+    
+    # Удаление (замена старым cancel)
     path('questions/<int:question_id>/delete/', views.delete_question, name='delete_question'),
     path('teacher/groups/<int:group_id>/delete/', views.delete_group, name='delete_group'),
 ]

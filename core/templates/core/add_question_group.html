@@ -51,7 +51,25 @@
         .btn-submit:hover { transform: translateY(-2px); }
         .hidden { display: none !important; }
 
-        /* === Сложность === */
+        /* === Радио: выбор блока === */
+        .block-radios {
+            display: flex; gap: 12px; margin-top: 8px; flex-wrap: wrap;
+        }
+        .block-radios label {
+            flex: 1; min-width: 140px; padding: 16px 12px;
+            border: 2px solid #e2e8f0; border-radius: 14px;
+            cursor: pointer; text-align: center; font-weight: 700;
+            font-size: 14px; margin: 0; background: #f8fafc;
+            color: #64748b; transition: 0.2s;
+        }
+        .block-radios label:hover { border-color: #cbd5e1; background: #fff; }
+        .block-radios input[type="radio"] { display: none; }
+        .block-radios label:has(input:checked) {
+            border-color: #3b82f6; background: rgba(59,130,246,0.08);
+            color: #2563eb; box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+        }
+
+        /* === Радио: сложность === */
         .difficulty-radios {
             display: flex; gap: 12px; margin-top: 8px; flex-wrap: wrap;
         }
@@ -62,33 +80,23 @@
             font-size: 14px; margin: 0; background: #f8fafc;
             color: #64748b; transition: 0.2s;
         }
-        .difficulty-radios label:hover {
-            border-color: #cbd5e1; background: #fff;
-        }
+        .difficulty-radios label:hover { border-color: #cbd5e1; background: #fff; }
         .difficulty-radios input[type="radio"] { display: none; }
         .difficulty-radios label:has(input:checked) {
             border-color: #3b82f6; background: rgba(59,130,246,0.08);
             color: #2563eb; box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
         }
 
-        /* === Селект предмета === */
+        /* === Селект профильного предмета === */
         .subject-select {
-            width: 100%;
-            padding: 14px 16px;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            font-family: inherit;
-            font-size: 14px;
-            font-weight: 600;
-            color: #2c3e50;
-            outline: none;
-            cursor: pointer;
-            margin-top: 8px;
+            width: 100%; padding: 14px 16px;
+            background: #f8fafc; border: 1px solid #e2e8f0;
+            border-radius: 12px; font-family: inherit;
+            font-size: 14px; font-weight: 600; color: #2c3e50;
+            outline: none; cursor: pointer; margin-top: 8px;
         }
         .subject-select:focus {
-            border-color: #3b82f6;
-            background: #fff;
+            border-color: #3b82f6; background: #fff;
             box-shadow: 0 0 0 4px rgba(59,130,246,0.12);
         }
 
@@ -279,27 +287,63 @@
                 </div>
             {% endif %}
 
-            <!-- === ВЫБОР ПРЕДМЕТА КОНТЕКСТА === -->
-            <label>{% trans "Для какого предмета контекст?" %}</label>
-            <select name="context_subject" id="context_subject" class="subject-select" required>
-                <option value="">— {% trans "Таңдаңыз" %} —</option>
-                {% for sid, label, block_code in context_subjects %}
-                    <option value="sub:{{ sid }}"
-                            data-block="{{ block_code }}"
-                            {% if edit_mode %}
-                                {% if group.subject_id == sid %}selected{% endif %}
-                                {% if not group.subject_id and group.block == block_code and block_code != 'profile' %}selected{% endif %}
-                            {% endif %}>
-                        {{ label }}
-                    </option>
-                {% endfor %}
-            </select>
-            <p class="help-text">
-                💡 {% trans "Контекст осы пәнге байланыстырылады." %}
-            </p>
+            <!-- === ВЫБОР БЛОКА КОНТЕКСТА === -->
+            {% if can_create_reading or can_create_profile or can_create_kaz_history %}
+                {% if can_create_reading and can_create_profile or can_create_kaz_history %}
+                    <label>{% trans "Для какого блока контекст?" %}</label>
+                    <div class="block-radios">
+                        {% if can_create_reading %}
+                        <label>
+                            <input type="radio" name="block_choice" value="reading"
+                                   {% if not edit_mode or group.block == 'reading' %}checked{% endif %}>
+                            📖 {% trans "Оқу сауаттылығы" %}
+                        </label>
+                        {% endif %}
+                        {% if can_create_kaz_history %}
+                        <label>
+                            <input type="radio" name="block_choice" value="kaz_history"
+                                   {% if edit_mode and group.block == 'kaz_history' %}checked{% endif %}>
+                            🏛️ {% trans "Қазақстан тарихы" %}
+                        </label>
+                        {% endif %}
+                        {% if can_create_profile %}
+                        <label>
+                            <input type="radio" name="block_choice" value="profile"
+                                   {% if edit_mode and group.block == 'profile' %}checked{% endif %}>
+                            📚 {% trans "Бейіндік пән" %}
+                        </label>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    {% if can_create_kaz_history %}
+                        <input type="hidden" name="block_choice" value="kaz_history">
+                    {% elif can_create_profile %}
+                        <input type="hidden" name="block_choice" value="profile">
+                    {% else %}
+                        <input type="hidden" name="block_choice" value="reading">
+                    {% endif %}
+                {% endif %}
+            {% endif %}
 
-            <!-- === СЛОЖНОСТЬ (только для reading) === -->
-            <div id="difficulty-section" class="hidden">
+            <!-- === Селект профильного предмета (только для profile) === -->
+            {% if can_create_profile %}
+            <div id="profile-subject-section" style="display:none;">
+                <label>{% trans "Бейіндік пән" %}</label>
+                <select name="profile_subject" id="profile_subject" class="subject-select">
+                    <option value="">— {% trans "Таңдаңыз" %} —</option>
+                    {% for s in teacher_profile_subjects %}
+                        <option value="{{ s.id }}"
+                            {% if edit_mode and group.subject_id == s.id %}selected{% endif %}>
+                            {{ s.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <p class="help-text">💡 {% trans "Контекст осы пәнге байланыстырылады." %}</p>
+            </div>
+            {% endif %}
+
+            <!-- === Сложность (только для reading) === -->
+            <div id="difficulty-section">
                 <label>{{ form.difficulty.label }}</label>
                 <div class="difficulty-radios">
                     {% for radio in form.difficulty %}
@@ -447,23 +491,47 @@ document.getElementById('group-form')?.addEventListener('submit', () => {
     }
 });
 
-/* === Показ сложности только для reading === */
+/* === Показ/скрытие сложности и селекта предмета === */
 const difficultySection = document.getElementById('difficulty-section');
-const contextSubject = document.getElementById('context_subject');
+const subjectSection = document.getElementById('profile-subject-section');
+const subjectSelect = document.getElementById('profile_subject');
+const blockRadios = document.querySelectorAll('input[name="block_choice"]');
 
-function updateDifficultyVisibility() {
-    if (!contextSubject || !difficultySection) return;
-    const opt = contextSubject.options[contextSubject.selectedIndex];
-    const block = opt ? opt.dataset.block : '';
-    if (block === 'reading') {
-        difficultySection.classList.remove('hidden');
-    } else {
-        difficultySection.classList.add('hidden');
+function updateBlockVisibility() {
+    const selected = document.querySelector('input[name="block_choice"]:checked')
+                  || document.querySelector('input[name="block_choice"][type="hidden"]');
+    if (!selected) {
+        difficultySection?.classList.add('hidden');
+        if (subjectSection) subjectSection.style.display = 'none';
+        return;
+    }
+
+    const isReading = selected.value === 'reading';
+    const isProfile = selected.value === 'profile';
+
+    // сложность — только для reading
+    if (difficultySection) {
+        if (isReading) {
+            difficultySection.classList.remove('hidden');
+        } else {
+            difficultySection.classList.add('hidden');
+        }
+    }
+
+    // селект предмета — только для profile
+    if (subjectSection) {
+        if (isProfile) {
+            subjectSection.style.display = 'block';
+            if (subjectSelect) subjectSelect.required = true;
+        } else {
+            subjectSection.style.display = 'none';
+            if (subjectSelect) subjectSelect.required = false;
+        }
     }
 }
 
-contextSubject?.addEventListener('change', updateDifficultyVisibility);
-updateDifficultyVisibility();
+blockRadios.forEach(r => r.addEventListener('change', updateBlockVisibility));
+updateBlockVisibility();
 
 /* === Превью картинки === */
 (function initImagePreview() {

@@ -125,11 +125,8 @@
                     <div>
                         <div class="block-name">{{ err.block }}</div>
                         {% if err.details %}
-                            <div class="details">
-                                {% for k, v in err.details.items %}
-                                    {{ k }}: {{ v }}{% if not forloop.last %} · {% endif %}
-                                {% endfor %}
-                            </div>
+                            <!-- ✅ Теперь details — это просто строка, выводим её напрямую -->
+                            <div class="details">{{ err.details }}</div>
                         {% endif %}
                     </div>
                     <div class="block-status">

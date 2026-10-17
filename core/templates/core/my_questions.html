@@ -59,6 +59,22 @@
             box-shadow: 0 8px 25px -8px rgba(16,185,129,0.5); margin-top: 16px;
         }
 
+        /* ✅ НОВОЕ: Поиск */
+        .search-form { display: flex; gap: 8px; margin: 24px 0 16px; }
+        .search-input {
+            flex: 1; padding: 14px 18px; border: 1px solid #cbd5e1;
+            border-radius: 12px; font-family: inherit; font-size: 15px; outline: none;
+        }
+        .search-input:focus { border-color: #3b82f6; box-shadow: 0 0 0 4px rgba(59,130,246,0.12); }
+        .btn-search {
+            padding: 14px 28px; background: #3b82f6; color: white;
+            border: none; border-radius: 12px; font-weight: 700; cursor: pointer;
+        }
+        .btn-reset {
+            padding: 14px 18px; background: #fee2e2; color: #991b1b;
+            border-radius: 12px; font-weight: 700; text-decoration: none; display: flex; align-items: center;
+        }
+
         /* Табы блоков */
         .block-tabs {
             display: flex;
@@ -271,6 +287,7 @@
             h1 { font-size: 28px; }
             .q-text-preview { max-width: 150px; }
             .block-tab { min-width: 100px; font-size: 12px; padding: 10px 12px; }
+            .search-form { flex-direction: column; }
         }
     </style>
 </head>
@@ -300,36 +317,48 @@
         + {% trans "Добавить вопрос" %}
     </a>
 
+    <!-- ✅ НОВОЕ: ПОИСК -->
+    <form method="get" class="search-form">
+        {% if block_filter != 'all' %}<input type="hidden" name="block" value="{{ block_filter }}">{% endif %}
+        {% if subject_filter %}<input type="hidden" name="subject" value="{{ subject_filter }}">{% endif %}
+        
+        <input type="text" name="q" value="{{ search_query }}" class="search-input" placeholder="🔍 {% trans 'Іздеу (мәтін, нұсқалар)...' %}">
+        <button type="submit" class="btn-search">{% trans "Искать" %}</button>
+        {% if search_query %}
+            <a href="?block={{ block_filter }}" class="btn-reset">✕ {% trans "Сброс" %}</a>
+        {% endif %}
+    </form>
+
     <!-- ТАБЫ ПО БЛОКАМ -->
     <div class="block-tabs">
-        <a class="block-tab {% if block_filter == 'all' %}active{% endif %}" href="?block=all">
+        <a class="block-tab {% if block_filter == 'all' %}active{% endif %}" href="?block=all{% if search_query %}&q={{ search_query }}{% endif %}">
             📋 {% trans "Все" %}
             <span class="count">{{ block_counts.all }}</span>
         </a>
 
         {% if 'kaz_history' in allowed_blocks %}
-        <a class="block-tab {% if block_filter == 'kaz_history' %}active{% endif %}" href="?block=kaz_history">
+        <a class="block-tab {% if block_filter == 'kaz_history' %}active{% endif %}" href="?block=kaz_history{% if search_query %}&q={{ search_query }}{% endif %}">
             📜 {% trans "Ист. КЗ" %}
             <span class="count">{{ block_counts.kaz_history }}</span>
         </a>
         {% endif %}
 
         {% if 'reading' in allowed_blocks %}
-        <a class="block-tab {% if block_filter == 'reading' %}active{% endif %}" href="?block=reading">
+        <a class="block-tab {% if block_filter == 'reading' %}active{% endif %}" href="?block=reading{% if search_query %}&q={{ search_query }}{% endif %}">
             📖 {% trans "Чтение" %}
             <span class="count">{{ block_counts.reading }}</span>
         </a>
         {% endif %}
 
         {% if 'math_literacy' in allowed_blocks %}
-        <a class="block-tab {% if block_filter == 'math_literacy' %}active{% endif %}" href="?block=math_literacy">
+        <a class="block-tab {% if block_filter == 'math_literacy' %}active{% endif %}" href="?block=math_literacy{% if search_query %}&q={{ search_query }}{% endif %}">
             🔢 {% trans "Матем." %}
             <span class="count">{{ block_counts.math_literacy }}</span>
         </a>
         {% endif %}
 
         {% if 'profile' in allowed_blocks %}
-        <a class="block-tab {% if block_filter == 'profile' %}active{% endif %}" href="?block=profile">
+        <a class="block-tab {% if block_filter == 'profile' %}active{% endif %}" href="?block=profile{% if search_query %}&q={{ search_query }}{% endif %}">
             📚 {% trans "Профиль" %}
             <span class="count">{{ block_counts.profile }}</span>
         </a>
@@ -339,12 +368,12 @@
     <!-- ПОДТАБЫ ПРОФИЛЯ -->
     {% if block_filter == 'profile' and profile_subjects|length > 1 %}
     <div class="subject-tabs">
-        <a class="subject-tab {% if not subject_filter %}active{% endif %}" href="?block=profile">
+        <a class="subject-tab {% if not subject_filter %}active{% endif %}" href="?block=profile{% if search_query %}&q={{ search_query }}{% endif %}">
             📋 {% trans "Все профильные" %}
         </a>
         {% for s in profile_subjects %}
         <a class="subject-tab {% if subject_filter == s.id|stringformat:'s' %}active{% endif %}"
-           href="?block=profile&subject={{ s.id }}">
+           href="?block=profile&subject={{ s.id }}{% if search_query %}&q={{ search_query }}{% endif %}">
             📚 {{ s.name }}
         </a>
         {% endfor %}
@@ -419,7 +448,7 @@
                                         </form>
                                     {% endif %}
 
-                                    {# Өшіру: draft, approved, rejected #}
+                                    {# ✅ НОВОЕ: Өшіру теперь без условий статуса (для draft, approved, rejected) #}
                                     {% if q.status == 'draft' or q.status == 'approved' or q.status == 'rejected' %}
                                         <form method="post" action="{% url 'core:delete_question' q.id %}" style="display:inline;">
                                             {% csrf_token %}
@@ -437,7 +466,13 @@
             </table>
         </div>
     {% else %}
-        <div class="empty">{% trans "У вас пока нет вопросов. Нажмите «Добавить вопрос»." %}</div>
+        <div class="empty">
+            {% if search_query %}
+                {% trans "По вашему запросу ничего не найдено." %}
+            {% else %}
+                {% trans "У вас пока нет вопросов. Нажмите «Добавить вопрос»." %}
+            {% endif %}
+        </div>
     {% endif %}
 </div>
 

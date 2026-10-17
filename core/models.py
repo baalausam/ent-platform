@@ -44,6 +44,7 @@ class Subject(models.Model):
     ]
     CODE_CHOICES = [
         ('kaz_history', _('История Казахстана')),
+        ('world_history', _('Всемирная история')),   # <--- ДОБАВЛЕНО
         ('reading', _('Грамотность чтения')),
         ('math_literacy', _('Математическая грамотность')),
         ('profile', _('Профильный предмет')),
@@ -203,10 +204,10 @@ class QuestionGroup(models.Model):
 
     @property
     def expected_question_count(self):
-        if self.block == 'profile':
+        # Для профиля и истории Казахстана всегда ровно 5 вопросов
+        if self.block in ['profile', 'kaz_history']:
             return 5
-        if self.block == 'kaz_history':
-             return 5
+        # Для чтения зависит от сложности (A=5, B=3, C=2)
         return CONTEXT_DIFFICULTY_COUNT.get(self.difficulty, 0)
 
     @property

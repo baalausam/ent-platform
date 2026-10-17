@@ -15,6 +15,14 @@
         h1 { font-size: 38px; font-weight: 900; letter-spacing: -0.03em; margin-bottom: 8px; background: linear-gradient(135deg, #2c3e50 0%, #3b82f6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .subtitle { color: #64748b; font-size: 15px; margin-bottom: 32px; }
         .btn-add { display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; text-decoration: none; border-radius: 12px; font-size: 15px; font-weight: 700; box-shadow: 0 8px 25px -8px rgba(59,130,246,0.5); margin-top: 16px; }
+        
+        /* ✅ НОВОЕ: Поиск */
+        .search-form { display: flex; gap: 8px; margin: 24px 0 16px; }
+        .search-input { flex: 1; padding: 14px 18px; border: 1px solid #cbd5e1; border-radius: 12px; font-family: inherit; font-size: 15px; outline: none; }
+        .search-input:focus { border-color: #3b82f6; box-shadow: 0 0 0 4px rgba(59,130,246,0.12); }
+        .btn-search { padding: 14px 28px; background: #3b82f6; color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; }
+        .btn-reset { padding: 14px 18px; background: #fee2e2; color: #991b1b; border-radius: 12px; font-weight: 700; text-decoration: none; display: flex; align-items: center; }
+
         .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 16px; margin-top: 24px; }
         .group-card { background: #ffffff; border: 1px solid #e5e9ee; border-radius: 20px; padding: 24px; display: flex; flex-direction: column; }
         .group-card:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
@@ -64,6 +72,15 @@
         + {% trans "Создать контекст" %}
     </a>
 
+    <!-- ✅ НОВОЕ: ПОИСК КОНТЕКСТОВ -->
+    <form method="get" class="search-form">
+        <input type="text" name="q" value="{{ search_query }}" class="search-input" placeholder="🔍 {% trans 'Іздеу (атауы, мәтіні)...' %}">
+        <button type="submit" class="btn-search">{% trans "Искать" %}</button>
+        {% if search_query %}
+            <a href="{% url 'core:my_question_groups' %}" class="btn-reset">✕ {% trans "Сброс" %}</a>
+        {% endif %}
+    </form>
+
     {% if groups %}
         <div class="cards">
             {% for g in groups %}
@@ -99,6 +116,7 @@
                         <a class="btn-sm btn-view" href="{% url 'core:group_detail' g.id %}">
                             👁 {% trans "Подробный просмотр" %}
                         </a>
+                        
                         {% if g.status == 'draft' %}
                             <a class="btn-sm btn-edit" href="{% url 'core:edit_question_group' g.id %}">
                                 ✏️ {% trans "Редактировать" %}
@@ -114,19 +132,27 @@
                                     <button type="submit" class="btn-sm btn-green">📤 {% trans "Отправить" %}</button>
                                 </form>
                             {% endif %}
-                            <form method="post" action="{% url 'core:delete_group' g.id %}" style="display:inline;">
-                                {% csrf_token %}
-                                <button type="submit" class="btn-sm btn-delete" onclick="return confirm('Контексті және ондағы барлық сұрақтарды өшіруге сенімдісіз бе?')">
-                                    🗑 {% trans "Удалить" %}
-                                </button>
-                            </form>
                         {% endif %}
+
+                        <!-- ✅ НОВОЕ: Кнопка удаления теперь ВСЕГДА (без условия статуса) -->
+                        <form method="post" action="{% url 'core:delete_group' g.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-sm btn-delete" onclick="return confirm('Контексті және ондағы барлық сұрақтарды өшіруге сенімдісіз бе?')">
+                                🗑 {% trans "Удалить" %}
+                            </button>
+                        </form>
                     </div>
                 </div>
             {% endfor %}
         </div>
     {% else %}
-        <div class="empty">{% trans "У вас пока нет контекстов. Создайте первый!" %}</div>
+        <div class="empty">
+            {% if search_query %}
+                {% trans "По вашему запросу контексты не найдены." %}
+            {% else %}
+                {% trans "У вас пока нет контекстов. Создайте первый!" %}
+            {% endif %}
+        </div>
     {% endif %}
 </div>
 </body>

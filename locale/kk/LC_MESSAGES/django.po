@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-11 16:51+0500\n"
-"PO-Revision-Date: 2026-10-11 18:00+0500\n"
+"POT-Creation-Date: 2026-10-17 17:44+0500\n"
+"PO-Revision-Date: 2026-10-17 18:00+0500\n"
 "Last-Translator: Admin <admin@example.com>\n"
 "Language-Team: Kazakh\n"
 "Language: kk\n"
@@ -59,8 +59,8 @@ msgstr "Мектеп атауы"
 msgid "Город"
 msgstr "Қала"
 
-#: .\core\forms.py:27 .\core\forms.py:56 .\core\forms.py:79 .\core\views.py:237
-#: .\core\views.py:387
+#: .\core\forms.py:27 .\core\forms.py:56 .\core\forms.py:79 .\core\views.py:239
+#: .\core\views.py:389
 msgid "Такой логин уже занят."
 msgstr "Бұл логин бос емес."
 
@@ -78,174 +78,167 @@ msgstr ""
 msgid "Код школы"
 msgstr "Мектеп коды"
 
-#: .\core\forms.py:97 .\core\models.py:46 .\core\models.py:167
-#: .\core\models.py:240 .\core\templates\core\test_result.html:242
+#: .\core\forms.py:97 .\core\models.py:46 .\core\models.py:168
+#: .\core\models.py:243 .\core\templates\core\test_result.html:242
 msgid "История Казахстана"
 msgstr "Қазақстан тарихы"
 
-#: .\core\forms.py:98 .\core\models.py:47 .\core\models.py:166
-#: .\core\models.py:241 .\core\templates\core\test_result.html:249
+#: .\core\forms.py:98 .\core\models.py:47
+msgid "Всемирная история"
+msgstr "Дүниежүзі тарихы"
+
+#: .\core\forms.py:99 .\core\models.py:48 .\core\models.py:167
+#: .\core\models.py:244 .\core\templates\core\test_result.html:249
 msgid "Грамотность чтения"
 msgstr "Оқу сауаттылығы"
 
-#: .\core\forms.py:99 .\core\models.py:48 .\core\models.py:168
-#: .\core\models.py:242 .\core\templates\core\test_result.html:256
+#: .\core\forms.py:100 .\core\models.py:49 .\core\models.py:169
+#: .\core\models.py:245 .\core\templates\core\test_result.html:256
 msgid "Математическая грамотность"
 msgstr "Математикалық сауаттылық"
 
-#: .\core\forms.py:100 .\core\forms.py:116 .\core\models.py:49
-#: .\core\models.py:169 .\core\models.py:243
+#: .\core\forms.py:101 .\core\forms.py:117 .\core\models.py:50
+#: .\core\models.py:170 .\core\models.py:246
+#: .\core\templates\core\add_question.html:253
 msgid "Профильный предмет"
 msgstr "Бейіндік пән"
 
-#: .\core\forms.py:103 .\core\models.py:225
+#: .\core\forms.py:104 .\core\models.py:228
 msgid "Один правильный ответ"
 msgstr "Бір дұрыс жауап"
 
-#: .\core\forms.py:104
+#: .\core\forms.py:105
 msgid "Несколько правильных ответов"
 msgstr "Бірнеше дұрыс жауап"
 
-#: .\core\forms.py:105 .\core\models.py:227
+#: .\core\forms.py:106 .\core\models.py:230
 #: .\core\templates\core\question_detail.html:350
-#: .\core\templates\core\review_questions.html:433
+#: .\core\templates\core\review_questions.html:434
 msgid "Сопоставление"
 msgstr "Сәйкестендіру"
 
-#: .\core\forms.py:108 .\core\models.py:17
+#: .\core\forms.py:109 .\core\forms.py:198 .\core\models.py:17
 msgid "Оңай"
 msgstr "Оңай"
 
-#: .\core\forms.py:109 .\core\models.py:18
+#: .\core\forms.py:110 .\core\forms.py:199 .\core\models.py:18
 msgid "Орташа"
 msgstr "Орташа"
 
-#: .\core\forms.py:110 .\core\models.py:19
+#: .\core\forms.py:111 .\core\forms.py:200 .\core\models.py:19
 msgid "Қиын"
 msgstr "Қиын"
 
-#: .\core\forms.py:113
+#: .\core\forms.py:114 .\core\templates\core\add_question.html:240
 msgid "Блок ЕНТ"
 msgstr "ҰБТ блогы"
 
-#: .\core\forms.py:119
+#: .\core\forms.py:120
 msgid "Қиындық деңгейі"
 msgstr "Қиындық деңгейі"
 
-#: .\core\forms.py:123
+#: .\core\forms.py:124
 msgid "Тип вопроса"
 msgstr "Сұрақ түрі"
 
-#: .\core\forms.py:128 .\core\templates\core\add_question.html:254
-#: .\core\templates\core\add_question_group.html:293
+#: .\core\forms.py:129 .\core\templates\core\add_question.html:280
+#: .\core\templates\core\add_question_group.html:366
 msgid "Формула (LaTeX)"
 msgstr "Формула (LaTeX)"
 
-#: .\core\forms.py:134
+#: .\core\forms.py:135
 msgid "Қарапайым мәтін"
 msgstr "Қарапайым мәтін"
 
-#: .\core\forms.py:138
+#: .\core\forms.py:139
 msgid "Вариант A"
 msgstr "A нұсқасы"
 
-#: .\core\forms.py:139
+#: .\core\forms.py:140
 msgid "Вариант B"
 msgstr "B нұсқасы"
 
-#: .\core\forms.py:140
+#: .\core\forms.py:141
 msgid "Вариант C"
 msgstr "C нұсқасы"
 
-#: .\core\forms.py:141
+#: .\core\forms.py:142
 msgid "Вариант D"
 msgstr "D нұсқасы"
 
-#: .\core\forms.py:142
+#: .\core\forms.py:143
 msgid "Вариант E"
 msgstr "E нұсқасы"
 
-#: .\core\forms.py:143
+#: .\core\forms.py:144
 msgid "Вариант F"
 msgstr "F нұсқасы"
 
-#: .\core\forms.py:144 .\core\templates\core\question_detail.html:345
+#: .\core\forms.py:145 .\core\templates\core\question_detail.html:345
 msgid "Правильный ответ"
 msgstr "Дұрыс жауап"
 
-#: .\core\forms.py:147
+#: .\core\forms.py:148
 msgid "Сурет (міндетті емес)"
 msgstr "Сурет (міндетті емес)"
 
-#: .\core\forms.py:166
+#: .\core\forms.py:167
 msgid "Мәтін енгізіңіз (екі өрістің біреуі)"
 msgstr "Мәтін енгізіңіз (екі өрістің біреуі)"
 
-#: .\core\forms.py:169
+#: .\core\forms.py:170
 msgid "Выберите профильный предмет."
 msgstr "Бейіндік пәнді таңдаңыз."
 
-#: .\core\forms.py:176
+#: .\core\forms.py:177
 msgid "Укажите правильный ответ."
 msgstr "Дұрыс жауапты көрсетіңіз."
 
-#: .\core\forms.py:178
+#: .\core\forms.py:179
 msgid "Допустимы только A-F."
 msgstr "Тек A-F рұқсат етіледі."
 
-#: .\core\forms.py:180
+#: .\core\forms.py:181
 msgid "Для одного ответа — одна буква."
 msgstr "Бір жауап үшін — бір әріп."
 
-#: .\core\forms.py:183
+#: .\core\forms.py:184
 msgid "Укажите хотя бы одну букву."
 msgstr "Кемінде бір әріп көрсетіңіз."
 
-#: .\core\forms.py:185
+#: .\core\forms.py:186
 msgid "Максимум три буквы."
 msgstr "Максимум үш әріп."
 
-#: .\core\forms.py:197
-msgid "Оңай — 5 сұрақ"
-msgstr "Оңай — 5 сұрақ"
+#: .\core\forms.py:202
+msgid "Контекст деңгейі"
+msgstr "Контекст деңгейі"
 
-#: .\core\forms.py:198
-msgid "Орташа — 3 сұрақ"
-msgstr "Орташа — 3 сұрақ"
-
-#: .\core\forms.py:199
-msgid "Қиын — 2 сұрақ"
-msgstr "Қиын — 2 сұрақ"
-
-#: .\core\forms.py:201
-msgid "Контекст деңгейі (тек оқу сауаттылығы үшін)"
-msgstr "Контекст деңгейі (тек оқу сауаттылығы үшін)"
-
-#: .\core\forms.py:208
+#: .\core\forms.py:209
 msgid "Контекст суреті (міндетті емес)"
 msgstr "Контекст суреті (міндетті емес)"
 
-#: .\core\forms.py:209
+#: .\core\forms.py:210
 msgid "JPG, PNG, GIF. Максимум 5 МБ."
 msgstr "JPG, PNG, GIF. Максимум 5 МБ."
 
-#: .\core\forms.py:229
+#: .\core\forms.py:230
 msgid "Название сессии"
 msgstr "Сессия атауы"
 
-#: .\core\forms.py:231 .\core\templates\core\class_results_detail.html:264
+#: .\core\forms.py:232 .\core\templates\core\class_results_detail.html:264
 msgid "Начало"
 msgstr "Басталуы"
 
-#: .\core\forms.py:235 .\core\templates\core\class_results_detail.html:268
+#: .\core\forms.py:236 .\core\templates\core\class_results_detail.html:268
 msgid "Окончание"
 msgstr "Аяқталуы"
 
-#: .\core\forms.py:241
+#: .\core\forms.py:242
 msgid "Классы (пусто = для всех)"
 msgstr "Сыныптар (бос = барлығына)"
 
-#: .\core\forms.py:254
+#: .\core\forms.py:255
 msgid "Окончание должно быть позже начала."
 msgstr "Аяқталуы басталуынан кейін болуы керек."
 
@@ -257,69 +250,69 @@ msgstr "Міндетті"
 msgid "Профильный"
 msgstr "Бейіндік"
 
-#: .\core\models.py:123 .\core\templates\core\class_results_detail.html:306
+#: .\core\models.py:124 .\core\templates\core\class_results_detail.html:306
 #: .\core\templates\core\school_results_detail.html:367
 #: .\core\templates\core\teacher_dashboard.html:320
 #: .\core\templates\core\test_result.html:188
 msgid "Ученик"
 msgstr "Оқушы"
 
-#: .\core\models.py:124
+#: .\core\models.py:125
 msgid "Учитель"
 msgstr "Мұғалім"
 
-#: .\core\models.py:125
+#: .\core\models.py:126
 msgid "Директор"
 msgstr "Директор"
 
-#: .\core\models.py:126
+#: .\core\models.py:127
 msgid "Завуч"
 msgstr "Оқу ісі меңгерушісі"
 
-#: .\core\models.py:181 .\core\models.py:234
+#: .\core\models.py:182 .\core\models.py:237
 msgid "Черновик"
 msgstr "Жоба"
 
-#: .\core\models.py:182 .\core\models.py:235
-#: .\core\templates\core\my_questions.html:295
+#: .\core\models.py:183 .\core\models.py:238
+#: .\core\templates\core\my_questions.html:312
 #: .\core\templates\core\review_questions.html:298
 #: .\core\templates\core\review_questions.html:325
 msgid "На проверке"
 msgstr "Тексеруде"
 
-#: .\core\models.py:183 .\core\models.py:236
+#: .\core\models.py:184 .\core\models.py:239
 msgid "Одобрен"
 msgstr "Мақұлданды"
 
-#: .\core\models.py:184 .\core\models.py:237
+#: .\core\models.py:185 .\core\models.py:240
 msgid "Отклонён"
 msgstr "Қабылданбады"
 
-#: .\core\models.py:226
+#: .\core\models.py:229
 msgid "Несколько правильных"
 msgstr "Бірнеше дұрыс"
 
-#: .\core\models.py:230
+#: .\core\models.py:233
 msgid "Стандартный"
 msgstr "Стандартты"
 
-#: .\core\models.py:231
+#: .\core\models.py:234
 msgid "Контекстный"
 msgstr "Контекстік"
 
-#: .\core\models.py:358 .\core\templates\core\school_results_detail.html:347
+#: .\core\models.py:361 .\core\templates\core\school_results_detail.html:347
 #: .\core\templates\core\student_dashboard.html:347
 #: .\core\templates\core\test_result.html:216
 msgid "В процессе"
 msgstr "Орындалуда"
 
-#: .\core\models.py:359 .\core\templates\core\school_results_detail.html:345
+#: .\core\models.py:362 .\core\templates\core\school_results_detail.html:345
 #: .\core\templates\core\student_dashboard.html:343
 #: .\core\templates\core\test_result.html:206
 msgid "Завершён"
 msgstr "Аяқталды"
 
-#: .\core\models.py:360 .\core\templates\core\school_results_detail.html:346
+#: .\core\models.py:363 .\core\templates\core\school_results_detail.html:346
 #: .\core\templates\core\student_dashboard.html:345
 #: .\core\templates\core\test_result.html:213
 msgid "Аннулирован"
@@ -333,85 +326,103 @@ msgstr "Қатынауға тыйым салынған"
 #: .\core\templates\core\access_denied.html:52
 #: .\core\templates\core\class_results.html:151
 #: .\core\templates\core\manage_sessions.html:356
-#: .\core\templates\core\my_question_groups.html:55
-#: .\core\templates\core\my_questions.html:284
+#: .\core\templates\core\my_question_groups.html:63
+#: .\core\templates\core\my_questions.html:301
 msgid "В панель учителя"
 msgstr "Мұғалім панеліне"
 
 #: .\core\templates\core\add_question.html:6
-#: .\core\templates\core\add_question.html:208
+#: .\core\templates\core\add_question.html:214
 msgid "Редактировать вопрос"
 msgstr "Сұрақты өңдеу"
 
 #: .\core\templates\core\add_question.html:6
-#: .\core\templates\core\add_question.html:209
-#: .\core\templates\core\group_detail.html:299
-#: .\core\templates\core\my_question_groups.html:108
-#: .\core\templates\core\my_questions.html:300
+#: .\core\templates\core\add_question.html:215
+#: .\core\templates\core\group_detail.html:310
+#: .\core\templates\core\my_question_groups.html:126
+#: .\core\templates\core\my_questions.html:317
 #: .\core\templates\core\teacher_dashboard.html:285
 msgid "Добавить вопрос"
 msgstr "Сұрақ қосу"
 
-#: .\core\templates\core\add_question.html:247
+#: .\core\templates\core\add_question.html:242
+#: .\core\templates\core\add_question.html:255
+msgid "Блокировка: вопрос принадлежит контексту"
+msgstr "Бұғаттау: сұрақ контекстке тиесілі"
+
+#: .\core\templates\core\add_question.html:273
 msgid "Текст вопроса"
 msgstr "Сұрақ мәтіні"
 
-#: .\core\templates\core\add_question.html:251
-#: .\core\templates\core\add_question_group.html:290
+#: .\core\templates\core\add_question.html:277
+#: .\core\templates\core\add_question_group.html:363
 msgid "Обычный текст"
 msgstr "Қарапайым мәтін"
 
-#: .\core\templates\core\add_question.html:290
-#: .\core\templates\core\add_question_group.html:345
+#: .\core\templates\core\add_question.html:324
+#: .\core\templates\core\add_question_group.html:418
 msgid "Міндетті емес. Егер сурет қосқыңыз келсе — таңдаңыз."
 msgstr "Міндетті емес. Егер сурет қосқыңыз келсе — таңдаңыз."
 
-#: .\core\templates\core\add_question.html:296
-#: .\core\templates\core\add_question_group.html:351
+#: .\core\templates\core\add_question.html:330
+#: .\core\templates\core\add_question_group.html:424
 msgid "Предпросмотр"
 msgstr "Алдын ала көрініс"
 
-#: .\core\templates\core\add_question.html:374
-#: .\core\templates\core\add_question_group.html:362
+#: .\core\templates\core\add_question.html:408
+#: .\core\templates\core\add_question_group.html:435
 msgid "Обновить"
 msgstr "Жаңарту"
 
-#: .\core\templates\core\add_question.html:375
-#: .\core\templates\core\add_question_group.html:363
+#: .\core\templates\core\add_question.html:409
+#: .\core\templates\core\add_question_group.html:436
 #: .\core\templates\core\edit_profile.html:347
 msgid "Сохранить"
 msgstr "Сақтау"
 
 #: .\core\templates\core\add_question_group.html:6
-#: .\core\templates\core\add_question_group.html:240
+#: .\core\templates\core\add_question_group.html:271
 msgid "Редактировать контекст"
 msgstr "Контексті өңдеу"
 
 #: .\core\templates\core\add_question_group.html:6
-#: .\core\templates\core\add_question_group.html:241
-#: .\core\templates\core\my_question_groups.html:64
+#: .\core\templates\core\add_question_group.html:272
+#: .\core\templates\core\my_question_groups.html:72
 msgid "Создать контекст"
 msgstr "Контекст жасау"
 
-#: .\core\templates\core\add_question_group.html:245
+#: .\core\templates\core\add_question_group.html:276
 msgid ""
 "Контекст — текст, к которому привязываются вопросы. Сурет қосу міндетті емес."
 msgstr "Контекст — сұрақтар байланыстырылатын мәтін. Сурет қосу міндетті емес."
 
-#: .\core\templates\core\add_question_group.html:254
+#: .\core\templates\core\add_question_group.html:293
 msgid "Для какого блока контекст?"
 msgstr "Қай блок үшін контекст?"
 
-#: .\core\templates\core\add_question_group.html:259
+#: .\core\templates\core\add_question_group.html:299
 msgid "Оқу сауаттылығы"
 msgstr "Оқу сауаттылығы"
 
-#: .\core\templates\core\add_question_group.html:264
+#: .\core\templates\core\add_question_group.html:306
+msgid "Қазақстан тарихы"
+msgstr "Қазақстан тарихы"
+
+#: .\core\templates\core\add_question_group.html:313
+#: .\core\templates\core\add_question_group.html:331
 msgid "Бейіндік пән"
 msgstr "Бейіндік пән"
 
-#: .\core\templates\core\add_question_group.html:286
-#: .\core\templates\core\group_detail.html:179
+#: .\core\templates\core\add_question_group.html:333
+msgid "Таңдаңыз"
+msgstr "Таңдаңыз"
+
+#: .\core\templates\core\add_question_group.html:341
+msgid "Контекст осы пәнге байланыстырылады."
+msgstr "Контекст осы пәнге байланыстырылады."
+
+#: .\core\templates\core\add_question_group.html:359
+#: .\core\templates\core\group_detail.html:181
 msgid "Текст контекста"
 msgstr "Контекст мәтіні"
 
@@ -434,7 +445,7 @@ msgstr "Директорға хабарласыңыз."
 #: .\core\templates\core\class_results.html:149
 #: .\core\templates\core\class_students_list.html:265
 #: .\core\templates\core\edit_profile.html:350
-#: .\core\templates\core\group_detail.html:169
+#: .\core\templates\core\group_detail.html:171
 #: .\core\templates\core\question_detail.html:267
 #: .\core\templates\core\school_results.html:147
 #: .\core\templates\core\students_list.html:284
@@ -490,7 +501,7 @@ msgstr "Сынып"
 #: .\core\templates\core\class_results_detail.html:276
 #: .\core\templates\core\class_results_detail.html:307
 #: .\core\templates\core\manage_sessions.html:397
-#: .\core\templates\core\my_questions.html:367
+#: .\core\templates\core\my_questions.html:396
 #: .\core\templates\core\school_results_detail.html:342
 #: .\core\templates\core\school_results_detail.html:370
 #: .\core\templates\core\student_dashboard.html:329
@@ -525,7 +536,7 @@ msgid "Балл"
 msgstr "Балл"
 
 #: .\core\templates\core\class_results_detail.html:337
-#: .\core\templates\core\group_detail.html:285
+#: .\core\templates\core\group_detail.html:296
 #: .\core\templates\core\school_results_detail.html:402
 #: .\core\templates\core\student_dashboard.html:359
 msgid "Подробнее"
@@ -577,7 +588,7 @@ msgid "Панель директора"
 msgstr "Директор панелі"
 
 #: .\core\templates\core\director_dashboard.html:283
-#: .\core\templates\core\my_questions.html:333
+#: .\core\templates\core\my_questions.html:362
 #: .\core\templates\core\review_questions.html:376
 #: .\core\templates\core\student_dashboard.html:228
 #: .\core\templates\core\teacher_dashboard.html:259
@@ -586,8 +597,8 @@ msgid "Профиль"
 msgstr "Профиль"
 
 #: .\core\templates\core\director_dashboard.html:284
-#: .\core\templates\core\my_question_groups.html:56
-#: .\core\templates\core\my_questions.html:285
+#: .\core\templates\core\my_question_groups.html:64
+#: .\core\templates\core\my_questions.html:302
 #: .\core\templates\core\review_questions.html:289
 #: .\core\templates\core\student_dashboard.html:229
 #: .\core\templates\core\teacher_dashboard.html:260
@@ -775,18 +786,25 @@ msgstr "Сынып жетекшісі болудан қалуға сенімді
 msgid "Просмотр контекста"
 msgstr "Контексті қарау"
 
-#: .\core\templates\core\group_detail.html:194
+#: .\core\templates\core\group_detail.html:196
 #: .\core\templates\core\question_detail.html:292
 msgid "Вопросы контекста"
 msgstr "Контекст сұрақтары"
 
-#: .\core\templates\core\group_detail.html:281
-#: .\core\templates\core\my_question_groups.html:104
-#: .\core\templates\core\my_questions.html:410
+#: .\core\templates\core\group_detail.html:283
+#: .\core\templates\core\my_question_groups.html:122
+#: .\core\templates\core\my_questions.html:439
 msgid "Редактировать"
 msgstr "Өңдеу"
 
-#: .\core\templates\core\group_detail.html:292
+#: .\core\templates\core\group_detail.html:291
+#: .\core\templates\core\my_question_groups.html:141
+#: .\core\templates\core\my_questions.html:457
+#: .\core\templates\core\review_questions.html:475
+msgid "Удалить"
+msgstr "Жою"
+
+#: .\core\templates\core\group_detail.html:303
 msgid "В этом контексте пока нет вопросов."
 msgstr "Бұл контексте әзірге сұрақтар жоқ."
 
@@ -901,7 +919,7 @@ msgid "Классы"
 msgstr "Сыныптар"
 
 #: .\core\templates\core\manage_sessions.html:408
-#: .\core\templates\core\my_questions.html:306
+#: .\core\templates\core\my_questions.html:335
 #: .\core\templates\core\review_questions.html:310
 #: .\core\templates\core\review_questions.html:356
 #: .\core\templates\core\school_results_detail.html:332
@@ -935,118 +953,135 @@ msgid "Пока нет сессий."
 msgstr "Әзірге сессиялар жоқ."
 
 #: .\core\templates\core\my_question_groups.html:6
-#: .\core\templates\core\my_question_groups.html:53
-#: .\core\templates\core\my_question_groups.html:60
+#: .\core\templates\core\my_question_groups.html:61
+#: .\core\templates\core\my_question_groups.html:68
 #: .\core\templates\core\teacher_dashboard.html:288
 msgid "Мои контексты"
 msgstr "Менің контексттерім"
 
-#: .\core\templates\core\my_question_groups.html:84
+#: .\core\templates\core\my_question_groups.html:77
+msgid "Іздеу (атауы, мәтіні)..."
+msgstr "Іздеу (атауы, мәтіні)..."
+
+#: .\core\templates\core\my_question_groups.html:78
+#: .\core\templates\core\my_questions.html:326
+msgid "Искать"
+msgstr "Іздеу"
+
+#: .\core\templates\core\my_question_groups.html:80
+#: .\core\templates\core\my_questions.html:328
+msgid "Сброс"
+msgstr "Тазалау"
+
+#: .\core\templates\core\my_question_groups.html:101
 #: .\core\templates\core\review_questions.html:330
-#: .\core\templates\core\review_questions.html:398
+#: .\core\templates\core\review_questions.html:399
 msgid "Вопросы"
 msgstr "Сұрақтар"
 
-#: .\core\templates\core\my_question_groups.html:100
+#: .\core\templates\core\my_question_groups.html:117
 #: .\core\templates\core\review_questions.html:336
-#: .\core\templates\core\review_questions.html:458
+#: .\core\templates\core\review_questions.html:459
 msgid "Подробный просмотр"
 msgstr "Толық қарау"
 
-#: .\core\templates\core\my_question_groups.html:114
-#: .\core\templates\core\my_questions.html:418
+#: .\core\templates\core\my_question_groups.html:132
+#: .\core\templates\core\my_questions.html:447
 msgid "Отправить"
 msgstr "Жіберу"
 
-#: .\core\templates\core\my_question_groups.html:120
-#: .\core\templates\core\my_questions.html:428
-#: .\core\templates\core\review_questions.html:474
-msgid "Удалить"
-msgstr "Жою"
+#: .\core\templates\core\my_question_groups.html:151
+msgid "По вашему запросу контексты не найдены."
+msgstr "Сіздің сұранысыңыз бойынша контексттер табылмады."
 
-#: .\core\templates\core\my_question_groups.html:129
+#: .\core\templates\core\my_question_groups.html:153
 msgid "У вас пока нет контекстов. Создайте первый!"
 msgstr "Сізде әзірге контексттер жоқ. Біріншісін жасаңыз!"
 
 #: .\core\templates\core\my_questions.html:7
-#: .\core\templates\core\my_questions.html:281
-#: .\core\templates\core\my_questions.html:289
+#: .\core\templates\core\my_questions.html:298
+#: .\core\templates\core\my_questions.html:306
 #: .\core\templates\core\teacher_dashboard.html:282
 msgid "Мои вопросы"
 msgstr "Менің сұрақтарым"
 
-#: .\core\templates\core\my_questions.html:293
+#: .\core\templates\core\my_questions.html:310
 #: .\core\templates\core\students_list.html:302
 #: .\core\templates\core\teachers_list.html:228
 msgid "Всего"
 msgstr "Барлығы"
 
-#: .\core\templates\core\my_questions.html:294
+#: .\core\templates\core\my_questions.html:311
 #: .\core\templates\core\review_questions.html:307
 msgid "Черновики"
 msgstr "Жобалар"
 
-#: .\core\templates\core\my_questions.html:296
+#: .\core\templates\core\my_questions.html:313
 #: .\core\templates\core\review_questions.html:301
 msgid "Одобрено"
 msgstr "Мақұлданды"
 
-#: .\core\templates\core\my_questions.html:312
+#: .\core\templates\core\my_questions.html:325
+msgid "Іздеу (мәтін, нұсқалар)..."
+msgstr "Іздеу (мәтін, нұсқалар)..."
+
+#: .\core\templates\core\my_questions.html:341
 #: .\core\templates\core\review_questions.html:361
-#: .\core\templates\core\take_test.html:302
 msgid "Ист. КЗ"
 msgstr "Қаз. тарихы"
 
-#: .\core\templates\core\my_questions.html:319
+#: .\core\templates\core\my_questions.html:348
 #: .\core\templates\core\review_questions.html:366
-#: .\core\templates\core\take_test.html:303
 msgid "Чтение"
 msgstr "Оқу"
 
-#: .\core\templates\core\my_questions.html:326
+#: .\core\templates\core\my_questions.html:355
 #: .\core\templates\core\review_questions.html:371
-#: .\core\templates\core\take_test.html:304
 msgid "Матем."
 msgstr "Матем."
 
-#: .\core\templates\core\my_questions.html:343
+#: .\core\templates\core\my_questions.html:372
 #: .\core\templates\core\review_questions.html:386
 msgid "Все профильные"
 msgstr "Барлық бейіндік"
 
-#: .\core\templates\core\my_questions.html:359
+#: .\core\templates\core\my_questions.html:388
 msgid "Уровень"
 msgstr "Деңгей"
 
-#: .\core\templates\core\my_questions.html:361
+#: .\core\templates\core\my_questions.html:390
 msgid "Блок"
 msgstr "Блок"
 
-#: .\core\templates\core\my_questions.html:363
+#: .\core\templates\core\my_questions.html:392
 msgid "Предмет"
 msgstr "Пән"
 
-#: .\core\templates\core\my_questions.html:364
+#: .\core\templates\core\my_questions.html:393
 msgid "Тип"
 msgstr "Түрі"
 
-#: .\core\templates\core\my_questions.html:365
+#: .\core\templates\core\my_questions.html:394
 msgid "Текст"
 msgstr "Мәтін"
 
-#: .\core\templates\core\my_questions.html:366
+#: .\core\templates\core\my_questions.html:395
 msgid "Ответ"
 msgstr "Жауап"
 
-#: .\core\templates\core\my_questions.html:368
+#: .\core\templates\core\my_questions.html:397
 msgid "Действие"
 msgstr "Әрекет"
 
-#: .\core\templates\core\my_questions.html:404
+#: .\core\templates\core\my_questions.html:433
 msgid "Просмотр"
 msgstr "Қарау"
 
-#: .\core\templates\core\my_questions.html:440
+#: .\core\templates\core\my_questions.html:471
+msgid "По вашему запросу ничего не найдено."
+msgstr "Сіздің сұранысыңыз бойынша ештеңе табылмады."
+
+#: .\core\templates\core\my_questions.html:473
 msgid "У вас пока нет вопросов. Нажмите «Добавить вопрос»."
 msgstr "Сізде әзірге сұрақтар жоқ. «Сұрақ қосу» түймесін басыңыз."
 
@@ -1093,7 +1128,7 @@ msgstr "2 кіші сұрақ"
 
 #: .\core\templates\core\question_detail.html:376
 #: .\core\templates\core\review_questions.html:332
-#: .\core\templates\core\review_questions.html:451
+#: .\core\templates\core\review_questions.html:452
 msgid "Автор"
 msgstr "Автор"
 
@@ -1222,21 +1257,21 @@ msgid "Контексты на проверке"
 msgstr "Тексерудегі контексттер"
 
 #: .\core\templates\core\review_questions.html:340
-#: .\core\templates\core\review_questions.html:463
+#: .\core\templates\core\review_questions.html:464
 msgid "Одобрить"
 msgstr "Мақұлдау"
 
 #: .\core\templates\core\review_questions.html:344
-#: .\core\templates\core\review_questions.html:467
+#: .\core\templates\core\review_questions.html:468
 msgid "Отклонить"
 msgstr "Қабылдамау"
 
-#: .\core\templates\core\review_questions.html:428
+#: .\core\templates\core\review_questions.html:429
 #: .\core\templates\core\test_result.html:323
 msgid "Верно"
 msgstr "Дұрыс"
 
-#: .\core\templates\core\review_questions.html:481
+#: .\core\templates\core\review_questions.html:482
 msgid "Вопросов с таким статусом нет."
 msgstr "Бұл мәртебедегі сұрақтар жоқ."
 
@@ -1344,100 +1379,100 @@ msgstr "Мектеп оқушылары"
 msgid "Учеников пока нет."
 msgstr "Оқушылар әзірге жоқ."
 
-#: .\core\templates\core\take_test.html:287
+#: .\core\templates\core\take_test.html:269
 msgid "Отвечено"
 msgstr "Жауап берілді"
 
-#: .\core\templates\core\take_test.html:290
+#: .\core\templates\core\take_test.html:272
 msgid "Менделеев"
 msgstr "Менделеев"
 
-#: .\core\templates\core\take_test.html:291
+#: .\core\templates\core\take_test.html:273
 msgid "Растворимость"
 msgstr "Ерігіштік"
 
-#: .\core\templates\core\take_test.html:420
+#: .\core\templates\core\take_test.html:398
 msgid "Следующий предмет"
 msgstr "Келесі пән"
 
-#: .\core\templates\core\take_test.html:424
-#: .\core\templates\core\take_test.html:434
+#: .\core\templates\core\take_test.html:402
+#: .\core\templates\core\take_test.html:412
 msgid "Завершить тест"
 msgstr "Тестті аяқтау"
 
-#: .\core\templates\core\take_test.html:433
+#: .\core\templates\core\take_test.html:411
 msgid "Осталось"
 msgstr "Қалды"
 
-#: .\core\templates\core\take_test.html:441
+#: .\core\templates\core\take_test.html:419
 msgid "Калькулятор"
 msgstr "Калькулятор"
 
-#: .\core\templates\core\take_test.html:469
+#: .\core\templates\core\take_test.html:447
 msgid "Периодическая таблица"
 msgstr "Периодтық кесте"
 
-#: .\core\templates\core\take_test.html:477
+#: .\core\templates\core\take_test.html:455
 msgid "Таблица растворимости"
 msgstr "Ерігіштік кестесі"
 
-#: .\core\templates\core\take_test.html:484
+#: .\core\templates\core\take_test.html:462
 msgid "ВНИМАНИЕ!"
 msgstr "НАЗАР АУДАРЫҢЫЗ!"
 
-#: .\core\templates\core\take_test.html:485
+#: .\core\templates\core\take_test.html:463
 msgid "Ваши результаты будут аннулированы."
 msgstr "Нәтижелеріңіз жойылады."
 
-#: .\core\templates\core\take_test.html:486
+#: .\core\templates\core\take_test.html:464
 msgid "Не покидайте вкладку с тестом!"
 msgstr "Тест орналасқан қосымша беттен шықпаңыз!"
 
-#: .\core\templates\core\take_test.html:488
+#: .\core\templates\core\take_test.html:466
 msgid "Понятно"
 msgstr "Түсінікті"
 
-#: .\core\templates\core\take_test.html:494
+#: .\core\templates\core\take_test.html:472
 msgid "Завершить тест?"
 msgstr "Тестті аяқтау керек пе?"
 
-#: .\core\templates\core\take_test.html:496
+#: .\core\templates\core\take_test.html:474
 msgid "Да"
 msgstr "Иә"
 
-#: .\core\templates\core\take_test.html:497
+#: .\core\templates\core\take_test.html:475
 msgid "Отмена"
 msgstr "Болдырмау"
 
-#: .\core\templates\core\take_test.html:551
+#: .\core\templates\core\take_test.html:527
 msgid "Можно выбрать не более 3 вариантов"
 msgstr "3 нұсқадан артық таңдауға болмайды"
 
-#: .\core\templates\core\take_test.html:626
+#: .\core\templates\core\take_test.html:602
 msgid "Время вышло"
 msgstr "Уақыт бітті"
 
-#: .\core\templates\core\take_test.html:646
+#: .\core\templates\core\take_test.html:622
 msgid "ТЕСТ АННУЛИРОВАН"
 msgstr "ТЕСТ ЖОЙЫЛДЫ"
 
-#: .\core\templates\core\take_test.html:646
+#: .\core\templates\core\take_test.html:622
 msgid "Вы покинули вкладку"
 msgstr "Сіз қосымша беттен шықтыңыз"
 
-#: .\core\templates\core\take_test.html:646
+#: .\core\templates\core\take_test.html:622
 msgid "раз(а)."
 msgstr "рет."
 
-#: .\core\templates\core\take_test.html:680
+#: .\core\templates\core\take_test.html:656
 msgid "Вы не ответили на"
 msgstr "Сіз жауап бермедіңіз"
 
-#: .\core\templates\core\take_test.html:680
+#: .\core\templates\core\take_test.html:656
 msgid "вопросов."
 msgstr "сұрақ."
 
-#: .\core\templates\core\take_test.html:680
+#: .\core\templates\core\take_test.html:656
 msgid "Вы ответили на все вопросы."
 msgstr "Сіз барлық сұрақтарға жауап бердіңіз."
 
@@ -1509,7 +1544,7 @@ msgstr ""
 "ашылғанша күтіңіз."
 
 #: .\core\templates\core\test_already_done.html:58
-#: .\core\templates\core\test_not_enough.html:148
+#: .\core\templates\core\test_not_enough.html:145
 msgid "Артқа"
 msgstr "Артқа"
 
@@ -1545,11 +1580,11 @@ msgstr "Керек: 120 сұрақ (140 балл)"
 msgid "Проверка по блокам"
 msgstr "Блоктар бойынша тексеру"
 
-#: .\core\templates\core\test_not_enough.html:143
+#: .\core\templates\core\test_not_enough.html:140
 msgid "Что делать?"
 msgstr "Не істеу керек?"
 
-#: .\core\templates\core\test_not_enough.html:144
+#: .\core\templates\core\test_not_enough.html:141
 msgid ""
 "Директор мен мұғалімдерге хабарласыңыз. Олар жетіспейтін блоктарға сұрақтар "
 "қосуы керек. Сұрақтар директор мақұлдаған соң ғана тестке шығады."
@@ -1641,162 +1676,159 @@ msgstr "Оқушылар"
 msgid "Учителей"
 msgstr "Мұғалімдер"
 
-#: .\core\views.py:232 .\core\views.py:382
+#: .\core\views.py:234 .\core\views.py:384
 msgid "Введите имя."
 msgstr "Атыңызды енгізіңіз."
 
-#: .\core\views.py:233 .\core\views.py:383
+#: .\core\views.py:235 .\core\views.py:385
 msgid "Введите фамилию."
 msgstr "Тегіңізді енгізіңіз."
 
-#: .\core\views.py:234 .\core\views.py:384
+#: .\core\views.py:236 .\core\views.py:386
 msgid "Введите логин."
 msgstr "Логинді енгізіңіз."
 
-#: .\core\views.py:235 .\core\views.py:385
+#: .\core\views.py:237 .\core\views.py:387
 msgid "Введите пароль."
 msgstr "Құпия сөзді енгізіңіз."
 
-#: .\core\views.py:244
+#: .\core\views.py:246
 msgid "Выберите хотя бы одно: предметник или классный руководитель."
 msgstr "Кемінде біреуін таңдаңыз: пән мұғалімі немесе сынып жетекшісі."
 
-#: .\core\views.py:251
+#: .\core\views.py:253
 msgid "Неверный код завуча."
 msgstr "Оқу ісі меңгерушісінің коды дұрыс емес."
 
-#: .\core\views.py:256
+#: .\core\views.py:258
 msgid "Неверный код учителя."
 msgstr "Мұғалім коды дұрыс емес."
 
-#: .\core\views.py:268 .\core\views.py:2138
+#: .\core\views.py:270 .\core\views.py:2245
 #, python-format
 msgid "У класса %(cls)s уже есть классный руководитель."
 msgstr "%(cls)s сыныбында сынып жетекшісі бар."
 
-#: .\core\views.py:271 .\core\views.py:2142
+#: .\core\views.py:273 .\core\views.py:2249
 msgid "Класс не найден."
 msgstr "Сынып табылмады."
 
-#: .\core\views.py:323 .\core\views.py:449
+#: .\core\views.py:325 .\core\views.py:451
 msgid "Неверный код."
 msgstr "Код дұрыс емес."
 
-#: .\core\views.py:393
+#: .\core\views.py:395
 msgid "Неверный код школы."
 msgstr "Мектеп коды дұрыс емес."
 
-#: .\core\views.py:399 .\core\views.py:2099 .\core\views.py:2130
+#: .\core\views.py:401 .\core\views.py:2206 .\core\views.py:2237
 msgid "Выберите класс."
 msgstr "Сыныпты таңдаңыз."
 
-#: .\core\views.py:404
+#: .\core\views.py:406
 msgid "Такого класса нет."
 msgstr "Мұндай сынып жоқ."
 
-#: .\core\views.py:410 .\core\views.py:2101
+#: .\core\views.py:412 .\core\views.py:2208
 msgid "Выберите два профильных предмета."
 msgstr "Екі бейіндік пәнді таңдаңыз."
 
-#: .\core\views.py:412 .\core\views.py:2103
+#: .\core\views.py:414 .\core\views.py:2210
 msgid "Профильные предметы должны быть разными."
 msgstr "Бейіндік пәндер әртүрлі болуы керек."
 
-#: .\core\views.py:521
+#: .\core\views.py:523
 msgid "У вас нет предметов для добавления вопросов."
 msgstr "Сізде сұрақ қосуға арналған пәндер жоқ."
 
-#: .\core\views.py:531
+#: .\core\views.py:533
 #, python-format
 msgid "Бұл контекстке %(exp)s сұрақ қосу керек. Артық қосуға болмайды."
 msgstr "Бұл контекстке %(exp)s сұрақ қосу керек. Артық қосуға болмайды."
 
-#: .\core\views.py:548 .\core\views.py:1015
+#: .\core\views.py:557 .\core\views.py:1087
 msgid "Вы не можете добавлять вопросы в этот блок."
 msgstr "Сіз бұл блокқа сұрақ қоса алмайсыз."
 
-#: .\core\views.py:557 .\core\views.py:1025
+#: .\core\views.py:567 .\core\views.py:1098
 msgid "Только по своему предмету."
 msgstr "Тек өз пәніңіз бойынша."
 
-#: .\core\views.py:566 .\core\views.py:1035
+#: .\core\views.py:577 .\core\views.py:1109
 msgid "Сәйкестендіру: 4 нұсқа + 2 кіші сұрақ қажет."
 msgstr "Сәйкестендіру: 4 нұсқа + 2 кіші сұрақ қажет."
 
-#: .\core\views.py:749
+#: .\core\views.py:746
 msgid "Сіз тек өз сұрақтарыңызды өшіре аласыз."
 msgstr "Сіз тек өз сұрақтарыңызды өшіре аласыз."
 
-#: .\core\views.py:796
-msgid "Сіз тек өз черновиктеріңізді өшіре аласыз."
-msgstr "Сіз тек өз черновиктеріңізді өшіре аласыз."
+#: .\core\views.py:775
+msgid "Сіз тек өз контексттеріңізді өшіре аласыз."
+msgstr "Сіз тек өз контексттеріңізді өшіре аласыз."
 
-#: .\core\views.py:821 .\core\views.py:936
-msgid "Контексті тек оқу сауаттылығы немесе бейіндік пән мұғалімі қоса алады."
-msgstr "Контексті тек оқу сауаттылығы немесе бейіндік пән мұғалімі қоса алады."
+#: .\core\views.py:801 .\core\views.py:966
+msgid "Контексті тек оқу сауаттылығы, бейіндік пән немесе Қазақстан тарихы мұғалімі қоса алады."
+msgstr "Контексті тек оқу сауаттылығы, бейіндік пән немесе Қазақстан тарихы мұғалімі қоса алады."
 
-#: .\core\views.py:872
-msgid ""
-"Контексты доступны только учителю грамотности чтения или профильного "
-"предмета."
-msgstr ""
-"Контексттер тек оқу сауаттылығы немесе бейіндік пән мұғаліміне қолжетімді."
+#: .\core\views.py:829 .\core\views.py:853 .\core\views.py:992
+#: .\core\views.py:1017
+msgid "Таңдаңыз: бейіндік пән."
+msgstr "Таңдаңыз: бейіндік пән."
 
-#: .\core\views.py:892
+#: .\core\views.py:888
+msgid "Контексты доступны только учителю грамотности чтения, казахской истории или профильного предмета."
+msgstr "Контексттер тек оқу сауаттылығы, қазақстан тарихы немесе бейіндік пән мұғаліміне қолжетімді."
+
+#: .\core\views.py:921
 #, python-format
-msgid ""
-"Контекст толық емес: %(cur)s / %(exp)s сұрақ. Алдымен барлық сұрақтарды "
-"қосыңыз."
-msgstr ""
-"Контекст толық емес: %(cur)s / %(exp)s сұрақ. Алдымен барлық сұрақтарды "
-"қосыңыз."
+msgid "Контекст толық емес: %(cur)s / %(exp)s сұрақ. Алдымен барлық сұрақтарды қосыңыз."
+msgstr "Контекст толық емес: %(cur)s / %(exp)s сұрақ. Алдымен барлық сұрақтарды қосыңыз."
 
-#: .\core\views.py:902
+#: .\core\views.py:931
 msgid "Контексте бекітілмеген сұрақтар бар."
 msgstr "Контексте бекітілмеген сұрақтар бар."
 
-#: .\core\views.py:927
+#: .\core\views.py:956
 msgid "Бұл контексті өңдеуге құқығыңыз жоқ (тек черновиктерді өңдеуге болады)."
-msgstr ""
-"Бұл контексті өңдеуге құқығыңыз жоқ (тек черновиктерді өңдеуге болады)."
+msgstr "Бұл контексті өңдеуге құқығыңыз жоқ (тек черновиктерді өңдеуге болады)."
 
-#: .\core\views.py:996
+#: .\core\views.py:1062
 msgid "Бұл сұрақты өңдеуге құқығыңыз жоқ."
 msgstr "Бұл сұрақты өңдеуге құқығыңыз жоқ."
 
-#: .\core\views.py:1966
+#: .\core\views.py:2073
 msgid "Неверный логин или пароль."
 msgstr "Логин немесе құпия сөз дұрыс емес."
 
-#: .\core\views.py:2086
+#: .\core\views.py:2193
 msgid "Старый пароль неверный."
 msgstr "Ескі құпия сөз дұрыс емес."
 
-#: .\core\views.py:2088
+#: .\core\views.py:2195
 msgid "Новые пароли не совпадают."
 msgstr "Жаңа құпия сөздер сәйкес келмейді."
 
-#: .\core\views.py:2090
+#: .\core\views.py:2197
 msgid "Пароль минимум 6 символов."
 msgstr "Құпия сөз кемінде 6 таңбадан тұруы керек."
 
-#: .\core\views.py:2113
+#: .\core\views.py:2220
 msgid "Ошибка при сохранении."
 msgstr "Сақтау кезінде қате орын алды."
 
-#: .\core\views.py:2119
+#: .\core\views.py:2226
 msgid "Выберите хотя бы одно."
 msgstr "Кемінде біреуін таңдаңыз."
 
-#: .\core\views.py:2124
+#: .\core\views.py:2231
 msgid "Выберите хотя бы один предмет."
 msgstr "Кемінде бір пәнді таңдаңыз."
 
-#: .\core\views.py:2187
+#: .\core\views.py:2294
 msgid "Сізде бұл сұрақты көруге құқық жоқ."
 msgstr "Сізде бұл сұрақты көруге құқық жоқ."
 
-#: .\core\views.py:2251
+#: .\core\views.py:2358
 msgid "Сізде бұл контексті көруге құқық жоқ."
 msgstr "Сізде бұл контексті көруге құқық жоқ."
 

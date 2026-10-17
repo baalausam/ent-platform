@@ -11,7 +11,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-    <!-- ✅ MathJax — формулаларды көрсету -->
     <script>
     MathJax = {
         tex: {
@@ -248,27 +247,10 @@
             font-size: 18px; cursor: pointer;
         }
 
-        /* ✅ MathJax формулалары шетке асып кетпеуі үшін */
-        mjx-container {
-            max-width: 100%;
-            overflow-x: auto;
-            overflow-y: hidden;
-        }
-        mjx-container[display="true"] {
-            max-width: 100%;
-            overflow-x: auto;
-            overflow-y: hidden;
-            display: block;
-            padding: 8px 0;
-        }
-        mjx-container:not([display="true"]) {
-            max-width: 100%;
-            overflow-wrap: anywhere;
-        }
-        mjx-container svg {
-            max-width: 100%;
-            height: auto;
-        }
+        mjx-container { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
+        mjx-container[display="true"] { max-width: 100%; overflow-x: auto; overflow-y: hidden; display: block; padding: 8px 0; }
+        mjx-container:not([display="true"]) { max-width: 100%; overflow-wrap: anywhere; }
+        mjx-container svg { max-width: 100%; height: auto; }
 
         @media (max-width: 700px) {
             .tab { font-size: 11px; padding: 10px 4px; }
@@ -293,27 +275,22 @@
     </div>
 </div>
 
-{% regroup answers by subject_snapshot as answer_blocks %}
-
 <div class="tabs">
-    {% for block in answer_blocks %}
+    {% for block in blocks %}
         <button class="tab {% if forloop.first %}active{% endif %}"
                 onclick="switchTab(this, 'block-{{ forloop.counter }}')">
-            {% if block.grouper == 'kaz_history' %}📜 {% trans "Ист. КЗ" %}
-            {% elif block.grouper == 'reading' %}📖 {% trans "Чтение" %}
-            {% elif block.grouper == 'math_literacy' %}🔢 {% trans "Матем." %}
-            {% elif block.grouper|slice:":8" == 'profile_' %}📚 {{ block.grouper|slice:"8:" }}
-            {% else %}{{ block.grouper }}{% endif %}
-            <span class="tab-badge">{{ block.list|length }}</span>
+            {{ block.name }}
+            <span class="tab-badge">{{ block.answers|length }}</span>
         </button>
     {% endfor %}
 </div>
 
 <div class="container">
-    {% for block in answer_blocks %}
+    {% for block in blocks %}
         <div class="subject-block {% if forloop.first %}active{% endif %}" id="block-{{ forloop.counter }}">
 
-            {% for ans in block.list %}
+            {% for item in block.answers %}
+                {% with ans=item.ans %}
                 <div class="question" data-answer-id="{{ ans.id }}" data-qtype="{{ ans.question_type_snapshot }}">
                     <div class="q-header">
                         <div class="q-num">№ {{ forloop.counter }}</div>
@@ -396,15 +373,15 @@
                     {% elif ans.question_type_snapshot == 'matching' %}
                         <div class="matching-block">
                             <h4>Сәйкестендіріңіз</h4>
-                            {% for sub in ans.matching_data_snapshot.sub_questions %}
+                            {% for row in item.matching_rows %}
                                 <div class="matching-row">
-                                    <span class="sub-text">{{ sub.text }}</span>
+                                    <span class="sub-text">{{ row.text }}</span>
                                     <select class="match-select"
                                             data-sub-idx="{{ forloop.counter0 }}"
                                             onchange="saveMatching({{ ans.id }})">
                                         <option value="">— таңдаңыз —</option>
-                                        {% for opt in ans.matching_data_snapshot.options %}
-                                            <option value="{{ opt }}">{{ opt }}</option>
+                                        {% for opt in row.options %}
+                                            <option value="{{ opt.value }}" {% if opt.selected %}selected{% endif %}>{{ opt.value }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -412,6 +389,7 @@
                         </div>
                     {% endif %}
                 </div>
+                {% endwith %}
             {% endfor %}
 
             <div style="text-align: center; margin: 30px 0;">
@@ -503,7 +481,7 @@ const ATTEMPT_ID = {{ attempt.id }};
 const SECONDS_LEFT = {{ seconds_left }};
 const MAX_VIOLATIONS = 3;
 const LANG = '{{ LANGUAGE_CODE }}';
-const MAX_MULTIPLE_CHOICES = 3;   // ✅ Максимум вариантов для multiple
+const MAX_MULTIPLE_CHOICES = 3;
 let violations = 0;
 let testActive = true;
 let secondsLeft = SECONDS_LEFT;
@@ -540,11 +518,9 @@ function saveAnswer(answerId, evt) {
     const q = document.querySelector(`[data-answer-id="${answerId}"]`);
     const type = q.dataset.qtype;
 
-    // ✅ Для multiple: не больше 3 выбранных вариантов
     if (type === 'multiple') {
         const checked = q.querySelectorAll('input[type=checkbox]:checked');
         if (checked.length > MAX_MULTIPLE_CHOICES) {
-            // Откатываем последний клик
             if (evt && evt.target && evt.target.type === 'checkbox') {
                 evt.target.checked = false;
             }
@@ -725,7 +701,6 @@ let initialAnswered = document.querySelectorAll('.question').length -
     document.querySelectorAll('.question:not(:has(input:checked)):not(:has(.match-select.chosen))').length;
 document.getElementById('answered-count').textContent = initialAnswered;
 
-// ✅ MathJax — барлық формулаларды өңдеу
 if (window.MathJax && window.MathJax.typesetPromise) {
     window.MathJax.typesetPromise();
 }
